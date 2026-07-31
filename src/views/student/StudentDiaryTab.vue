@@ -4,8 +4,8 @@
     <div class="border border-[#C2C6D4] rounded-[8px] bg-white px-6 py-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
       <!-- Week navigation -->
       <div class="flex items-center gap-4">
-        <button @click="changeWeek(-1)" :disabled="isWriting" class="flex items-center gap-1 border border-[#C2C6D4] text-[#424752] px-3 py-1.5 rounded-[4px] hover:bg-slate-50 transition text-[13px] disabled:opacity-50">
-          <span class="material-symbols-outlined text-[16px]">arrow_back</span>
+        <button @click="changeWeek(-1)" :disabled="isWriting" class="flex items-center gap-2 border border-[#C2C6D4] text-[#424752] px-3 py-1.5 rounded-[4px] hover:bg-slate-50 transition text-[13px] disabled:opacity-50">
+          <span>&larr;</span>
           Tuần trước
         </button>
         <div class="text-center min-w-[120px]">
@@ -15,9 +15,9 @@
           </div>
           <div class="text-[12px] text-[#424752] mt-1">{{ getWeekDateRange(currentWeek) }}</div>
         </div>
-        <button @click="changeWeek(1)" :disabled="isWriting || currentWeek >= maxWeek" class="flex items-center gap-1 border border-[#C2C6D4] text-[#424752] px-3 py-1.5 rounded-[4px] hover:bg-slate-50 transition text-[13px] disabled:opacity-50">
+        <button @click="changeWeek(1)" :disabled="isWriting || currentWeek >= maxWeek" class="flex items-center gap-2 border border-[#C2C6D4] text-[#424752] px-3 py-1.5 rounded-[4px] hover:bg-slate-50 transition text-[13px] disabled:opacity-50">
           Tuần sau
-          <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+          <span>&rarr;</span>
         </button>
       </div>
       
@@ -35,7 +35,7 @@
           </div>
         </div>
         <button v-if="!isWriting" @click="startWriting" :disabled="!canWrite" class="bg-[#005EA3] hover:bg-blue-800 text-white font-normal px-5 py-2.5 rounded-[4px] transition text-[14px] flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed">
-          <span class="material-symbols-outlined text-[18px]">add</span>
+          <span>+</span>
           Viết nhật ký
         </button>
         <button v-else @click="cancelWriting" class="border border-[#C2C6D4] text-[#424752] hover:bg-slate-50 font-normal px-5 py-2.5 rounded-[4px] transition text-[14px] flex items-center gap-1">
@@ -142,9 +142,9 @@
             </div>
             
             <!-- Right Column -->
-            <div class="flex-1 flex flex-col justify-between">
-              <div>
-                <p class="text-[13px] text-[#1A1C1C] leading-[20px] mb-4 flex-1" :class="{'italic text-[#7A7D85]': diary.status === 'Draft' && !diary.taskDescription}">
+            <div class="flex-1 flex items-center justify-between gap-6">
+              <div class="flex-1">
+                <p class="text-[13px] text-[#1A1C1C] leading-[20px] mb-4" :class="{'italic text-[#7A7D85]': diary.status === 'Draft' && !diary.taskDescription}">
                   {{ diary.status === 'Draft' && !diary.taskDescription ? 'Chưa có nội dung trích đoạn nhật ký cho ngày hôm nay. Hãy cập nhật tiến độ công việc của bạn...' : getPreviewText(diary) }}
                 </p>
                 
@@ -154,21 +154,20 @@
                   <span>Cảm nhận: <span class="font-bold text-[#1A1C1C]">{{ diary.feeling || '--' }}/5</span></span>
                 </div>
                 
-                <div v-if="diary.feedbacks && diary.feedbacks.length > 0" class="mb-3 text-[#B45309] text-[12px] flex items-start gap-1">
-                  <span class="material-symbols-outlined text-[14px] mt-[1px]">chat_bubble_outline</span>
-                  <span class="font-bold">"{{ diary.feedbacks[diary.feedbacks.length-1].content }}"</span>
+                <div v-if="diary.feedbacks && diary.feedbacks.length > 0" class="text-[#B45309] text-[13px] flex items-start gap-1">
+                  <span class="material-symbols-outlined text-[16px] mt-[2px]">chat_bubble_outline</span>
+                  <span class="font-medium">"{{ diary.feedbacks[diary.feedbacks.length-1].content }}"</span>
                 </div>
               </div>
 
-              <div class="flex items-center justify-end mt-2">
-                <button @click="openDrawer(diary)" class="text-[#005EA3] font-bold text-[13px] flex items-center gap-1 hover:underline">
+              <div class="shrink-0 flex items-center justify-end">
+                <button @click="openDrawer(diary)" class="text-[#005EA3] font-bold text-[14px] flex items-center gap-1 hover:underline">
                   <template v-if="diary.status === 'Draft'">
-                    <span class="material-symbols-outlined text-[16px]">edit_note</span>
+                    <span class="material-symbols-outlined text-[18px]">edit_note</span>
                     Tiếp tục viết
                   </template>
                   <template v-else>
-                    Xem chi tiết
-                    <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+                    Xem chi tiết <span>&rarr;</span>
                   </template>
                 </button>
               </div>
