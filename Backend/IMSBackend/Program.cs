@@ -18,8 +18,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();
 
 var connectionString = ResolveConnectionString(builder.Configuration);
+Console.WriteLine($"[IMS] DB host hint: {DescribeConnectionTarget(connectionString)}");
+
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(connectionString));
+    options.UseNpgsql(connectionString, npgsql =>
+        npgsql.EnableRetryOnFailure(5, TimeSpan.FromSeconds(5), null)));
 
 builder.Services.AddCors(options =>
 {
@@ -106,30 +109,119 @@ app.MapGet("/", () => Results.Ok(new
     docs = "/openapi/v1.json"
 }));
 
-using (var scope = app.Services.CreateScope())
-{
-    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    db.Database.EnsureCreated();
-}
+// Wait for Postgres (Render free DB / cold start can flake on first connect)
+await EnsureDatabaseReadyAsync(app.Services);
 
 app.Run();
 
+static async Task EnsureDatabaseReadyAsync(IServiceProvider services)
+{
+    const int maxAttempts = 10;
+    Exception last = null;
+
+    for (var attempt = 1; attempt <= maxAttempts; attempt++)
+    {
+        try
+        {
+            using var scope = services.CreateScope();
+            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            await db.Database.OpenConnectionAsync();
+            await db.Database.CloseConnectionAsync();
+            await db.Database.EnsureCreatedAsync();
+            Console.WriteLine($"[IMS] Database ready (attempt {attempt}).");
+            return;
+        }
+        catch (Exception ex)
+        {
+            last = ex;
+            Console.WriteLine($"[IMS] DB not ready (attempt {attempt}/{maxAttempts}): {ex.GetType().Name}: {ex.Message}");
+            if (ex.InnerException != null)
+                Console.WriteLine($"[IMS] Inner: {ex.InnerException.Message}");
+            await Task.Delay(TimeSpan.FromSeconds(Math.Min(30, attempt * 3)));
+        }
+    }
+
+    throw new InvalidOperationException(
+        "Could not connect to PostgreSQL after retries. " +
+        "Check DATABASE_URL is the Internal Database URL from ims-db, " +
+        "and that ims-api is in the same region as ims-db (Oregon).",
+        last);
+}
+
+static string DescribeConnectionTarget(string cs)
+{
+    try
+    {
+        var host = cs.Split(';')
+            .Select(p => p.Trim())
+            .FirstOrDefault(p => p.StartsWith("Host=", StringComparison.OrdinalIgnoreCase));
+        var db = cs.Split(';')
+            .Select(p => p.Trim())
+            .FirstOrDefault(p => p.StartsWith("Database=", StringComparison.OrdinalIgnoreCase));
+        return $"{host ?? "Host=?"};{db ?? "Database=?"}";
+    }
+    catch
+    {
+        return "(unparsed)";
+    }
+}
+
 static string ResolveConnectionString(IConfiguration config)
 {
-    var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
-    if (!string.IsNullOrWhiteSpace(databaseUrl) &&
-        (databaseUrl.StartsWith("postgres://", StringComparison.OrdinalIgnoreCase) ||
-         databaseUrl.StartsWith("postgresql://", StringComparison.OrdinalIgnoreCase)))
+    // Prefer DATABASE_URL (Render), then ConnectionStrings__DefaultConnection
+    var databaseUrl =
+        Environment.GetEnvironmentVariable("DATABASE_URL")
+        ?? config.GetConnectionString("DefaultConnection");
+
+    if (string.IsNullOrWhiteSpace(databaseUrl))
+    {
+        return "Host=localhost;Port=5432;Database=ims_db;Username=postgres;Password=postgres";
+    }
+
+    // Already an Npgsql key=value string
+    if (databaseUrl.Contains("Host=", StringComparison.OrdinalIgnoreCase)
+        || databaseUrl.Contains("Server=", StringComparison.OrdinalIgnoreCase))
+    {
+        return EnsureSsl(databaseUrl);
+    }
+
+    if (databaseUrl.StartsWith("postgres://", StringComparison.OrdinalIgnoreCase)
+        || databaseUrl.StartsWith("postgresql://", StringComparison.OrdinalIgnoreCase))
     {
         var uri = new Uri(databaseUrl);
         var userInfo = uri.UserInfo.Split(':', 2);
         var username = Uri.UnescapeDataString(userInfo[0]);
         var password = userInfo.Length > 1 ? Uri.UnescapeDataString(userInfo[1]) : "";
         var database = uri.AbsolutePath.Trim('/');
+        var port = uri.Port > 0 ? uri.Port : 5432;
 
-        return $"Host={uri.Host};Port={(uri.Port > 0 ? uri.Port : 5432)};Database={database};Username={username};Password={password};SSL Mode=Require;Trust Server Certificate=true";
+        return EnsureSsl(
+            $"Host={uri.Host};Port={port};Database={database};Username={username};Password={password}");
     }
 
-    return config.GetConnectionString("DefaultConnection")
-        ?? "Host=localhost;Port=5432;Database=ims_db;Username=postgres;Password=postgres";
+    throw new InvalidOperationException(
+        "DATABASE_URL must be a postgresql:// URL or Host=... Npgsql connection string.");
+}
+
+static string EnsureSsl(string connectionString)
+{
+    // Render Postgres: external needs TLS; internal accepts Prefer.
+    // Trust Server Certificate avoids CA issues in containers.
+    if (!connectionString.Contains("SSL Mode=", StringComparison.OrdinalIgnoreCase)
+        && !connectionString.Contains("Ssl Mode=", StringComparison.OrdinalIgnoreCase))
+    {
+        connectionString += ";SSL Mode=Prefer";
+    }
+
+    if (!connectionString.Contains("Trust Server Certificate=", StringComparison.OrdinalIgnoreCase))
+    {
+        connectionString += ";Trust Server Certificate=true";
+    }
+
+    if (!connectionString.Contains("Timeout=", StringComparison.OrdinalIgnoreCase))
+    {
+        connectionString += ";Timeout=30";
+    }
+
+    return connectionString;
 }
