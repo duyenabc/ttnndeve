@@ -16,6 +16,7 @@
     "axios": "^1.19.0",
     "element-plus": "^2.14.2",
     "express": "^5.2.1",
+    "firebase": "^12.17.0",
     "pinia": "^3.0.4",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",

@@ -1139,8 +1139,8 @@
       title: 'Giai đoạn thực hiện',
       selectedIndex: 2,
       levels: [
-        { label: 'Chậm trễ nhi� u', points: 0 },
-        { label: '� úng tiến độ ít', points: 0.5 },
+        { label: 'Chậm trễ nhiều', points: 0 },
+        { label: 'Không đúng tiến độ', points: 0.5 },
         { label: 'Có chậm trễ nhẹ', points: 0.75 },
         { label: 'Xuất sắc', points: 1.5 }
       ]
@@ -1150,9 +1150,9 @@
       title: 'Nội dung báo cáo',
       selectedIndex: 3,
       levels: [
-        { label: 'Thiếu nhi� u nội dung', points: 0 },
+        { label: 'Thiếu nhiều nội dung', points: 0 },
         { label: 'Khá đầy đủ', points: 0.5 },
-        { label: '� ầy đủ yêu cầu', points: 1.0 },
+        { label: 'Đầy đủ yêu cầu', points: 1.0 },
         { label: 'Phong phú sâu sắc', points: 1.5 }
       ]
     }
@@ -1170,9 +1170,9 @@
 
   const statusFilters = [
     { value: 'ALL', label: 'Tất cả' },
-    { value: '� ang mở', label: '� ang mở' },
+    { value: 'Đang mở', label: 'Đang mở' },
     { value: 'Sắp tới', label: 'Sắp tới' },
-    { value: '� ã đóng', label: '� ã đóng' }
+    { value: 'Đã đóng', label: 'Đã đóng' }
   ];
 
   const events = ref([]);
