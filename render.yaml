@@ -29,11 +29,10 @@ services:
       - key: Cors__Origins
         value: https://ttnndeve.onrender.com
 
-  # Vue static site
+  # Vue static site (Static Sites không dùng plan: free)
   - type: web
     name: ttnndeve
     runtime: static
-    plan: free
     buildCommand: npm ci && npm run build
     staticPublishPath: dist
     routes:
