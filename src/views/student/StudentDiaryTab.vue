@@ -335,6 +335,35 @@
           </div>
         </template>
 
+        <!-- UC-18.3: Lịch sử đánh giá (tất cả nhận xét GV) -->
+        <div class="mt-8 border border-slate-200 rounded-xl bg-white overflow-hidden">
+          <div class="px-5 py-3.5 border-b border-slate-100 flex items-center justify-between">
+            <h3 class="text-[15px] font-bold text-slate-900 flex items-center gap-2">
+              <span class="material-symbols-outlined text-[#005EA3] text-[20px]">history_edu</span>
+              Lịch sử đánh giá
+            </h3>
+            <span class="text-[12px] text-slate-500">{{ evaluationHistory.length }} nhận xét</span>
+          </div>
+          <div v-if="evaluationHistory.length === 0" class="px-5 py-8 text-center text-[13px] text-slate-500">
+            Chưa có nhận xét từ giảng viên.
+          </div>
+          <ul v-else class="divide-y divide-slate-100">
+            <li
+              v-for="item in evaluationHistory"
+              :key="item.id"
+              class="px-5 py-3.5 hover:bg-slate-50/80"
+            >
+              <div class="flex flex-wrap items-center justify-between gap-2 mb-1">
+                <span class="text-[13px] font-bold text-slate-800">{{ item.teacherName || 'GVHD' }}</span>
+                <span class="text-[11px] text-slate-500">
+                  Tuần {{ item.week }} · {{ formatFeedbackDate(item.timestamp) }}
+                </span>
+              </div>
+              <p class="text-[13px] text-slate-700 leading-relaxed whitespace-pre-wrap">{{ item.content }}</p>
+            </li>
+          </ul>
+        </div>
+
         <!-- Footer progress -->
         <div class="mt-6 pt-5 border-t border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div class="text-[13px] font-semibold text-slate-800">
@@ -576,6 +605,7 @@ const maxWeek = ref(15);
  */
 const internshipStart = ref(addDays(alignToMonday(new Date()), -7));
 const diaries = ref([]);
+const evaluationHistory = ref([]);
 const config = ref({
   isEnabled: true,
   minPerWeek: 2,
@@ -614,6 +644,7 @@ watch(isWriting, (v) => emit('writing-change', v));
 onMounted(async () => {
   await loadConfig();
   await loadDiaries();
+  await loadEvaluationHistory();
   // Keep progress on the internship "current" week (default calendar → tuần 2)
   currentWeek.value = weekNumberForDate(new Date());
   isLoading.value = false;
@@ -651,6 +682,20 @@ const loadDiaries = async () => {
     diaries.value = res.data || [];
   } catch (e) {
     console.error('Error loading diaries', e);
+  }
+};
+
+const loadEvaluationHistory = async () => {
+  try {
+    const uid = authStore.user?.maNguoiDung || authStore.user?.id;
+    if (!uid) return;
+    const res = await api.get('/diaries/feedback-history', {
+      params: { userId: uid, classId: props.classId },
+    });
+    evaluationHistory.value = Array.isArray(res.data) ? res.data : [];
+  } catch (e) {
+    console.error('Error loading evaluation history', e);
+    evaluationHistory.value = [];
   }
 };
 
@@ -1019,7 +1064,7 @@ function formatFileSize(bytes) {
   return `${(n / (1024 * 1024)).toFixed(1)} MB`;
 }
 
-const openDrawer = (diary) => {
+const openDrawer = async (diary) => {
   const ev = parsedEvidence(diary);
 
   if (diary.status === 'Draft') {
@@ -1046,7 +1091,12 @@ const openDrawer = (diary) => {
     isDrawerOpen.value = true;
 
     if (!diary.isReadByStudent && diary.feedbacks?.length) {
-      diary.isReadByStudent = true;
+      try {
+        await api.put(`/diaries/${diary.id}/read`, null, { params: { by: 'student' } });
+        diary.isReadByStudent = true;
+      } catch {
+        diary.isReadByStudent = true;
+      }
     }
   }
 };

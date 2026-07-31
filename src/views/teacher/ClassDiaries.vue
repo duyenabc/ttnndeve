@@ -883,22 +883,45 @@ function closeDrawer() {
 async function submitInlineFeedback(student) {
   const entry = currentEntry(student);
   const content = inlineFeedback[student.id]?.trim();
-  if (!entry || !content) return;
-  isSubmittingFeedback.value = true;
-  try {
-    await api.put(`/diaries/${entry.id}/feedback`, {
-      teacherName: authStore.user?.hoTen || 'GVHD',
-      content,
-    });
-    inlineFeedback[student.id] = '';
-    toastMessage.value = 'Đã gửi nhận xét thành công';
+  if (!entry) return;
+  if (!content) {
+    toastMessage.value = 'Nội dung nhận xét không được để trống';
     showToast.value = true;
     setTimeout(() => {
       showToast.value = false;
     }, 3000);
+    return;
+  }
+  isSubmittingFeedback.value = true;
+  try {
+    const res = await api.put(`/diaries/${entry.id}/feedback`, {
+      teacherName: authStore.user?.hoTen || 'GVHD',
+      content,
+    });
+    inlineFeedback[student.id] = '';
+    toastMessage.value = res.data?.message || 'Đã gửi nhận xét thành công';
+    showToast.value = true;
+    setTimeout(() => {
+      showToast.value = false;
+    }, 3000);
+    // #region agent log
+    fetch('http://127.0.0.1:7500/ingest/7f531694-75ae-41c0-a883-0940871f5a5e', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Debug-Session-Id': '19ef33' },
+      body: JSON.stringify({
+        sessionId: '19ef33',
+        runId: 'uc18-3',
+        hypothesisId: 'H1',
+        location: 'ClassDiaries.vue:submitInlineFeedback',
+        message: 'feedback sent',
+        data: { diaryId: entry.id, notified: !!res.data?.notification },
+        timestamp: Date.now(),
+      }),
+    }).catch(() => {});
+    // #endregion
     await loadData();
-  } catch {
-    toastMessage.value = 'Gửi nhận xét thất bại';
+  } catch (err) {
+    toastMessage.value = err.response?.data?.message || 'Gửi nhận xét thất bại';
     showToast.value = true;
   } finally {
     isSubmittingFeedback.value = false;
@@ -906,22 +929,30 @@ async function submitInlineFeedback(student) {
 }
 
 async function submitFeedback() {
-  if (!feedbackContent.value.trim() || !viewingDiary.value) return;
+  if (!viewingDiary.value) return;
+  if (!feedbackContent.value.trim()) {
+    toastMessage.value = 'Nội dung nhận xét không được để trống';
+    showToast.value = true;
+    setTimeout(() => {
+      showToast.value = false;
+    }, 3000);
+    return;
+  }
   isSubmittingFeedback.value = true;
   try {
-    await api.put(`/diaries/${viewingDiary.value.id}/feedback`, {
+    const res = await api.put(`/diaries/${viewingDiary.value.id}/feedback`, {
       teacherName: authStore.user?.hoTen || 'GVHD',
       content: feedbackContent.value,
     });
-    toastMessage.value = 'Đã gửi phản hồi thành công';
+    toastMessage.value = res.data?.message || 'Đã gửi phản hồi thành công';
     showToast.value = true;
     setTimeout(() => {
       showToast.value = false;
     }, 3000);
     await loadData();
     closeDrawer();
-  } catch {
-    toastMessage.value = 'Có lỗi xảy ra khi gửi phản hồi';
+  } catch (err) {
+    toastMessage.value = err.response?.data?.message || 'Có lỗi xảy ra khi gửi phản hồi';
     showToast.value = true;
   } finally {
     isSubmittingFeedback.value = false;
