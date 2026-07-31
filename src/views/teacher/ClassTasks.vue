@@ -1278,7 +1278,7 @@
 
   function subStatusClass(status) {
     switch (status) {
-      case '� ã nộp':
+      case ' ã nộp':
         return 'bg-emerald-100 text-emerald-800';
       case 'Nộp trễ':
         return 'bg-amber-100 text-amber-800';
@@ -1303,6 +1303,23 @@
     }
   }
 
+  async function saveRubricGrade() {
+    if (!selectedSubForReview.value) return;
+    try {
+      const scoreVal = parseFloat(calculatedRubricScore.value) || currentDirectScore.value;
+      await api.post(`/giangvien/submissions/${selectedSubForReview.value.id}/grade`, {
+        score: scoreVal
+      });
+      selectedSubForReview.value.isGraded = true;
+      selectedSubForReview.value.score = scoreVal.toFixed(1);
+      showToast(`Đã lưu điểm ${selectedSubForReview.value.score} cho ${selectedSubForReview.value.studentName}!`);
+      selectedSubForReview.value = null;
+    } catch (err) {
+      console.error(err);
+      showToast('Có lỗi xảy ra khi lưu điểm!');
+    }
+  }
+
   function openRubricReview(sub) {
     selectedSubForReview.value = sub;
     currentSubIndex.value = filteredSubmissions.value.findIndex(s => s.id === sub.id);
@@ -1315,23 +1332,6 @@
     docSegments.value = [{ text: rawDocText, highlighted: false, comment: '' }];
     hasUnsavedChanges.value = false;
   }
-
-  async function saveRubricGrade() {
-    if (!selectedSubForReview.value) return;
-    try {
-      const scoreVal = parseFloat(calculatedRubricScore.value) || currentDirectScore.value;
-        await api.post(`/giangvien/submissions/${selectedSubForReview.value.id}/grade`, {
-          score: scoreVal
-        });
-        selectedSubForReview.value.isGraded = true;
-        selectedSubForReview.value.score = scoreVal.toFixed(1);
-        showToast(`�?ã lưu điểm ${selectedSubForReview.value.score} cho ${selectedSubForReview.value.studentName}!`);
-        selectedSubForReview.value = null;
-      } catch (err) {
-        console.error(err);
-        showToast('Có lỗi xảy ra khi lưu điểm!');
-      }
-    }
 
   function openCreateModal() {
     isEditing.value = false;
