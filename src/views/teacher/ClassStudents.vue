@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="ims-scope w-full mx-auto space-y-6">
     <!-- Breadcrumb & Header -->
     <div class="flex flex-col gap-2">
@@ -642,11 +642,11 @@
                 class="px-2 py-0.5 rounded text-[10px] font-bold uppercase"
                 :class="statusCls[detail.trangThaiThucTap] || 'bg-slate-100 text-slate-600'"
               >
-                {{ statusLabels[detail.trangThaiThucTap] || 'ÄANG THá»°C Táº¬P' }}
+                {{ statusLabels[detail.trangThaiThucTap] || 'Ä ANG THá»°C Táº¬P' }}
               </span>
             </div>
             <h3 class="font-extrabold text-2xl text-slate-900">{{ detail.hoTen }}</h3>
-            <p class="text-xs text-slate-500 font-mono mt-0.5">MSSV: {{ detail.maSoSinhVien }} â€¢ L�:p: {{ detail.lopSinhHoat || 'K64' }}</p>
+            <p class="text-xs text-slate-500 font-mono mt-0.5">MSSV: {{ detail.maSoSinhVien }} â€¢ L:p: {{ detail.lopSinhHoat || 'K64' }}</p>
           </div>
           <button class="material-symbols-outlined text-slate-400 hover:text-slate-700 transition-colors" @click="detail = null">
             close
@@ -659,7 +659,7 @@
             v-for="t in [
               { id: 'overview', label: 'Tá»•ng quan' },
               { id: 'logs', label: 'Nháº­t kÃ½' },
-              { id: 'submissions', label: 'Bài n�"p' },
+              { id: 'submissions', label: 'Bài nộp' },
               { id: 'grades', label: 'Äiá»ƒm' },
               { id: 'history', label: 'Lá»‹ch sá»­ Ä‘Ã¡nh giÃ¡' },
               { id: 'notes', label: 'Ghi chÃº' }
@@ -907,7 +907,7 @@
                   <span class="material-symbols-outlined text-[22px]">picture_as_pdf</span>
                 </div>
                 <span>In / Táº£i PDF (.pdf)</span>
-                <span class="text-[10px] text-rose-700 font-normal">Báº£n in A4 cÃ³ xÃ¡c nháº­n Giáº£ng viÃªn</span>
+        [`Giảng viên hướng dẫn: TS. Nguyễn Văn A`],
               </button>
             </div>
           </div>
@@ -1148,9 +1148,9 @@
       ["KHOA CÃ”NG NGHá»† THÃ”NG TIN - Bá»˜ MÃ”N Há»† THá»NG THÃ”NG TIN"],
       ["DANH SÃCH SINH VIÃŠN THá»°C Táº¬P DOANH NGHIá»†P"],
       [`MÃ£ lá»›p thực tập: ${cls.value?.tenLop || maLop} | ${cls.value?.tenKy || 'Há»c ká»³ I - 2025-2026'}`],
-      [`Giáº£ng viÃªn hư�:ng dẫn: TS. Nguyá»…n VÄƒn A`],
+        [`Giảng viên hướng dẫn: TS. Nguyễn Văn A`],
       [""],
-      ["STT", "MSSV", "Há» và tên", "L�:p SH", "Doanh nghi�!p thực tập", "V�9 trí thực tập", "Nhóm", "Trạng thái", "Tiến ��""]
+        ["STT", "MSSV", "Họ và tên", "Lớp SH", "Doanh nghiệp thực tập", "Vị trí thực tập", "Nhóm", "Trạng thái", "Tiến độ"]
     ];
 
     const list = students.value;
