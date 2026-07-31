@@ -1,43 +1,44 @@
 <template>
   <div class="space-y-4 font-sans relative">
     <!-- Header bar -->
-    <div class="border border-slate-200 rounded-[12px] bg-white p-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div class="border border-[#C2C6D4] rounded-[8px] bg-white px-6 py-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
       <!-- Week navigation -->
       <div class="flex items-center gap-4">
-        <button @click="changeWeek(-1)" :disabled="isWriting" class="flex items-center gap-1 border border-slate-300 text-slate-500 px-3 py-1.5 rounded-[8px] hover:bg-slate-50 transition text-[13px] disabled:opacity-50">
+        <button @click="changeWeek(-1)" :disabled="isWriting" class="flex items-center gap-1 border border-[#C2C6D4] text-[#424752] px-3 py-1.5 rounded-[4px] hover:bg-slate-50 transition text-[13px] disabled:opacity-50">
           <span class="material-symbols-outlined text-[16px]">arrow_back</span>
           Tuần trước
         </button>
-        <div class="text-center">
-          <div class="font-bold text-slate-900 text-[16px] flex items-center justify-center gap-1">
+        <div class="text-center min-w-[120px]">
+          <div class="font-bold text-[#1A1C1C] text-[15px] flex items-center justify-center gap-1 cursor-pointer">
             Tuần {{ currentWeek }}
+            <span class="material-symbols-outlined text-[16px]">arrow_drop_down</span>
           </div>
-          <div class="text-[12px] text-slate-500">Hạn nộp: {{ config.deadlineDayName }} {{ config.deadlineTime }}</div>
+          <div class="text-[12px] text-[#424752] mt-1">Hạn nộp: {{ config.deadlineDayName }} {{ config.deadlineTime }}</div>
         </div>
-        <button @click="changeWeek(1)" :disabled="isWriting || currentWeek >= maxWeek" class="flex items-center gap-1 border border-slate-300 text-slate-700 px-3 py-1.5 rounded-[8px] hover:bg-slate-50 transition text-[13px] disabled:opacity-50">
+        <button @click="changeWeek(1)" :disabled="isWriting || currentWeek >= maxWeek" class="flex items-center gap-1 border border-[#C2C6D4] text-[#424752] px-3 py-1.5 rounded-[4px] hover:bg-slate-50 transition text-[13px] disabled:opacity-50">
           Tuần sau
           <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
         </button>
       </div>
       
       <!-- Progress and write button -->
-      <div class="flex items-center gap-6">
-        <div class="w-[240px]">
-          <div class="flex justify-between items-center text-[12px] font-bold mb-1">
-            <span class="text-slate-500 font-normal text-[11px]">Tiến độ tuần này</span>
-            <span :class="weekSubmittedCount >= config.minPerWeek ? 'text-[#005EA3]' : 'text-amber-600'">
+      <div class="flex items-center gap-8">
+        <div class="w-[300px]">
+          <div class="flex justify-between items-center text-[12px] mb-2">
+            <span class="text-[#424752] font-medium text-[12px]">Tiến độ tuần này</span>
+            <span class="text-[#005EA3] font-bold">
               {{ weekSubmittedCount }}/{{ config.minPerWeek }} nhật ký đã nộp
             </span>
           </div>
-          <div class="w-full bg-slate-200 rounded-full h-[6px] flex overflow-hidden">
-            <div :class="['h-full transition-all duration-500', weekSubmittedCount >= config.minPerWeek ? 'bg-[#005EA3]' : 'bg-amber-500']" :style="{ width: weekProgressPercent + '%' }"></div>
+          <div class="w-full bg-[#E9E8E7] rounded-[12px] h-[6px] flex overflow-hidden">
+            <div :class="['h-full transition-all duration-500 rounded-[12px]', weekSubmittedCount >= config.minPerWeek ? 'bg-[#005EA3]' : 'bg-[#00488D]']" :style="{ width: weekProgressPercent + '%' }"></div>
           </div>
         </div>
-        <button v-if="!isWriting" @click="startWriting" :disabled="!canWrite" class="bg-[#005EA3] hover:bg-blue-800 text-white font-bold px-4 py-2 rounded-[8px] transition text-[13px] flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed">
-          <span class="material-symbols-outlined text-[16px]">add</span>
+        <button v-if="!isWriting" @click="startWriting" :disabled="!canWrite" class="bg-[#005EA3] hover:bg-blue-800 text-white font-normal px-5 py-2.5 rounded-[4px] transition text-[14px] flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed">
+          <span class="material-symbols-outlined text-[18px]">add</span>
           Viết nhật ký
         </button>
-        <button v-else @click="cancelWriting" class="border border-slate-300 text-slate-700 hover:bg-slate-50 font-bold px-4 py-2 rounded-[8px] transition text-[13px] flex items-center gap-1">
+        <button v-else @click="cancelWriting" class="border border-[#C2C6D4] text-[#424752] hover:bg-slate-50 font-normal px-5 py-2.5 rounded-[4px] transition text-[14px] flex items-center gap-1">
           Hủy viết
         </button>
       </div>
@@ -126,40 +127,40 @@
       <!-- Diary List -->
       <div v-else class="space-y-4">
         <template v-if="currentWeekDiaries.length > 0">
-          <div v-for="diary in currentWeekDiaries" :key="diary.id" class="border border-slate-200 bg-white rounded-[12px] p-5 flex flex-col md:flex-row gap-6 hover:shadow-md transition">
-            <div class="w-[200px] shrink-0 border-r border-slate-100 pr-4">
-              <div class="font-bold text-[14px] text-slate-900 mb-1">{{ formatDate(diary.ngayCapNhat || diary.ngayTao) }}</div>
-              <div class="text-[11px] text-slate-500 mb-2 italic">Cập nhật lần cuối</div>
-              <div class="flex flex-wrap gap-2 mb-2">
-                <span v-if="diary.status === 'Submitted'" class="inline-block bg-[#E6F4EA] text-[#137333] px-2 py-0.5 rounded text-[10px] font-bold">ĐÃ NỘP</span>
-                <span v-else class="inline-block bg-slate-200 text-slate-600 px-2 py-0.5 rounded text-[10px] font-bold">NHÁP</span>
-                <span v-if="diary.feedbacks && diary.feedbacks.length > 0 && !diary.isReadByStudent" class="inline-block bg-[#FCE8E6] text-[#C5221F] px-2 py-0.5 rounded text-[10px] font-bold">CÓ PHẢN HỒI MỚI</span>
+          <div v-for="diary in currentWeekDiaries" :key="diary.id" class="border border-[#C2C6D4] bg-white rounded-[4px] p-[24px] flex flex-col md:flex-row gap-6">
+            <!-- Left Column -->
+            <div class="w-[200px] shrink-0 flex flex-col items-start border-r border-[#E9E8E7] pr-4">
+              <div class="font-bold text-[14px] text-[#1A1C1C] mb-2">{{ formatCardDate(diary.ngayCapNhat || diary.ngayTao) }}</div>
+              
+              <div class="flex flex-col gap-2 mb-3">
+                <span v-if="diary.status === 'Submitted'" class="inline-block bg-[#D1F5D3] text-[#166534] px-3 py-1 rounded-[4px] text-[11px] font-bold w-fit">ĐÃ NỘP</span>
+                <span v-else class="inline-block bg-[#E9E8E7] text-[#424752] px-3 py-1 rounded-[4px] text-[11px] font-bold w-fit">NHÁP</span>
+                <span v-if="diary.feedbacks && diary.feedbacks.length > 0 && !diary.isReadByStudent" class="inline-block bg-[#FFE4D6] text-[#A43D00] px-3 py-1 rounded-[4px] text-[11px] font-bold w-fit">CÓ PHẢN HỒI MỚI</span>
               </div>
+              
+              <div class="text-[11px] text-[#7A7D85]">Cập nhật: {{ formatUpdateTime(diary.ngayCapNhat || diary.ngayTao) }}</div>
             </div>
-            <div class="flex-1 flex flex-col">
-              <p class="text-[13px] text-slate-700 leading-relaxed mb-3 flex-1 line-clamp-3">
-                {{ getPreviewText(diary) }}
-              </p>
-              
-              <div class="flex items-center gap-4 mb-3 text-[12px] text-slate-600 font-medium">
-                <span v-if="diary.completionLevel" class="flex items-center gap-1">
-                  <span class="material-symbols-outlined text-[16px] text-amber-500">task_alt</span>
-                  Mức độ: {{ diary.completionLevel }}/10
-                </span>
-                <span v-if="diary.feeling" class="flex items-center gap-1">
-                  <span class="material-symbols-outlined text-[16px] text-amber-500">mood</span>
-                  Cảm nhận: {{ diary.feeling }}/5
-                </span>
-              </div>
-              
-              <div v-if="diary.feedbacks && diary.feedbacks.length > 0" class="mb-3">
-                <div class="text-[#D93025] font-bold text-[12px] flex items-start gap-1">
-                  <span class="material-symbols-outlined text-[16px] mt-0.5">chat_bubble_outline</span>
-                  Có phản hồi mới từ Giảng viên
+            
+            <!-- Right Column -->
+            <div class="flex-1 flex flex-col justify-between">
+              <div>
+                <p class="text-[13px] text-[#1A1C1C] leading-[20px] mb-4 flex-1" :class="{'italic text-[#7A7D85]': diary.status === 'Draft' && !diary.taskDescription}">
+                  {{ diary.status === 'Draft' && !diary.taskDescription ? 'Chưa có nội dung trích đoạn nhật ký cho ngày hôm nay. Hãy cập nhật tiến độ công việc của bạn...' : getPreviewText(diary) }}
+                </p>
+                
+                <div class="flex items-center gap-3 text-[12px] text-[#424752] mb-3">
+                  <span>Mức độ hoàn thành: <span class="font-bold text-[#1A1C1C]">{{ diary.completionLevel || '--' }}/10</span></span>
+                  <span class="text-[#C2C6D4]">|</span>
+                  <span>Cảm nhận: <span class="font-bold text-[#1A1C1C]">{{ diary.feeling || '--' }}/5</span></span>
+                </div>
+                
+                <div v-if="diary.feedbacks && diary.feedbacks.length > 0" class="mb-3 text-[#B45309] text-[12px] flex items-start gap-1">
+                  <span class="material-symbols-outlined text-[14px] mt-[1px]">chat_bubble_outline</span>
+                  <span class="font-bold">"{{ diary.feedbacks[diary.feedbacks.length-1].content }}"</span>
                 </div>
               </div>
 
-              <div class="flex items-center justify-end mt-auto">
+              <div class="flex items-center justify-end mt-2">
                 <button @click="openDrawer(diary)" class="text-[#005EA3] font-bold text-[13px] flex items-center gap-1 hover:underline">
                   <template v-if="diary.status === 'Draft'">
                     <span class="material-symbols-outlined text-[16px]">edit_note</span>
@@ -184,16 +185,16 @@
 
       <!-- Footer progress -->
       <div v-if="!isWriting" class="mt-8 pt-[24px] border-t border-[#C2C6D4] flex items-center justify-between">
-        <div class="text-[14px] font-bold text-[#1A1C1C]">
-          Tổng cả kỳ: {{ totalSubmitted }}/{{ totalRequired }} nhật ký đã nộp
+        <div class="text-[13px] font-bold text-[#1A1C1C]">
+          Tổng cả kỳ: <span class="text-[#005EA3]">{{ totalSubmitted }}/{{ totalRequired }} nhật ký đã nộp</span>
         </div>
         <div class="w-[256px]">
           <div class="flex justify-between items-center text-[12px] mb-1">
-            <span class="text-[#424752] font-medium text-[12px]">Tiến độ hoàn thành</span>
-            <span class="text-[#00488D] font-bold">{{ Math.round((totalSubmitted / Math.max(1, totalRequired)) * 100) }}%</span>
+            <span class="text-[#424752] font-medium text-[11px]">Tiến độ hoàn thành</span>
+            <span class="text-[#005EA3] font-bold text-[13px]">{{ Math.round((totalSubmitted / Math.max(1, totalRequired)) * 100) }}%</span>
           </div>
           <div class="w-full bg-[#E9E8E7] rounded-[12px] h-[6px] flex overflow-hidden">
-            <div class="h-full transition-all duration-500 rounded-[12px]" :class="totalSubmitted >= totalRequired ? 'bg-[#005503]' : 'bg-[#00488D]'" :style="{ width: Math.min(100, Math.round((totalSubmitted / Math.max(1, totalRequired)) * 100)) + '%' }"></div>
+            <div class="h-full transition-all duration-500 rounded-[12px] bg-[#00488D]" :style="{ width: Math.min(100, Math.round((totalSubmitted / Math.max(1, totalRequired)) * 100)) + '%' }"></div>
           </div>
         </div>
       </div>
@@ -203,44 +204,45 @@
     <div v-if="isDrawerOpen" class="fixed inset-0 z-[100] bg-slate-900/50 backdrop-blur-sm flex justify-end" @click.self="closeDrawer">
       <div class="bg-white w-[500px] h-full shadow-2xl flex flex-col animate-slide-in border-l border-[#C2C6D4]">
         <div class="p-[24px] border-b border-[#C2C6D4] flex items-start justify-between">
-          <div class="flex flex-col gap-1">
-            <h3 class="text-[24px] font-semibold text-[#1A1C1C] leading-[32px]">Chi tiết nhật ký thực tập</h3>
-            <span class="text-[14px] font-bold text-[#00488D]">Tuần {{ viewingDiary.week }} - {{ viewingDiary.status === 'Submitted' ? 'Đã nộp' : 'Nháp' }}</span>
+          <div class="flex flex-col gap-2">
+            <h3 class="text-[24px] font-semibold text-[#1A1C1C] leading-[32px]">Chi tiết Nhật ký thực tập</h3>
+            <span class="text-[14px] font-bold text-[#005EA3]">Ngày {{ formatDrawerDate(viewingDiary) }} — Tuần {{ viewingDiary.week }}</span>
           </div>
-          <button @click="closeDrawer" class="w-[30px] h-[30px] rounded-[12px] hover:bg-slate-100 flex items-center justify-center transition">
-            <span class="material-symbols-outlined text-[14px] text-[#1A1C1C]">close</span>
+          <button @click="closeDrawer" class="w-[30px] h-[30px] rounded-[12px] hover:bg-slate-100 flex items-center justify-center transition mt-1">
+            <span class="material-symbols-outlined text-[18px] text-[#1A1C1C]">close</span>
           </button>
         </div>
         
         <div class="p-[24px] overflow-y-auto flex-1 space-y-[24px]">
-          <div class="grid grid-cols-2 gap-4">
-            <div v-if="viewingDiary.completionLevel" class="bg-amber-50 p-3 rounded-[8px]">
-              <div class="text-[11px] text-amber-800 font-bold uppercase mb-1">Mức độ hoàn thành</div>
-              <div class="text-[18px] font-bold text-amber-600">{{ viewingDiary.completionLevel }}/10</div>
+          <div v-if="viewingDiary.completionLevel || viewingDiary.feeling" class="bg-[#F4F4F4] rounded-[4px] py-[16px] flex items-center justify-between">
+            <div v-if="viewingDiary.completionLevel" class="flex-1 flex flex-col items-center" :class="{'border-r border-[#C2C6D4]': viewingDiary.feeling}">
+              <span class="text-[11px] text-[#424752] font-bold uppercase mb-1">MỨC ĐỘ HOÀN THÀNH</span>
+              <span class="text-[22px] font-bold text-[#005EA3]">{{ viewingDiary.completionLevel }}/10</span>
             </div>
-            <div v-if="viewingDiary.feeling" class="bg-amber-50 p-3 rounded-[8px]">
-              <div class="text-[11px] text-amber-800 font-bold uppercase mb-1">Cảm nhận chung</div>
-              <div class="text-[18px] font-bold text-amber-600">{{ viewingDiary.feeling }}/5</div>
+            <div v-if="viewingDiary.feeling" class="flex-1 flex flex-col items-center">
+              <span class="text-[11px] text-[#424752] font-bold uppercase mb-1">CẢM NHẬN CHUNG</span>
+              <span class="text-[22px] font-bold text-[#005EA3]">{{ viewingDiary.feeling }}/5</span>
             </div>
           </div>
 
-          <template v-for="field in activeFields" :key="field.id">
-            <div v-if="!['completionLevel', 'feeling'].includes(field.id)">
-              <h4 class="font-semibold text-[12px] text-[#424752] uppercase tracking-[0.6px] leading-[16px] mb-1">{{ field.label }}</h4>
-              <p class="text-[14px] text-[#1A1C1C] leading-[20px] whitespace-pre-wrap">{{ viewingDiary[field.id] || '---' }}</p>
-            </div>
-          </template>
+          <div class="flex flex-col space-y-[16px]">
+            <template v-for="field in activeFields" :key="field.id">
+              <div v-if="!['completionLevel', 'feeling'].includes(field.id)">
+                <h4 class="font-bold text-[12px] text-[#424752] leading-[16px] mb-1">{{ field.label }}</h4>
+                <p class="text-[14px] text-[#1A1C1C] leading-[20px] whitespace-pre-wrap">{{ viewingDiary[field.id] || '---' }}</p>
+              </div>
+            </template>
+          </div>
 
           <!-- Feedbacks -->
-          <div v-if="viewingDiary.feedbacks && viewingDiary.feedbacks.length > 0" class="mt-[24px] pt-[24px] border-t border-dashed border-[#C2C6D4]">
-            <h4 class="font-semibold text-[12px] text-[#424752] uppercase tracking-[0.6px] mb-4">Nhận xét của Giảng viên</h4>
+          <div v-if="viewingDiary.feedbacks && viewingDiary.feedbacks.length > 0" class="mt-[24px]">
             <div class="space-y-3">
-              <div v-for="(fb, index) in viewingDiary.feedbacks" :key="index" class="bg-[rgba(255,219,205,0.3)] border border-[#FFDBCD] p-[16px] rounded-[4px] flex flex-col gap-[8px]">
+              <div v-for="(fb, index) in viewingDiary.feedbacks" :key="index" class="bg-[#FFF5F2] border border-[#FFDBCD] p-[16px] rounded-[4px] flex flex-col gap-[8px]">
                 <div class="flex items-center gap-[8px]">
-                  <span class="material-symbols-outlined text-[12px] text-[#A43D00]">chat_bubble</span>
-                  <span class="text-[12px] font-bold text-[#7D2D00]">{{ fb.teacherName }} • {{ formatDate(fb.timestamp) }}</span>
+                  <span class="material-symbols-outlined text-[14px] text-[#A43D00]">chat_bubble</span>
+                  <span class="text-[12px] font-bold text-[#A43D00]">{{ fb.teacherName }} • {{ formatFeedbackDate(fb.timestamp) }}</span>
                 </div>
-                <p class="text-[13px] text-[#7D2D00] italic leading-[18px] whitespace-pre-wrap">"{{ fb.content }}"</p>
+                <p class="text-[13px] text-[#A43D00] italic leading-[18px] whitespace-pre-wrap">"{{ fb.content }}"</p>
               </div>
             </div>
           </div>
@@ -472,6 +474,41 @@ const formatDate = (isoString) => {
   if (!isoString) return '';
   const d = new Date(isoString);
   return d.toLocaleDateString('vi-VN') + ' ' + d.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+};
+
+const formatCardDate = (isoString) => {
+  if (!isoString) return '';
+  const d = new Date(isoString);
+  const dayNames = ['Chủ nhật', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'];
+  const dateStr = d.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
+  const dayOfWeek = dayNames[d.getDay()];
+  return `${dateStr} — ${dayOfWeek}`;
+};
+
+const formatUpdateTime = (isoString) => {
+  if (!isoString) return '';
+  const d = new Date(isoString);
+  const dateStr = d.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
+  const timeStr = d.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+  return `${dateStr} - ${timeStr}`;
+};
+
+const formatFeedbackDate = (isoString) => {
+  if (!isoString) return '';
+  const d = new Date(isoString);
+  const dateStr = d.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
+  const timeStr = d.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+  return `${dateStr} ${timeStr}`;
+};
+
+const formatDrawerDate = (diary) => {
+  const dateString = diary.ngayCapNhat || diary.ngayTao;
+  if (!dateString) return 'Chưa xác định';
+  const d = new Date(dateString);
+  const dayNames = ['Chủ nhật', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'];
+  const dateStr = d.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
+  const dayOfWeek = dayNames[d.getDay()];
+  return `${dateStr} (${dayOfWeek})`;
 };
 
 const openDrawer = (diary) => {
