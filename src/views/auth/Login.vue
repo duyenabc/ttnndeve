@@ -24,9 +24,9 @@
         </Transition>
 
         <form @submit.prevent="handleLogin" class="w-full space-y-4" novalidate>
-          <div class="relative">
+          <div class="relative w-full min-w-0 box-border">
             <span
-              class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-[20px] pointer-events-none"
+              class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 z-[1] text-slate-400 text-[20px] pointer-events-none"
               :class="{ 'text-[#005EA3]': form.maDinhDanh }"
             >
               person
@@ -39,7 +39,7 @@
               autocomplete="username"
               placeholder="Mã định danh / Tên đăng nhập"
               :class="[
-                'w-full pl-11 pr-4 py-3.5 bg-white border rounded-lg text-sm font-medium text-slate-900 placeholder-slate-400 outline-none transition-all duration-200',
+                'block w-full box-border pl-11 pr-12 py-3.5 bg-white border rounded-lg text-sm font-medium text-slate-900 placeholder-slate-400 outline-none transition-all duration-200',
                 inputErrors.maDinhDanh
                   ? 'border-rose-500 focus:ring-2 focus:ring-rose-200'
                   : 'border-slate-300 focus:border-[#005EA3] focus:ring-2 focus:ring-blue-100',
@@ -48,9 +48,9 @@
             />
           </div>
 
-          <div class="relative">
+          <div class="relative w-full min-w-0 box-border">
             <span
-              class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-[20px] pointer-events-none"
+              class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 z-[1] text-slate-400 text-[20px] pointer-events-none"
               :class="{ 'text-[#005EA3]': form.matKhau }"
             >
               lock
@@ -63,7 +63,7 @@
               autocomplete="current-password"
               placeholder="Mật khẩu"
               :class="[
-                'w-full pl-11 pr-11 py-3.5 bg-white border rounded-lg text-sm font-medium text-slate-900 placeholder-slate-400 outline-none transition-all duration-200',
+                'block w-full box-border pl-11 pr-12 py-3.5 bg-white border rounded-lg text-sm font-medium text-slate-900 placeholder-slate-400 outline-none transition-all duration-200',
                 inputErrors.matKhau
                   ? 'border-rose-500 focus:ring-2 focus:ring-rose-200'
                   : 'border-slate-300 focus:border-[#005EA3] focus:ring-2 focus:ring-blue-100',
@@ -73,10 +73,10 @@
             <button
               type="button"
               @click="showPassword = !showPassword"
-              class="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1 rounded-lg transition cursor-pointer"
+              class="absolute right-2 top-1/2 z-[1] -translate-y-1/2 inline-flex h-8 w-8 items-center justify-center border-0 bg-transparent p-0 text-slate-400 hover:text-slate-600 outline-none shadow-none appearance-none cursor-pointer"
               :title="showPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'"
             >
-              <span class="material-symbols-outlined text-[20px]">
+              <span class="material-symbols-outlined text-[20px] leading-none">
                 {{ showPassword ? 'visibility_off' : 'visibility' }}
               </span>
             </button>
@@ -85,7 +85,7 @@
           <button
             type="submit"
             :disabled="loading"
-            class="w-full py-3.5 bg-[#005EA3] hover:bg-[#003362] text-white font-bold text-sm rounded-lg shadow-sm transition-all duration-200 active:scale-[0.99] flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
+            class="flex w-full box-border py-3.5 bg-[#005EA3] hover:bg-[#003362] text-white font-bold text-sm rounded-lg border border-[#005EA3] shadow-sm transition-all duration-200 active:scale-[0.99] items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
           >
             <span v-if="loading" class="material-symbols-outlined animate-spin text-[18px]">progress_activity</span>
             <span>{{ loading ? 'Đang xử lý...' : 'Đăng nhập' }}</span>
@@ -199,6 +199,12 @@ async function handleLogin() {
 </script>
 
 <style scoped>
+/* Hide browser native password reveal (Edge/IE) so only our custom eye shows */
+#input-password::-ms-reveal,
+#input-password::-ms-clear {
+  display: none;
+}
+
 .fade-enter-active,
 .fade-leave-active {
   transition: all 0.3s ease;
