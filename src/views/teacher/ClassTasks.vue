@@ -4,38 +4,34 @@
     <div v-if="!activeSubmissionEvent" class="space-y-6">
       <!-- Breadcrumbs & Header -->
       <div>
-        <nav class="flex items-center gap-2 text-xs text-slate-500 mb-2">
+        <nav class="flex items-center gap-2 text-[13px] text-slate-500 mb-3">
           <router-link to="/teacher/classes" class="hover:text-blue-700 transition-colors">Lớp của tôi</router-link>
           <span class="material-symbols-outlined text-[14px]">chevron_right</span>
-          <span class="text-slate-700 font-medium">Công việc</span>
-          <span class="material-symbols-outlined text-[14px]">chevron_right</span>
-          <span class="font-bold text-slate-900">Sự kiện & Bài nộp</span>
+          <span class="text-slate-900 font-bold">Công việc</span>
         </nav>
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <h1 class="text-[28px] font-bold text-slate-900 tracking-tight">Quản lý Công việc & Sự kiện Nộp bài</h1>
-        </div>
+        <h1 class="text-[32px] font-bold text-slate-900 tracking-tight">Công việc</h1>
       </div>
 
       <!-- Sub Navigation Tabs -->
-      <div class="flex items-center gap-8 border-b border-slate-200">
+      <div class="flex items-center gap-8 border-b border-slate-200 mt-2">
         <router-link
           :to="`/teacher/classes/${classId}/diaries`"
-          class="pb-3 text-slate-500 hover:text-blue-700 font-semibold text-sm transition-colors"
+          class="pb-3 text-slate-500 hover:text-[#005EA3] font-semibold text-[15px] transition-colors"
         >
-          Nhật ký thực tập
+          Nhật ký
         </router-link>
         <router-link
           :to="`/teacher/classes/${classId}/tasks`"
-          class="pb-3 text-blue-700 border-b-2 border-blue-700 font-bold text-sm"
+          class="pb-3 text-[#005EA3] border-b-[3px] border-[#005EA3] font-bold text-[15px]"
         >
-          Sự kiện & Bài nộp
+          Sự kiện
         </router-link>
         <router-link
           :to="`/teacher/classes/${classId}/topics`"
-          class="pb-3 text-slate-500 hover:text-blue-700 font-semibold text-sm transition-colors flex items-center gap-1.5"
+          class="pb-3 text-slate-500 hover:text-[#005EA3] font-semibold text-[15px] transition-colors flex items-center gap-1.5"
         >
-          Phê duyệt đ�? tài
-          <span v-if="pendingTopicsCount > 0" class="bg-blue-100 text-blue-800 text-[10px] px-1.5 py-0.2 rounded-full font-bold">
+          Đề tài
+          <span v-if="pendingTopicsCount > 0" class="bg-blue-100 text-blue-800 text-[10px] px-1.5 py-0.5 rounded-full font-bold">
             {{ pendingTopicsCount }}
           </span>
         </router-link>

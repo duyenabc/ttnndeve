@@ -35,29 +35,28 @@
     </div>
 
     <!-- Filter Bar -->
-    <div class="bg-[#f8f9fa] rounded-xl border border-slate-200 p-5 space-y-5">
-      <!-- Time Filter -->
-      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div class="flex items-center gap-4">
-          <span class="text-[13px] font-bold text-slate-700 w-24">THỜI GIAN:</span>
-          <div class="flex bg-[#e2e8f0] p-1 rounded-lg text-[13px] font-semibold text-slate-600">
+    <div class="bg-[#f1f3f5] rounded-xl border border-slate-200/80 p-5 space-y-4">
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        <div class="flex flex-wrap items-center gap-3">
+          <span class="text-[12px] font-bold text-slate-600 tracking-wide">THỜI GIAN:</span>
+          <div class="flex bg-slate-200/80 p-1 rounded-lg text-[13px] font-semibold text-slate-600">
             <button
               @click="timeTab = 'thisWeek'"
-              class="px-5 py-1.5 rounded-md transition-all"
+              class="px-4 py-1.5 rounded-md transition-all"
               :class="timeTab === 'thisWeek' ? 'bg-white text-[#005EA3] shadow-sm font-bold' : 'hover:text-slate-900'"
             >
               Tuần này
             </button>
             <button
               @click="timeTab = 'lastWeek'"
-              class="px-5 py-1.5 rounded-md transition-all"
+              class="px-4 py-1.5 rounded-md transition-all"
               :class="timeTab === 'lastWeek' ? 'bg-white text-[#005EA3] shadow-sm font-bold' : 'hover:text-slate-900'"
             >
               Tuần trước
             </button>
             <button
               @click="timeTab = 'term'"
-              class="px-5 py-1.5 rounded-md transition-all"
+              class="px-4 py-1.5 rounded-md transition-all"
               :class="timeTab === 'term' ? 'bg-white text-[#005EA3] shadow-sm font-bold' : 'hover:text-slate-900'"
             >
               Toàn kỳ
@@ -66,38 +65,31 @@
         </div>
         <div class="flex items-center gap-2">
           <span class="text-[13px] text-slate-500">Tùy chỉnh:</span>
-          <div class="relative">
+          <div class="relative min-w-[200px]">
             <select
               v-model="selectedWeek"
-              class="appearance-none pl-3 pr-8 py-1.5 bg-white border border-slate-300 rounded-md text-[13px] text-slate-700 outline-none focus:ring-1 focus:ring-[#005EA3]"
+              class="w-full appearance-none pl-3 pr-8 py-1.5 bg-white border border-slate-300 rounded-md text-[13px] text-slate-700 outline-none focus:ring-1 focus:ring-[#005EA3]"
             >
-              <option value="15">Tuần 15</option>
-              <option value="14">Tuần 14</option>
-              <option value="13">Tuần 13</option>
-              <option value="12">Tuần 12</option>
-              <option value="11">Tuần 11</option>
+              <option v-for="w in weekOptions" :key="w.value" :value="w.value">{{ w.label }}</option>
             </select>
             <span class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 text-[18px] pointer-events-none">expand_more</span>
           </div>
         </div>
       </div>
 
-      <!-- Status Filter -->
-      <div class="flex items-center gap-4">
-        <span class="text-[13px] font-bold text-slate-700 w-24">TRẠNG THÁI:</span>
-        <div class="flex flex-wrap items-center gap-3">
-          <button
-            v-for="st in statusOptions"
-            :key="st.value"
-            @click="statusFilter = st.value"
-            class="px-4 py-1.5 rounded-full text-[13px] transition-all border font-medium"
-            :class="statusFilter === st.value
-              ? 'bg-[#005EA3] text-white border-[#005EA3] font-bold'
-              : 'bg-white text-slate-600 border-slate-300 hover:bg-slate-50'"
-          >
-            {{ st.label }}
-          </button>
-        </div>
+      <div class="flex flex-wrap items-center gap-3">
+        <span class="text-[12px] font-bold text-slate-600 tracking-wide">TRẠNG THÁI:</span>
+        <button
+          v-for="st in statusOptions"
+          :key="st.value"
+          @click="statusFilter = st.value"
+          class="px-4 py-1.5 rounded-full text-[13px] transition-all border font-medium"
+          :class="statusFilter === st.value
+            ? 'bg-[#005EA3] text-white border-[#005EA3] font-bold'
+            : 'bg-white text-slate-600 border-slate-300 hover:bg-slate-50'"
+        >
+          {{ st.label }}
+        </button>
       </div>
     </div>
 
@@ -108,43 +100,40 @@
 
     <template v-else>
       <!-- STUDENT DIARY LIST (Tuần này / Tuần trước / Tùy chỉnh) -->
-      <div v-if="timeTab !== 'term'" class="space-y-4">
-        <!-- Week plan alignment banner -->
-        <div class="bg-blue-50 border border-blue-200 rounded-lg p-3 text-sm text-blue-800 flex items-center gap-2 mb-4">
-          <span class="material-symbols-outlined text-[20px]">info</span>
-          <strong>Lưu ý:</strong> Hãy đối chiếu các nhật ký tuần này với "Kế hoạch tuần tiếp theo" mà sinh viên đã ghi trong tuần trước để đánh giá mức độ hoàn thành.
-        </div>
-
+      <div v-if="timeTab !== 'term'" class="space-y-3">
         <div
           v-for="student in filteredStudentDiaries"
           :key="student.id"
-          class="bg-white rounded-lg border border-slate-300 p-5 shadow-sm space-y-4 transition hover:shadow-md relative"
+          class="bg-white rounded-xl border border-slate-200 p-4 sm:p-5 transition hover:border-slate-300"
         >
-          <div class="flex items-start justify-between">
-            <div class="flex items-start gap-4">
-              <!-- Avatar -->
-              <div class="w-12 h-12 rounded-lg bg-[#e2e8f0] text-slate-700 font-bold flex items-center justify-center text-[15px]">
-                {{ student.initials }}
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex items-start gap-3.5 min-w-0 flex-1">
+              <div class="w-11 h-11 rounded-full bg-slate-200 text-slate-600 font-bold flex items-center justify-center text-[13px] shrink-0 overflow-hidden">
+                <img v-if="student.avatar" :src="student.avatar" :alt="student.name" class="w-full h-full object-cover" />
+                <span v-else>{{ student.initials }}</span>
               </div>
 
-              <!-- Info -->
-              <div class="pt-0.5">
-                <div class="flex items-center gap-2">
-                  <h3 class="font-medium text-slate-900 text-[16px]">{{ student.name }}</h3>
-                  <span v-if="student.isNew" class="bg-[#e6f0fa] text-[#005EA3] text-[10px] px-1.5 py-0.5 rounded-sm font-bold uppercase tracking-wider">MỚI</span>
+              <div class="min-w-0 flex-1">
+                <div class="flex flex-wrap items-center gap-2">
+                  <h3 class="font-semibold text-slate-900 text-[15px]">{{ student.name }}</h3>
+                  <span
+                    v-if="student.isNew"
+                    class="bg-[#e6f0fa] text-[#005EA3] text-[10px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wider"
+                  >
+                    MỚI
+                  </span>
                 </div>
-                <p class="text-[13px] text-slate-500 mt-1">MSSV: {{ student.mssv }} • {{ student.entries.length }}/{{ config.minPerWeek }} nhật ký (Tuần {{ selectedWeek }})</p>
-                
-                <!-- Logs Pills -->
-                <div v-if="student.entries.length > 0" class="flex flex-wrap items-center gap-2 mt-3">
+                <p class="text-[13px] text-slate-500 mt-0.5">
+                  MSSV: {{ student.mssv }} · {{ student.entries.length }}/{{ config.minPerWeek }} nhật ký
+                </p>
+
+                <div v-if="student.entries.length > 0" class="flex flex-wrap items-center gap-2 mt-2.5">
                   <button
                     v-for="(entry, index) in student.entries"
                     :key="entry.id"
-                    @click="student.activeEntryIndex = index"
-                    class="px-3 py-1 rounded-full text-[12px] font-medium border transition-all"
-                    :class="student.activeEntryIndex === index
-                      ? 'bg-white text-[#005EA3] border-[#005EA3]'
-                      : 'bg-white text-slate-500 border-slate-300 hover:bg-slate-50'"
+                    type="button"
+                    @click="openDiaryDetail(entry)"
+                    class="px-2.5 py-1 rounded-md text-[12px] font-medium text-[#005EA3] bg-blue-50/80 hover:bg-blue-100 transition"
                   >
                     Nhật ký #{{ index + 1 }} ({{ entry.dateLabel }})
                   </button>
@@ -152,65 +141,69 @@
               </div>
             </div>
 
-            <!-- Status & Action -->
-            <div class="flex flex-col items-end gap-3 pt-1">
-              <span
-                class="px-3 py-1 rounded-full text-[12px] font-medium"
-                :class="studentStatusBadgeClass(student.status)"
-              >
-                {{ student.status }}
-              </span>
-              <button 
-                v-if="student.entries.length > 0" 
-                @click="openDiaryDetail(currentActiveEntry(student))" 
-                class="text-[#005EA3] hover:underline text-[13px] font-bold mt-4 flex items-center gap-1"
-              >
-                Xem chi tiết
-                <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
-              </button>
-            </div>
+            <span
+              class="px-2.5 py-1 rounded-full text-[12px] font-semibold shrink-0"
+              :class="studentStatusBadgeClass(student.status)"
+            >
+              {{ student.status }}
+            </span>
           </div>
 
-          <!-- Preview Content -->
-          <div v-if="student.entries.length > 0" class="bg-[#f0f4f8] border-l-[3px] border-[#005EA3] p-3 rounded-r-md flex items-start gap-2 text-[13px] text-slate-700 ml-[64px]">
-            <span class="material-symbols-outlined text-[#005EA3] text-[18px] shrink-0 mt-0.5">menu_book</span>
-            <div class="leading-relaxed">
-              <span class="italic font-bold text-[#005EA3]">Trích đoạn Nhật ký #{{ student.activeEntryIndex + 1 }}:</span>
-              <span class="ml-1 text-slate-800">{{ getPreviewText(currentActiveEntry(student).rawData) }}</span>
-            </div>
+          <!-- AI Summary -->
+          <div class="mt-3.5 bg-[#eef5fb] border border-[#d6e6f5] rounded-lg px-3.5 py-2.5 flex items-start gap-2.5 text-[13px] text-slate-700">
+            <span class="material-symbols-outlined text-[#005EA3] text-[18px] shrink-0 mt-0.5">auto_awesome</span>
+            <p class="leading-relaxed flex-1">
+              <span class="font-semibold text-[#005EA3]">Tóm tắt AI:</span>
+              <span class="ml-1 text-slate-700">{{ getAiSummary(student) }}</span>
+            </p>
+            <button
+              type="button"
+              class="text-slate-400 hover:text-slate-600 shrink-0 p-0.5"
+              :title="student.entries.length ? 'Xem chi tiết' : 'Chi tiết'"
+              @click="student.entries.length ? openDiaryDetail(currentActiveEntry(student)) : null"
+            >
+              <span class="material-symbols-outlined text-[20px]">expand_more</span>
+            </button>
           </div>
         </div>
 
-        <div v-if="filteredStudentDiaries.length === 0" class="text-center py-10 bg-white border border-slate-200 rounded-lg text-slate-500">
+        <div
+          v-if="filteredStudentDiaries.length === 0"
+          class="text-center py-10 bg-white border border-slate-200 rounded-xl text-slate-500"
+        >
           <p>Không có sinh viên nào khớp với bộ lọc.</p>
         </div>
       </div>
 
       <!-- TERM SUMMARY HEATMAP VIEW (Toàn kỳ) -->
-      <div v-else class="bg-white rounded-lg border border-slate-300 overflow-hidden shadow-sm">
+      <div v-else class="bg-white rounded-xl border border-slate-200 overflow-hidden">
         <div class="overflow-x-auto">
           <table class="w-full text-left border-collapse text-[13px]">
             <thead>
-              <tr class="bg-[#f8f9fa] border-b border-slate-300 font-bold text-[12px] text-slate-700 uppercase tracking-wide">
-                <th class="py-4 px-5">HỌ TÊN</th>
-                <th class="py-4 px-5">MÃ SỐ SINH VIÊN</th>
-                <th class="py-4 px-5 text-center">TỶ LỆ</th>
-                <th class="py-4 px-5 text-center">THIẾU</th>
-                <th class="py-4 px-5 text-center">KHÔNG NỘP</th>
-                <th class="py-4 px-5">HEATMAP (TUẦN 1-15)</th>
+              <tr class="bg-[#f8f9fa] border-b border-slate-200 font-bold text-[11px] text-slate-500 uppercase tracking-wide">
+                <th class="py-3.5 px-5">Họ tên</th>
+                <th class="py-3.5 px-5">Mã số sinh viên</th>
+                <th class="py-3.5 px-5 text-center">Tỷ lệ</th>
+                <th class="py-3.5 px-5 text-center">Thiếu</th>
+                <th class="py-3.5 px-5 text-center">Không nộp</th>
+                <th class="py-3.5 px-5">Heatmap (Tuần 1-15)</th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-slate-200">
-              <tr v-for="student in studentDiariesAllTerm" :key="student.id" class="hover:bg-slate-50 transition">
-                <td class="py-4 px-5 font-medium text-[#005EA3]">{{ student.name }}</td>
-                <td class="py-4 px-5 text-slate-600">{{ student.mssv }}</td>
-                <td class="py-4 px-5 text-center text-slate-700">{{ student.totalSubmitted }}/{{ config.minPerWeek * 15 }}</td>
-                <td class="py-4 px-5 text-center text-amber-500">{{ student.totalMissing }}</td>
-                <td class="py-4 px-5 text-center text-red-500">{{ student.totalNone }}</td>
-                <td class="py-4 px-5">
+            <tbody class="divide-y divide-slate-100">
+              <tr v-for="student in studentDiariesAllTerm" :key="student.id" class="hover:bg-slate-50/80 transition">
+                <td class="py-3.5 px-5 font-medium text-[#005EA3]">{{ student.name }}</td>
+                <td class="py-3.5 px-5 text-slate-600">{{ student.mssv }}</td>
+                <td class="py-3.5 px-5 text-center text-slate-700">{{ student.totalSubmitted }}/{{ config.minPerWeek * 15 }}</td>
+                <td class="py-3.5 px-5 text-center font-semibold text-red-500">{{ student.totalMissing }}</td>
+                <td class="py-3.5 px-5 text-center font-semibold text-red-500">{{ student.totalNone }}</td>
+                <td class="py-3.5 px-5">
                   <div class="flex items-center gap-1">
-                    <div v-for="w in 15" :key="w" class="w-[18px] h-[18px] tooltip-trigger relative group" :class="getHeatmapColor(student, w)">
-                      <!-- Tooltip -->
+                    <div
+                      v-for="w in 15"
+                      :key="w"
+                      class="w-4 h-4 rounded-sm relative group"
+                      :class="getHeatmapColor(student, w)"
+                    >
                       <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 hidden group-hover:block bg-slate-800 text-white text-[10px] py-1 px-2 rounded whitespace-nowrap z-10">
                         Tuần {{ w }}: {{ student.weeklyCounts[w] || 0 }} / {{ config.minPerWeek }}
                       </div>
@@ -314,7 +307,7 @@ const route = useRoute();
 const classId = computed(() => route.params.id || '101');
 
 const timeTab = ref('thisWeek');
-const selectedWeek = ref('13'); // Defaults to Week 13 for demo
+const selectedWeek = ref('13');
 const statusFilter = ref('ALL');
 
 const statusOptions = [
@@ -322,6 +315,14 @@ const statusOptions = [
   { value: 'Nộp đủ', label: 'Nộp đủ' },
   { value: 'Nộp thiếu', label: 'Nộp thiếu' },
   { value: 'Không nộp', label: 'Không nộp' }
+];
+
+const weekOptions = [
+  { value: '15', label: 'Tuần 15 (05/06 - 11/06)' },
+  { value: '14', label: 'Tuần 14 (29/05 - 04/06)' },
+  { value: '13', label: 'Tuần 13 (22/05 - 28/05)' },
+  { value: '12', label: 'Tuần 12 (15/05 - 21/05)' },
+  { value: '11', label: 'Tuần 11 (08/05 - 14/05)' },
 ];
 
 const allStudents = ref([]);
@@ -407,11 +408,12 @@ const studentDiaries = computed(() => {
       id: stId,
       name: st.hoTen || 'Chưa cập nhật tên',
       initials,
+      avatar: st.anhDaiDien || st.avatar || null,
       mssv: st.maSoSinhVien || 'N/A',
       status,
-      isNew: entries.length > 0 && (new Date() - new Date(stDiaries[0].ngayTao) < 24*60*60*1000),
+      isNew: entries.length > 0 && (new Date() - new Date(stDiaries[0].ngayTao) < 24 * 60 * 60 * 1000),
       entries,
-      activeEntryIndex: 0
+      activeEntryIndex: 0,
     };
   });
 });
@@ -482,6 +484,19 @@ function currentActiveEntry(student) {
 function getPreviewText(rawData) {
   if (!rawData) return 'Không có nội dung';
   return rawData.taskDescription || rawData.newKnowledge || 'Đã nộp nhật ký';
+}
+
+function getAiSummary(student) {
+  if (!student.entries.length) {
+    return 'Sinh viên chưa nộp nhật ký cho tuần này. Kế hoạch tuần trước là nghiên cứu và hoàn thành công việc đã đề ra.';
+  }
+  const entry = currentActiveEntry(student)?.rawData;
+  const work = getPreviewText(entry);
+  const firstName = (student.name || '').trim().split(' ').pop() || 'Sinh viên';
+  if (student.status === 'Nộp đủ') {
+    return `${firstName} đã hoàn thành đủ nhật ký tuần này. Nội dung nổi bật: ${work}`;
+  }
+  return `${firstName} mới nộp ${student.entries.length}/${config.value.minPerWeek} nhật ký. Nội dung gần nhất: ${work}`;
 }
 
 function studentStatusBadgeClass(status) {

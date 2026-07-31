@@ -29,7 +29,7 @@
             <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0 animate-pulse" />
             <span class="font-bold text-slate-800 text-sm truncate">Lớp Thực tập K64</span>
           </div>
-          <p class="text-[11px] font-medium text-slate-500 mt-0.5 pl-4">Học kỳ 1 - 2024 • DUE</p>
+          <p class="text-[11px] font-medium text-slate-500 mt-0.5 pl-4">Học kỳ 1 - 2024</p>
         </div>
 
         <div v-else class="flex justify-center w-full" title="Lớp Thực tập K64">
@@ -59,8 +59,8 @@
             class="w-full group relative flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 text-left"
             :class="[
               isItemActive(item)
-                ? 'bg-blue-50 text-[#005EA3] font-bold shadow-2xs border-l-4 border-[#005EA3]'
-                : 'text-slate-700 hover:bg-slate-100/80 hover:text-slate-900 border-l-4 border-transparent',
+                ? 'bg-[#005EA3] text-white font-bold shadow-sm'
+                : 'text-slate-700 hover:bg-slate-100/80 hover:text-slate-900',
               isCollapsed ? 'lg:justify-center lg:px-0' : ''
             ]"
             @click="closeMobile"
@@ -68,7 +68,7 @@
             <!-- Icon -->
             <span
               class="material-symbols-outlined text-[22px] transition-transform group-hover:scale-110 shrink-0"
-              :class="isItemActive(item) ? 'text-[#005EA3]' : 'text-slate-500 group-hover:text-slate-700'"
+              :class="isItemActive(item) ? 'text-white' : 'text-slate-500 group-hover:text-slate-700'"
               :style="isItemActive(item) ? { fontVariationSettings: `'FILL' 1` } : {}"
             >
               {{ item.icon }}
@@ -86,7 +86,7 @@
             <span
               v-if="item.badge && (!isCollapsed || isMobileOpen)"
               class="ml-auto px-2 py-0.5 rounded-full text-[11px] font-bold transition-all"
-              :class="item.badgeClass || 'bg-blue-100 text-blue-800'"
+              :class="isItemActive(item) ? 'bg-white/20 text-white' : (item.badgeClass || 'bg-blue-100 text-blue-800')"
             >
               {{ item.badge }}
             </span>
@@ -245,7 +245,7 @@
       ];
     }
 
-    // Default for GiangVien
+    // Default for GiangVien — menu lớp theo mockup
     return [
       {
         id: 'dashboard',
@@ -254,31 +254,21 @@
         path: `/teacher/classes/${activeClassId.value}/dashboard`
       },
       {
-        id: 'classes',
-        label: 'Lớp của tôi',
-        icon: 'class',
-        path: '/teacher/classes'
-      },
-      {
         id: 'students',
         label: 'Sinh viên',
         icon: 'groups',
-        path: `/teacher/classes/${activeClassId.value}/students`,
-        badge: '32 SV'
+        path: `/teacher/classes/${activeClassId.value}/students`
       },
       {
         id: 'work',
         label: 'Công việc',
         icon: 'assignment',
-        path: `/teacher/classes/${activeClassId.value}/tasks`,
-        badge: '3 Mới',
-        badgeClass: 'bg-amber-100 text-amber-800'
-      },
-      {
-        id: 'schedule',
-        label: 'Lịch hướng dẫn',
-        icon: 'event',
-        path: '/teacher/schedule'
+        path: `/teacher/classes/${activeClassId.value}/diaries`,
+        matchPaths: [
+          `/teacher/classes/${activeClassId.value}/diaries`,
+          `/teacher/classes/${activeClassId.value}/tasks`,
+          `/teacher/classes/${activeClassId.value}/topics`
+        ]
       },
       {
         id: 'evaluation',
@@ -291,6 +281,12 @@
         label: 'Kho tài liệu & biểu mẫu',
         icon: 'folder_shared',
         path: '/documents'
+      },
+      {
+        id: 'settings',
+        label: 'Cấu hình lớp',
+        icon: 'settings',
+        path: `/teacher/classes/${activeClassId.value}/settings`
       }
     ];
   });
@@ -301,6 +297,9 @@
   }
 
   function isItemActive(item) {
+    if (item.matchPaths?.length) {
+      return item.matchPaths.some((p) => route.path === p || route.path.startsWith(p + '/'));
+    }
     return item.path && isPathActive(item.path);
   }
 
