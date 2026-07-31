@@ -449,10 +449,12 @@ const api = {
 
     if (url === '/diaries') {
       const id = Date.now();
+      const nowStr = new Date().toISOString();
       const newDiary = {
         id: String(id),
         ...data,
-        ngayTao: new Date().toISOString()
+        ngayTao: nowStr,
+        ngayCapNhat: nowStr
       };
       await setDoc(doc(db, 'diaries', String(id)), newDiary);
       return { data: { message: 'Đã lưu nhật ký', diary: newDiary } };
@@ -497,7 +499,7 @@ const api = {
             content: data.content,
             timestamp: new Date().toISOString()
           });
-          await updateDoc(doc(db, 'diaries', String(id)), { feedbacks, isReadByTeacher: true });
+          await updateDoc(doc(db, 'diaries', String(id)), { feedbacks, isReadByTeacher: true, ngayCapNhat: new Date().toISOString() });
         }
       } catch (e) {}
       return { data: { message: 'Đã gửi phản hồi' } };
@@ -509,6 +511,17 @@ const api = {
         await updateDoc(doc(db, 'diaries', String(id)), { isReadByTeacher: true });
       } catch (e) {}
       return { data: { message: 'Đã đánh dấu đọc' } };
+    }
+
+    if (url.startsWith('/diaries/') && !url.endsWith('/feedback') && !url.endsWith('/read')) {
+      const id = url.split('/')[2];
+      try {
+        data.ngayCapNhat = new Date().toISOString();
+        await updateDoc(doc(db, 'diaries', String(id)), data);
+      } catch (e) {
+        throw { response: { data: { message: 'Lỗi cập nhật nhật ký' } } };
+      }
+      return { data: { message: 'Đã cập nhật nhật ký' } };
     }
 
     if (url.startsWith('/giangvien/classes/') && url.endsWith('/diary-config')) {

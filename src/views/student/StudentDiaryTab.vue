@@ -128,7 +128,8 @@
         <template v-if="currentWeekDiaries.length > 0">
           <div v-for="diary in currentWeekDiaries" :key="diary.id" class="border border-slate-200 bg-white rounded-[12px] p-5 flex flex-col md:flex-row gap-6 hover:shadow-md transition">
             <div class="w-[200px] shrink-0 border-r border-slate-100 pr-4">
-              <div class="font-bold text-[14px] text-slate-900 mb-2">{{ formatDate(diary.ngayTao) }}</div>
+              <div class="font-bold text-[14px] text-slate-900 mb-1">{{ formatDate(diary.ngayCapNhat || diary.ngayTao) }}</div>
+              <div class="text-[11px] text-slate-500 mb-2 italic">Cập nhật lần cuối</div>
               <div class="flex flex-wrap gap-2 mb-2">
                 <span v-if="diary.status === 'Submitted'" class="inline-block bg-[#E6F4EA] text-[#137333] px-2 py-0.5 rounded text-[10px] font-bold">ĐÃ NỘP</span>
                 <span v-else class="inline-block bg-slate-200 text-slate-600 px-2 py-0.5 rounded text-[10px] font-bold">NHÁP</span>
@@ -139,6 +140,17 @@
               <p class="text-[13px] text-slate-700 leading-relaxed mb-3 flex-1 line-clamp-3">
                 {{ getPreviewText(diary) }}
               </p>
+              
+              <div class="flex items-center gap-4 mb-3 text-[12px] text-slate-600 font-medium">
+                <span v-if="diary.completionLevel" class="flex items-center gap-1">
+                  <span class="material-symbols-outlined text-[16px] text-amber-500">task_alt</span>
+                  Mức độ: {{ diary.completionLevel }}/10
+                </span>
+                <span v-if="diary.feeling" class="flex items-center gap-1">
+                  <span class="material-symbols-outlined text-[16px] text-amber-500">mood</span>
+                  Cảm nhận: {{ diary.feeling }}/5
+                </span>
+              </div>
               
               <div v-if="diary.feedbacks && diary.feedbacks.length > 0" class="mb-3">
                 <div class="text-[#D93025] font-bold text-[12px] flex items-start gap-1">
@@ -171,17 +183,17 @@
       </div>
 
       <!-- Footer progress -->
-      <div v-if="!isWriting" class="mt-8 pt-6 border-t border-slate-200 flex items-center justify-between">
-        <div class="text-[13px] font-bold text-slate-800">
-          Tổng cả kỳ: <span class="text-[#005EA3]">{{ totalSubmitted }}/{{ totalRequired }} nhật ký đã nộp</span>
+      <div v-if="!isWriting" class="mt-8 pt-[24px] border-t border-[#C2C6D4] flex items-center justify-between">
+        <div class="text-[14px] font-bold text-[#1A1C1C]">
+          Tổng cả kỳ: {{ totalSubmitted }}/{{ totalRequired }} nhật ký đã nộp
         </div>
-        <div class="w-[240px]">
+        <div class="w-[256px]">
           <div class="flex justify-between items-center text-[12px] mb-1">
-            <span class="text-slate-500 font-normal text-[11px]">Tiến độ hoàn thành</span>
-            <span class="text-[#005EA3] font-bold">{{ Math.round((totalSubmitted / Math.max(1, totalRequired)) * 100) }}%</span>
+            <span class="text-[#424752] font-medium text-[12px]">Tiến độ hoàn thành</span>
+            <span class="text-[#00488D] font-bold">{{ Math.round((totalSubmitted / Math.max(1, totalRequired)) * 100) }}%</span>
           </div>
-          <div class="w-full bg-slate-200 rounded-full h-[4px] flex overflow-hidden">
-            <div class="bg-[#005EA3] h-full transition-all duration-500" :style="{ width: Math.min(100, Math.round((totalSubmitted / Math.max(1, totalRequired)) * 100)) + '%' }"></div>
+          <div class="w-full bg-[#E9E8E7] rounded-[12px] h-[6px] flex overflow-hidden">
+            <div class="h-full transition-all duration-500 rounded-[12px]" :class="totalSubmitted >= totalRequired ? 'bg-[#005503]' : 'bg-[#00488D]'" :style="{ width: Math.min(100, Math.round((totalSubmitted / Math.max(1, totalRequired)) * 100)) + '%' }"></div>
           </div>
         </div>
       </div>
@@ -189,35 +201,53 @@
 
     <!-- Drawer for Diary Detail -->
     <div v-if="isDrawerOpen" class="fixed inset-0 z-[100] bg-slate-900/50 backdrop-blur-sm flex justify-end" @click.self="closeDrawer">
-      <div class="bg-white w-[500px] h-full shadow-2xl flex flex-col animate-slide-in">
-        <div class="p-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
-          <h2 class="font-bold text-[16px] text-slate-800">Chi tiết Nhật ký</h2>
-          <button @click="closeDrawer" class="text-slate-400 hover:text-slate-600">✕</button>
+      <div class="bg-white w-[500px] h-full shadow-2xl flex flex-col animate-slide-in border-l border-[#C2C6D4]">
+        <div class="p-[24px] border-b border-[#C2C6D4] flex items-start justify-between">
+          <div class="flex flex-col gap-1">
+            <h3 class="text-[24px] font-semibold text-[#1A1C1C] leading-[32px]">Chi tiết nhật ký thực tập</h3>
+            <span class="text-[14px] font-bold text-[#00488D]">Tuần {{ viewingDiary.week }} - {{ viewingDiary.status === 'Submitted' ? 'Đã nộp' : 'Nháp' }}</span>
+          </div>
+          <button @click="closeDrawer" class="w-[30px] h-[30px] rounded-[12px] hover:bg-slate-100 flex items-center justify-center transition">
+            <span class="material-symbols-outlined text-[14px] text-[#1A1C1C]">close</span>
+          </button>
         </div>
         
-        <div class="p-6 overflow-y-auto flex-1 space-y-5">
-          <div v-for="field in activeFields" :key="field.id">
-            <h4 class="font-bold text-[12px] text-slate-500 uppercase">{{ field.label }}</h4>
-            <p class="text-[14px] text-slate-800 mt-1 whitespace-pre-wrap">{{ viewingDiary[field.id] || '---' }}</p>
+        <div class="p-[24px] overflow-y-auto flex-1 space-y-[24px]">
+          <div class="grid grid-cols-2 gap-4">
+            <div v-if="viewingDiary.completionLevel" class="bg-amber-50 p-3 rounded-[8px]">
+              <div class="text-[11px] text-amber-800 font-bold uppercase mb-1">Mức độ hoàn thành</div>
+              <div class="text-[18px] font-bold text-amber-600">{{ viewingDiary.completionLevel }}/10</div>
+            </div>
+            <div v-if="viewingDiary.feeling" class="bg-amber-50 p-3 rounded-[8px]">
+              <div class="text-[11px] text-amber-800 font-bold uppercase mb-1">Cảm nhận chung</div>
+              <div class="text-[18px] font-bold text-amber-600">{{ viewingDiary.feeling }}/5</div>
+            </div>
           </div>
 
+          <template v-for="field in activeFields" :key="field.id">
+            <div v-if="!['completionLevel', 'feeling'].includes(field.id)">
+              <h4 class="font-semibold text-[12px] text-[#424752] uppercase tracking-[0.6px] leading-[16px] mb-1">{{ field.label }}</h4>
+              <p class="text-[14px] text-[#1A1C1C] leading-[20px] whitespace-pre-wrap">{{ viewingDiary[field.id] || '---' }}</p>
+            </div>
+          </template>
+
           <!-- Feedbacks -->
-          <div v-if="viewingDiary.feedbacks && viewingDiary.feedbacks.length > 0" class="mt-8 pt-4 border-t border-dashed border-slate-300">
-            <h3 class="font-bold text-[14px] text-[#005EA3] mb-4 flex items-center gap-1">
-              <span class="material-symbols-outlined text-[18px]">forum</span> Phản hồi từ Giảng viên
-            </h3>
-            <div v-for="(fb, i) in viewingDiary.feedbacks" :key="i" class="bg-blue-50 border border-blue-100 rounded-[8px] p-3 mb-3">
-              <div class="flex justify-between text-[11px] mb-1">
-                <span class="font-bold text-slate-700">{{ fb.teacherName || 'GVHD' }}</span>
-                <span class="text-slate-400">{{ formatDate(fb.timestamp) }}</span>
+          <div v-if="viewingDiary.feedbacks && viewingDiary.feedbacks.length > 0" class="mt-[24px] pt-[24px] border-t border-dashed border-[#C2C6D4]">
+            <h4 class="font-semibold text-[12px] text-[#424752] uppercase tracking-[0.6px] mb-4">Nhận xét của Giảng viên</h4>
+            <div class="space-y-3">
+              <div v-for="(fb, index) in viewingDiary.feedbacks" :key="index" class="bg-[rgba(255,219,205,0.3)] border border-[#FFDBCD] p-[16px] rounded-[4px] flex flex-col gap-[8px]">
+                <div class="flex items-center gap-[8px]">
+                  <span class="material-symbols-outlined text-[12px] text-[#A43D00]">chat_bubble</span>
+                  <span class="text-[12px] font-bold text-[#7D2D00]">{{ fb.teacherName }} • {{ formatDate(fb.timestamp) }}</span>
+                </div>
+                <p class="text-[13px] text-[#7D2D00] italic leading-[18px] whitespace-pre-wrap">"{{ fb.content }}"</p>
               </div>
-              <p class="text-[13px] text-slate-800 leading-relaxed">{{ fb.content }}</p>
             </div>
           </div>
         </div>
         
-        <div class="p-4 border-t border-slate-200 bg-slate-50 flex justify-end">
-          <button @click="closeDrawer" class="px-5 py-2 border border-slate-300 text-slate-700 font-bold rounded-[8px] hover:bg-white text-[13px]">
+        <div class="p-[24px] border-t border-[#C2C6D4] flex justify-end">
+          <button @click="closeDrawer" class="px-5 py-2 border border-slate-300 text-slate-700 font-bold rounded-[8px] hover:bg-slate-50 text-[13px] transition">
             Đóng
           </button>
         </div>
@@ -361,23 +391,31 @@ const saveDraft = async () => {
 
 const saveDiary = async (status) => {
   try {
-    const payload = {
+    let payload = {
       ...form.value,
       classId: props.classId,
-      userId: authStore.user?.id,
+      userId: authStore.user?.maNguoiDung || authStore.user?.id,
       week: currentWeek.value,
-      status: status,
-      feedbacks: []
+      status: status
     };
     
-    // If we are editing a draft, update it. For mock, just append.
-    await api.post('/diaries', payload);
+    if (!payload.feedbacks) payload.feedbacks = [];
+    
+    // Remove undefined fields which Firestore rejects
+    payload = JSON.parse(JSON.stringify(payload));
+    
+    if (payload.id) {
+      await api.put(`/diaries/${payload.id}`, payload);
+    } else {
+      await api.post('/diaries', payload);
+    }
     
     displayToast(status === 'Submitted' ? 'Đã nộp nhật ký thành công' : 'Đã lưu nháp');
     isWriting.value = false;
     await loadDiaries();
   } catch (e) {
-    alert('Nộp nhật ký thất bại, vui lòng thử lại sau!');
+    console.error('Save diary error:', e);
+    alert('Lưu nhật ký thất bại, vui lòng thử lại sau!');
   }
 };
 
