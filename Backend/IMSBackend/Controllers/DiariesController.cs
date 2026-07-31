@@ -98,15 +98,26 @@ namespace IMSBackend.Controllers
             return Ok(new { message = "Đã gửi phản hồi" });
         }
         
+        /// <summary>UC-18.2 — mark diary read by teacher (default) or student.</summary>
         [HttpPut("{id}/read")]
-        public async Task<IActionResult> MarkRead(string id)
+        public async Task<IActionResult> MarkRead(string id, [FromQuery] string by = "teacher")
         {
             var diary = await _context.Diaries.FindAsync(id);
             if (diary == null) return NotFound();
-            
-            diary.IsReadByTeacher = true; // or Student depending on role
+
+            if (string.Equals(by, "student", StringComparison.OrdinalIgnoreCase))
+                diary.IsReadByStudent = true;
+            else
+                diary.IsReadByTeacher = true;
+
+            diary.NgayCapNhat = DateTime.UtcNow;
             await _context.SaveChangesAsync();
-            return Ok(new { message = "Đã đánh dấu đọc" });
+            return Ok(new
+            {
+                message = "Đã đánh dấu đọc",
+                isReadByTeacher = diary.IsReadByTeacher,
+                isReadByStudent = diary.IsReadByStudent
+            });
         }
     }
 

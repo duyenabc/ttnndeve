@@ -164,16 +164,20 @@
               <template v-else>
                 <div class="flex flex-wrap items-center gap-2 pt-4">
                   <button
-                    v-for="(entry, index) in student.entries"
+                    v-for="entry in student.entriesNewestFirst"
                     :key="entry.id"
                     type="button"
                     class="px-2.5 py-1 rounded-full text-[12px] font-medium border transition"
-                    :class="activeEntryId[student.id] === entry.id
-                      ? 'bg-[#005EA3] text-white border-[#005EA3]'
-                      : 'text-[#005EA3] bg-blue-50/80 border-blue-100 hover:bg-blue-100'"
+                    :class="[
+                      activeEntryId[student.id] === entry.id
+                        ? 'bg-[#005EA3] text-white border-[#005EA3]'
+                        : entry.isRead
+                          ? 'text-slate-600 bg-white border-slate-200 hover:bg-slate-50'
+                          : 'text-[#005EA3] bg-blue-50/80 border-blue-100 hover:bg-blue-100',
+                    ]"
                     @click.stop="selectEntry(student, entry)"
                   >
-                    Nhật ký #{{ index + 1 }} ({{ entry.weekdayLabel }} - {{ entry.dateLabel }})
+                    Nhật ký #{{ entry.displayIndex }} ({{ entry.weekdayLabel }} - {{ entry.dateLabel }})
                   </button>
                 </div>
 
@@ -194,8 +198,9 @@
                     <span class="ml-1">{{ planBanner(student).text }}</span>
                   </div>
 
+                  <!-- UC-18.2: short view = 3 fields; full = all enabled fields -->
                   <div class="space-y-2">
-                    <div v-for="field in previewFields" :key="field.id">
+                    <div v-for="field in fieldsForEntry(student)" :key="field.id">
                       <h4 class="font-bold text-[11px] text-slate-500 uppercase mb-1">{{ field.label }}</h4>
                       <p class="text-[13px] text-slate-800 whitespace-pre-wrap bg-white p-3 rounded border border-slate-100 min-h-[36px]">
                         {{ fieldValue(currentEntry(student).rawData, field.id) }}
@@ -207,10 +212,36 @@
                     <button
                       type="button"
                       class="px-3 py-1.5 text-[13px] font-semibold text-[#005EA3] border border-[#005EA3]/40 rounded-md hover:bg-blue-50"
+                      @click.stop="toggleFullView(student)"
+                    >
+                      {{ isFullView(student) ? 'Thu gọn' : 'Xem đầy đủ' }}
+                    </button>
+                    <button
+                      type="button"
+                      class="px-3 py-1.5 text-[13px] font-medium text-slate-600 border border-slate-200 rounded-md hover:bg-slate-50"
                       @click.stop="openDiaryDetail(currentEntry(student), student)"
                     >
-                      Xem đầy đủ
+                      Mở panel chi tiết
                     </button>
+                  </div>
+
+                  <!-- UC-18.2: prior teacher comments highlighted under content -->
+                  <div
+                    v-if="entryFeedbacks(student).length"
+                    class="rounded-lg border border-amber-200 bg-amber-50/80 px-3.5 py-3 space-y-2"
+                  >
+                    <h4 class="text-[12px] font-bold text-amber-900 uppercase tracking-wide">Nhận xét giảng viên</h4>
+                    <div
+                      v-for="(fb, i) in entryFeedbacks(student)"
+                      :key="i"
+                      class="bg-white/80 border border-amber-100 rounded-md p-3"
+                    >
+                      <div class="flex justify-between text-[11px] mb-1 gap-2">
+                        <span class="font-bold text-slate-800">{{ fb.teacherName || 'GVHD' }}</span>
+                        <span class="text-slate-500 shrink-0">{{ formatDate(fb.timestamp) }}</span>
+                      </div>
+                      <p class="text-[13px] text-slate-800 leading-relaxed whitespace-pre-wrap">{{ fb.content }}</p>
+                    </div>
                   </div>
 
                   <div class="pt-2 border-t border-slate-200">
@@ -413,6 +444,7 @@ const config = ref({
 });
 
 const expandedIds = ref(new Set());
+const fullViewIds = ref(new Set()); // studentId:entryId keys for UC-18.2 full content
 const activeEntryId = reactive({});
 const inlineFeedback = reactive({});
 
@@ -541,9 +573,10 @@ const studentDiaries = computed(() => {
 
   return allStudents.value.map((st) => {
     const stId = String(st.maGhiDanh || st.maSoSinhVien || st.id);
+    // Chronological (oldest → newest) for plan comparison
     const stDiaries = allDiaries.value
       .filter((d) => matchStudentDiary(d, st) && String(d.week) === week && d.status === 'Submitted')
-      .sort((a, b) => new Date(a.ngayTao) - new Date(b.ngayTao));
+      .sort((a, b) => new Date(a.ngayTao || a.ngayCapNhat) - new Date(b.ngayTao || b.ngayCapNhat));
 
     const entries = stDiaries.map((d, index) => {
       const dObj = new Date(d.ngayTao || d.ngayCapNhat);
@@ -551,11 +584,14 @@ const studentDiaries = computed(() => {
         id: d.id,
         dateLabel: dObj.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit' }),
         weekdayLabel: weekdayVi(dObj),
+        displayIndex: index + 1,
         index,
         rawData: d,
         isRead: !!d.isReadByTeacher,
       };
     });
+    // UC-18.2: newest first in the week list
+    const entriesNewestFirst = [...entries].reverse();
 
     const submittedCount = entries.length;
     let status = 'Đang trong hạn';
@@ -583,6 +619,7 @@ const studentDiaries = computed(() => {
       submittedCount,
       hasUnread: entries.some((e) => !e.isRead),
       entries,
+      entriesNewestFirst,
       allChronological: stDiaries,
     };
   });
@@ -642,8 +679,9 @@ function toggleStudent(id) {
   else {
     next.add(id);
     const st = studentDiaries.value.find((s) => s.id === id);
-    if (st?.entries?.length && !activeEntryId[id]) {
-      selectEntry(st, st.entries[st.entries.length - 1]);
+    // Open newest diary by default (UC-18.2)
+    if (st?.entriesNewestFirst?.length) {
+      selectEntry(st, st.entriesNewestFirst[0]);
     }
   }
   expandedIds.value = next;
@@ -651,7 +689,58 @@ function toggleStudent(id) {
 
 function currentEntry(student) {
   const id = activeEntryId[student.id];
-  return student.entries.find((e) => e.id === id) || student.entries[student.entries.length - 1] || null;
+  return (
+    student.entries.find((e) => e.id === id) ||
+    student.entriesNewestFirst?.[0] ||
+    student.entries[student.entries.length - 1] ||
+    null
+  );
+}
+
+function fullViewKey(student) {
+  const e = currentEntry(student);
+  return e ? `${student.id}:${e.id}` : '';
+}
+
+function isFullView(student) {
+  const key = fullViewKey(student);
+  return key ? fullViewIds.value.has(key) : false;
+}
+
+function fieldsForEntry(student) {
+  return isFullView(student) ? activeFields.value : previewFields.value;
+}
+
+function toggleFullView(student) {
+  const key = fullViewKey(student);
+  if (!key) return;
+  const next = new Set(fullViewIds.value);
+  if (next.has(key)) next.delete(key);
+  else next.add(key);
+  fullViewIds.value = next;
+  const entry = currentEntry(student);
+  if (entry) selectEntry(student, entry);
+  // #region agent log
+  fetch('http://127.0.0.1:7500/ingest/7f531694-75ae-41c0-a883-0940871f5a5e', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-Debug-Session-Id': '19ef33' },
+    body: JSON.stringify({
+      sessionId: '19ef33',
+      runId: 'uc18-2',
+      hypothesisId: 'H1',
+      location: 'ClassDiaries.vue:toggleFullView',
+      message: 'toggle full diary view',
+      data: { key, full: next.has(key), fields: next.has(key) ? activeFields.value.length : 3 },
+      timestamp: Date.now(),
+    }),
+  }).catch(() => {});
+  // #endregion
+}
+
+function entryFeedbacks(student) {
+  const entry = currentEntry(student);
+  const list = entry?.rawData?.feedbacks;
+  return Array.isArray(list) ? list : [];
 }
 
 function planBanner(student) {
