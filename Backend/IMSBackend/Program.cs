@@ -109,10 +109,11 @@ app.MapGet("/", () => Results.Ok(new
     docs = "/openapi/v1.json"
 }));
 
-// Wait for Postgres (Render free DB / cold start can flake on first connect)
+// Listen first so Render healthCheckPath:/ succeeds, then init DB
+await app.StartAsync();
+Console.WriteLine("[IMS] HTTP server listening; initializing database...");
 await EnsureDatabaseReadyAsync(app.Services);
-
-app.Run();
+await app.WaitForShutdownAsync();
 
 static async Task EnsureDatabaseReadyAsync(IServiceProvider services)
 {

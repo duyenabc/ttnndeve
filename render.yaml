@@ -1,21 +1,23 @@
 # Render Blueprint — https://render.com/docs/blueprint-spec
-# Sau khi tạo service, cập nhật URL thật vào Dashboard nếu khác mặc định.
+# Dashboard → New → Blueprint → chọn repo này → Apply.
+# Sau khi tạo xong, copy URL thật và cập nhật env (bước trong README).
 
 databases:
   - name: ims-db
     plan: free
+    region: oregon
     databaseName: ims_db
     user: ims
+    postgresMajorVersion: "15"
 
 services:
-  # ASP.NET Core API
   - type: web
     name: ims-api
     runtime: docker
-    dockerfilePath: ./Backend/IMSBackend/Dockerfile
-    # Repo root — must match COPY paths in Dockerfile (Backend/IMSBackend/...)
-    dockerContext: .
+    region: oregon
     plan: free
+    dockerfilePath: ./Backend/IMSBackend/Dockerfile
+    dockerContext: .
     healthCheckPath: /
     envVars:
       - key: ASPNETCORE_ENVIRONMENT
@@ -26,11 +28,10 @@ services:
           property: connectionString
       - key: Jwt__Key
         generateValue: true
-      # Đổi thành URL Static Site thật sau khi deploy (Dashboard → Environment)
+      # Đổi thành URL Static Site thật sau khi Blueprint tạo xong, rồi redeploy API
       - key: Cors__Origins
         value: https://ttnndeve.onrender.com
 
-  # Vue static site (Static Sites không dùng plan: free)
   - type: web
     name: ttnndeve
     runtime: static
@@ -41,6 +42,6 @@ services:
         source: /*
         destination: /index.html
     envVars:
-      # Đổi thành URL API thật sau khi deploy (Dashboard → Environment), rồi Redeploy
+      # Đổi thành URL API thật (https://ims-api-xxxx.onrender.com/api), rồi Manual Deploy lại Static
       - key: VITE_API_BASE_URL
         value: https://ims-api.onrender.com/api

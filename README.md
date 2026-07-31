@@ -64,26 +64,34 @@ Client mặc định: `http://localhost:3000`
 
 ## Deploy Render
 
-Repo có `render.yaml` (PostgreSQL + API Docker + Static Vue).
+Repo có `render.yaml` (PostgreSQL + API Docker + Static Vue). Cần đủ **3** service: `ims-db`, `ims-api`, `ttnndeve`.
 
-### Cách nhanh trên Dashboard
+### Cách nhanh: Blueprint (khuyên dùng)
 
-1. [Render Dashboard](https://dashboard.render.com) → **New** → **Blueprint** → chọn repo `duyenabc/ttnndeve` → Apply `render.yaml`.
-2. Đợi **ims-db**, **ims-api**, **ttnndeve** tạo xong.
-3. Mở **ims-api** → copy URL (ví dụ `https://ims-api.onrender.com`).
-4. Mở **ttnndeve** (Static) → Environment:
-   - `VITE_API_BASE_URL` = `https://<ims-api-url>/api` (không dấu `/` cuối thừa)
-5. Mở **ims-api** → Environment:
-   - `Cors__Origins` = `https://<ttnndeve-url>` (URL frontend, không `/` cuối)
-6. **Manual Deploy** lại cả API và Static (Vite chỉ đọc `VITE_*` lúc build).
+1. [Render Dashboard](https://dashboard.render.com) → **New** → **Blueprint** → repo `duyenabc/ttnndeve` → Apply.
+2. Đợi 3 service xanh: **ims-db**, **ims-api**, **ttnndeve**.
+3. Mở **ims-api** → copy URL thật (thường `https://ims-api-xxxx.onrender.com`).  
+   Mở URL đó: phải thấy JSON `{ "service": "IMS API", "status": "ok" }` (không phải trang "Home Page").
+4. **ttnndeve** → Environment → `VITE_API_BASE_URL` = `https://<ims-api-url>/api` → **Manual Deploy**.
+5. **ims-api** → Environment → `Cors__Origins` = `https://<ttnndeve-url>` (không `/` cuối) → restart/redeploy.
+6. API và DB phải cùng region (**Oregon**). `DATABASE_URL` = Internal URL của `ims-db` (Blueprint tự gắn).
 
-### Checklist bạn cần chỉnh
+### Docker (nếu tạo Web Service tay)
+
+| Mục | Giá trị |
+|-----|---------|
+| Dockerfile Path | `Backend/IMSBackend/Dockerfile` |
+| Docker Context | `.` (gốc repo) |
+| Root Directory | để trống |
+| Region | Oregon (cùng `ims-db`) |
+
+### Checklist
 
 | Mục | Ở đâu | Giá trị |
 |-----|--------|---------|
-| `VITE_API_BASE_URL` | Static site env | `https://ims-api-xxxx.onrender.com/api` |
-| `Cors__Origins` | API env | `https://ttnndeve.onrender.com` (URL frontend thật) |
-| `DATABASE_URL` | API (từ Blueprint) | Tự gắn từ Postgres — không sửa tay trừ khi lỗi SSL |
-| Repo access | Render ↔ GitHub | Render có quyền đọc repo `ttnndeve` |
+| `VITE_API_BASE_URL` | Static env | `https://ims-api-xxxx.onrender.com/api` |
+| `Cors__Origins` | API env | URL frontend thật |
+| `DATABASE_URL` | API env | Internal Database URL từ `ims-db` |
+| Không Suspended | Overview | Cả 3 service Active |
 
-Free tier: API sleep sau idle; lần mở đầu có thể chậm ~30–60s.
+Free tier: API sleep sau idle; lần mở đầu ~30–60s. Nếu Logs báo DB fail: kiểm tra Internal URL + cùng region.
