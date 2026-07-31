@@ -104,7 +104,9 @@ Nếu lỡ tạo frontend kiểu Web Service (Node): Build = `npm ci && npm run 
 |-----|--------|---------|
 | `VITE_API_BASE_URL` | Static env | `https://ims-backend….onrender.com/api` |
 | `Cors__Origins` | API env | URL frontend thật |
-| `DATABASE_URL` | API env | Internal Database URL từ `ims-db` |
+| `DATABASE_URL` | API env | **Internal Database URL** từ Postgres (`ims-db`) — host dạng `dpg-….oregon-postgres.render.com`, **không** `localhost` |
+
+Nếu log API có `Failed to connect to 127.0.0.1:5432` / `tcp://localhost:5432`: chưa gắn `DATABASE_URL`. Vào service API → **Environment** → Add `DATABASE_URL` → dán **Internal Database URL** từ trang Postgres → Save → **Manual Deploy**.
 | Không Suspended | Overview | Cả 3 service Active |
 
 Free tier: API sleep sau idle; lần mở đầu ~30–60s. Nếu Logs báo DB fail: kiểm tra Internal URL + cùng region.

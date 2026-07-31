@@ -17,6 +17,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();
 
+var hasDatabaseUrlEnv = !string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("DATABASE_URL"));
+var hasCsEnv = !string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("ConnectionStrings__DefaultConnection"));
+Console.WriteLine($"[IMS] Env DATABASE_URL set: {hasDatabaseUrlEnv}; ConnectionStrings__DefaultConnection set: {hasCsEnv}");
+
 var connectionString = ResolveConnectionString(builder.Configuration);
 Console.WriteLine($"[IMS] DB host hint: {DescribeConnectionTarget(connectionString)}");
 
@@ -282,24 +286,36 @@ static string DescribeConnectionTarget(string cs)
 
 static string ResolveConnectionString(IConfiguration config)
 {
-    // Prefer DATABASE_URL (Render), then ConnectionStrings__DefaultConnection
-    var databaseUrl =
-        Environment.GetEnvironmentVariable("DATABASE_URL")
-        ?? config.GetConnectionString("DefaultConnection");
+    // Prefer env (Render), then appsettings — never use localhost on Render/Production
+    var fromEnv = Environment.GetEnvironmentVariable("DATABASE_URL")
+        ?? Environment.GetEnvironmentVariable("ConnectionStrings__DefaultConnection");
+    var databaseUrl = fromEnv ?? config.GetConnectionString("DefaultConnection");
+    var onRenderOrProd =
+        !string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("PORT"))
+        || string.Equals(
+            Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"),
+            "Production",
+            StringComparison.OrdinalIgnoreCase);
 
     if (string.IsNullOrWhiteSpace(databaseUrl))
     {
+        if (onRenderOrProd)
+        {
+            throw new InvalidOperationException(
+                "DATABASE_URL is missing. In Render → ims-api-ftzr → Environment: " +
+                "add DATABASE_URL = Internal Database URL from your Postgres (ims-db), then redeploy.");
+        }
+
         return "Host=localhost;Port=5432;Database=ims_db;Username=postgres;Password=postgres";
     }
 
-    // Already an Npgsql key=value string
+    string resolved;
     if (databaseUrl.Contains("Host=", StringComparison.OrdinalIgnoreCase)
         || databaseUrl.Contains("Server=", StringComparison.OrdinalIgnoreCase))
     {
-        return EnsureSsl(databaseUrl);
+        resolved = EnsureSsl(databaseUrl);
     }
-
-    if (databaseUrl.StartsWith("postgres://", StringComparison.OrdinalIgnoreCase)
+    else if (databaseUrl.StartsWith("postgres://", StringComparison.OrdinalIgnoreCase)
         || databaseUrl.StartsWith("postgresql://", StringComparison.OrdinalIgnoreCase))
     {
         var uri = new Uri(databaseUrl);
@@ -307,14 +323,38 @@ static string ResolveConnectionString(IConfiguration config)
         var username = Uri.UnescapeDataString(userInfo[0]);
         var password = userInfo.Length > 1 ? Uri.UnescapeDataString(userInfo[1]) : "";
         var database = uri.AbsolutePath.Trim('/');
-        var port = uri.Port > 0 ? uri.Port : 5432;
+        var dbPort = uri.Port > 0 ? uri.Port : 5432;
 
-        return EnsureSsl(
-            $"Host={uri.Host};Port={port};Database={database};Username={username};Password={password}");
+        resolved = EnsureSsl(
+            $"Host={uri.Host};Port={dbPort};Database={database};Username={username};Password={password}");
+    }
+    else
+    {
+        throw new InvalidOperationException(
+            "DATABASE_URL must be a postgresql:// URL or Host=... Npgsql connection string.");
     }
 
-    throw new InvalidOperationException(
-        "DATABASE_URL must be a postgresql:// URL or Host=... Npgsql connection string.");
+    if (onRenderOrProd && IsLocalDbHost(resolved))
+    {
+        throw new InvalidOperationException(
+            "Database host is localhost inside the container. " +
+            "Set DATABASE_URL to the Render Postgres Internal Database URL " +
+            "(host looks like dpg-xxxxx-a), not localhost. Then Manual Deploy the API.");
+    }
+
+    Console.WriteLine($"[IMS] Connection source: {(fromEnv != null ? "environment" : "appsettings")}");
+    return resolved;
+}
+
+static bool IsLocalDbHost(string connectionString)
+{
+    var host = connectionString.Split(';')
+        .Select(p => p.Trim())
+        .FirstOrDefault(p => p.StartsWith("Host=", StringComparison.OrdinalIgnoreCase)
+            || p.StartsWith("Server=", StringComparison.OrdinalIgnoreCase));
+    if (host == null) return false;
+    var value = host.Split('=', 2)[1].Trim();
+    return value is "localhost" or "127.0.0.1" or "::1";
 }
 
 static string EnsureSsl(string connectionString)
