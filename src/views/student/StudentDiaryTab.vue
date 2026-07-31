@@ -255,11 +255,28 @@
     </div>
     
     <!-- Toast Notification -->
-    <div v-if="showToast" class="fixed top-24 right-8 z-50 flex items-center p-4 mb-4 text-gray-500 bg-white rounded-lg shadow-lg border border-gray-100" role="alert">
+    <div v-if="showToast" class="fixed top-24 right-8 z-[200] flex items-center p-4 mb-4 text-gray-500 bg-white rounded-lg shadow-lg border border-gray-100" role="alert">
       <div class="inline-flex items-center justify-center shrink-0 w-8 h-8 rounded-lg text-green-500 bg-green-100">
         <span class="material-symbols-outlined text-[20px]">check_circle</span>
       </div>
       <div class="ml-3 text-sm font-normal text-gray-800">{{ toastMessage }}</div>
+    </div>
+    
+    <!-- Confirm Submit Modal -->
+    <div v-if="showConfirmSubmit" class="fixed inset-0 z-[200] bg-slate-900/40 backdrop-blur-sm flex items-center justify-center animate-fade-in" @click.self="showConfirmSubmit = false">
+      <div class="bg-white rounded-[12px] shadow-2xl p-[32px] w-[400px] flex flex-col items-center text-center">
+        <span class="material-symbols-outlined text-[48px] text-[#005EA3] mb-4">send</span>
+        <h3 class="text-[20px] font-bold text-[#1A1C1C] mb-3">Xác nhận nộp nhật ký?</h3>
+        <p class="text-[15px] text-slate-700 mb-8">Sau khi nộp, bạn sẽ không thể chỉnh sửa</p>
+        <div class="flex gap-4 w-full">
+          <button @click="showConfirmSubmit = false" class="flex-1 py-[10px] border border-slate-300 rounded-[4px] text-[15px] font-bold text-[#1A1C1C] hover:bg-slate-50 transition">
+            Hủy
+          </button>
+          <button @click="confirmSubmit" class="flex-1 py-[10px] bg-[#005EA3] rounded-[4px] text-[15px] font-bold text-white hover:bg-[#00488D] transition">
+            Xác nhận nộp
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -290,6 +307,7 @@ const isWriting = ref(false);
 const form = ref({});
 const isDrawerOpen = ref(false);
 const viewingDiary = ref({});
+const showConfirmSubmit = ref(false);
 const showToast = ref(false);
 const toastMessage = ref('');
 
@@ -380,8 +398,12 @@ const cancelWriting = () => {
   form.value = {};
 };
 
-const submitDiary = async () => {
-  if (!confirm('Sau khi nộp, bạn không thể tự sửa. Xác nhận nộp?')) return;
+const submitDiary = () => {
+  showConfirmSubmit.value = true;
+};
+
+const confirmSubmit = async () => {
+  showConfirmSubmit.value = false;
   await saveDiary('Submitted');
 };
 
@@ -468,5 +490,12 @@ const displayToast = (msg) => {
 @keyframes slideIn {
   from { transform: translateX(100%); }
   to { transform: translateX(0); }
+}
+.animate-fade-in {
+  animation: fadeIn 0.2s ease-out forwards;
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 </style>
