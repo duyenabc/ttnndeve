@@ -1,18 +1,14 @@
 <template>
   <div class="ims-scope w-full mx-auto space-y-6 font-sans pb-24 text-slate-800">
-    <!-- Breadcrumb & Header -->
     <div>
       <nav class="flex items-center gap-2 text-[13px] text-slate-500 mb-3">
         <router-link to="/teacher/classes" class="hover:text-blue-700 transition-colors">Lớp của tôi</router-link>
         <span class="material-symbols-outlined text-[14px]">chevron_right</span>
         <span class="text-slate-900 font-bold">Công việc</span>
       </nav>
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <h1 class="text-[32px] font-bold text-slate-900 tracking-tight">Công việc</h1>
-      </div>
+      <h1 class="text-[32px] font-bold text-slate-900 tracking-tight">Công việc</h1>
     </div>
 
-    <!-- Sub Navigation Tabs -->
     <div class="flex items-center gap-8 border-b border-slate-200 mt-2">
       <router-link
         :to="`/teacher/classes/${classId}/diaries`"
@@ -28,231 +24,316 @@
       </router-link>
       <router-link
         :to="`/teacher/classes/${classId}/topics`"
-        class="pb-3 text-slate-500 hover:text-[#005EA3] font-semibold text-[15px] transition-colors flex items-center gap-1.5"
+        class="pb-3 text-slate-500 hover:text-[#005EA3] font-semibold text-[15px] transition-colors"
       >
         Đề tài
       </router-link>
     </div>
 
-    <!-- Filter Bar -->
-    <div class="bg-[#f1f3f5] rounded-xl border border-slate-200/80 p-5 space-y-4">
-      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-        <div class="flex flex-wrap items-center gap-3">
-          <span class="text-[12px] font-bold text-slate-600 tracking-wide">THỜI GIAN:</span>
-          <div class="flex bg-slate-200/80 p-1 rounded-lg text-[13px] font-semibold text-slate-600">
-            <button
-              @click="timeTab = 'thisWeek'"
-              class="px-4 py-1.5 rounded-md transition-all"
-              :class="timeTab === 'thisWeek' ? 'bg-white text-[#005EA3] shadow-sm font-bold' : 'hover:text-slate-900'"
-            >
-              Tuần này
-            </button>
-            <button
-              @click="timeTab = 'lastWeek'"
-              class="px-4 py-1.5 rounded-md transition-all"
-              :class="timeTab === 'lastWeek' ? 'bg-white text-[#005EA3] shadow-sm font-bold' : 'hover:text-slate-900'"
-            >
-              Tuần trước
-            </button>
-            <button
-              @click="timeTab = 'term'"
-              class="px-4 py-1.5 rounded-md transition-all"
-              :class="timeTab === 'term' ? 'bg-white text-[#005EA3] shadow-sm font-bold' : 'hover:text-slate-900'"
-            >
-              Toàn kỳ
-            </button>
-          </div>
-        </div>
-        <div class="flex items-center gap-2">
-          <span class="text-[13px] text-slate-500">Tùy chỉnh:</span>
-          <div class="relative min-w-[200px]">
-            <select
-              v-model="selectedWeek"
-              class="w-full appearance-none pl-3 pr-8 py-1.5 bg-white border border-slate-300 rounded-md text-[13px] text-slate-700 outline-none focus:ring-1 focus:ring-[#005EA3]"
-            >
-              <option v-for="w in weekOptions" :key="w.value" :value="w.value">{{ w.label }}</option>
-            </select>
-            <span class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 text-[18px] pointer-events-none">expand_more</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="flex flex-wrap items-center gap-3">
-        <span class="text-[12px] font-bold text-slate-600 tracking-wide">TRẠNG THÁI:</span>
-        <button
-          v-for="st in statusOptions"
-          :key="st.value"
-          @click="statusFilter = st.value"
-          class="px-4 py-1.5 rounded-full text-[13px] transition-all border font-medium"
-          :class="statusFilter === st.value
-            ? 'bg-[#005EA3] text-white border-[#005EA3] font-bold'
-            : 'bg-white text-slate-600 border-slate-300 hover:bg-slate-50'"
-        >
-          {{ st.label }}
-        </button>
-      </div>
-    </div>
-
-    <div v-if="isLoading" class="text-center py-8">
-      <span class="material-symbols-outlined animate-spin text-3xl text-[#005EA3]">refresh</span>
-      <p class="text-sm text-slate-500 mt-2">Đang tải dữ liệu...</p>
+    <div
+      v-if="!config.isEnabled"
+      class="bg-amber-50 border border-amber-200 rounded-xl px-5 py-4 text-[14px] text-amber-900"
+    >
+      Lớp học hiện chưa kích hoạt tính năng Nhật ký thực tập. Vào
+      <router-link :to="`/teacher/classes/${classId}/settings`" class="font-bold underline">Cấu hình lớp</router-link>
+      để bật.
     </div>
 
     <template v-else>
-      <!-- STUDENT DIARY LIST (Tuần này / Tuần trước / Tùy chỉnh) -->
-      <div v-if="timeTab !== 'term'" class="space-y-3">
-        <div
-          v-for="student in filteredStudentDiaries"
-          :key="student.id"
-          class="bg-white rounded-xl border border-slate-200 p-4 sm:p-5 transition hover:border-slate-300"
-        >
-          <div class="flex items-start justify-between gap-3">
-            <div class="flex items-start gap-3.5 min-w-0 flex-1">
-              <div class="w-11 h-11 rounded-full bg-slate-200 text-slate-600 font-bold flex items-center justify-center text-[13px] shrink-0 overflow-hidden">
-                <img v-if="student.avatar" :src="student.avatar" :alt="student.name" class="w-full h-full object-cover" />
-                <span v-else>{{ student.initials }}</span>
-              </div>
+      <!-- Filter Bar -->
+      <div class="bg-[#f1f3f5] rounded-xl border border-slate-200/80 p-5 space-y-4">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div class="flex flex-wrap items-center gap-3">
+            <span class="text-[12px] font-bold text-slate-600 tracking-wide">THỜI GIAN:</span>
+            <div class="flex bg-slate-200/80 p-1 rounded-lg text-[13px] font-semibold text-slate-600">
+              <button
+                type="button"
+                @click="setTimeTab('thisWeek')"
+                class="px-4 py-1.5 rounded-md transition-all"
+                :class="timeTab === 'thisWeek' ? 'bg-white text-[#005EA3] shadow-sm font-bold' : 'hover:text-slate-900'"
+              >
+                Tuần này
+              </button>
+              <button
+                type="button"
+                @click="setTimeTab('lastWeek')"
+                class="px-4 py-1.5 rounded-md transition-all"
+                :class="timeTab === 'lastWeek' ? 'bg-white text-[#005EA3] shadow-sm font-bold' : 'hover:text-slate-900'"
+              >
+                Tuần trước
+              </button>
+              <button
+                type="button"
+                @click="setTimeTab('term')"
+                class="px-4 py-1.5 rounded-md transition-all"
+                :class="timeTab === 'term' ? 'bg-white text-[#005EA3] shadow-sm font-bold' : 'hover:text-slate-900'"
+              >
+                Toàn kỳ
+              </button>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="text-[13px] text-slate-500">Tùy chỉnh:</span>
+            <div class="relative min-w-[220px]">
+              <select
+                v-model.number="selectedWeek"
+                class="w-full appearance-none pl-3 pr-8 py-1.5 bg-white border border-slate-300 rounded-md text-[13px] text-slate-700 outline-none focus:ring-1 focus:ring-[#005EA3]"
+                @change="timeTab = 'custom'"
+              >
+                <option v-for="w in weekOptions" :key="w.value" :value="w.value">{{ w.label }}</option>
+              </select>
+              <span class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 text-[18px] pointer-events-none">expand_more</span>
+            </div>
+          </div>
+        </div>
 
-              <div class="min-w-0 flex-1">
-                <div class="flex flex-wrap items-center gap-2">
-                  <h3 class="font-semibold text-slate-900 text-[15px]">{{ student.name }}</h3>
-                  <span
-                    v-if="student.isNew"
-                    class="bg-[#e6f0fa] text-[#005EA3] text-[10px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wider"
-                  >
-                    MỚI
-                  </span>
+        <div class="flex flex-wrap items-center gap-3">
+          <span class="text-[12px] font-bold text-slate-600 tracking-wide">TRẠNG THÁI:</span>
+          <button
+            v-for="st in statusOptions"
+            :key="st.value"
+            type="button"
+            @click="statusFilter = st.value"
+            class="px-4 py-1.5 rounded-full text-[13px] transition-all border font-medium"
+            :class="statusFilter === st.value
+              ? 'bg-[#005EA3] text-white border-[#005EA3] font-bold'
+              : 'bg-white text-slate-600 border-slate-300 hover:bg-slate-50'"
+          >
+            {{ st.label }}
+          </button>
+        </div>
+      </div>
+
+      <div v-if="isLoading" class="text-center py-8">
+        <span class="material-symbols-outlined animate-spin text-3xl text-[#005EA3]">refresh</span>
+        <p class="text-sm text-slate-500 mt-2">Đang tải dữ liệu...</p>
+      </div>
+
+      <template v-else>
+        <!-- Weekly student blocks -->
+        <div v-if="timeTab !== 'term'" class="space-y-3">
+          <div
+            v-for="student in filteredStudentDiaries"
+            :key="student.id"
+            class="rounded-xl border transition"
+            :class="student.hasUnread
+              ? 'bg-[#e8f3fc] border-[#b7d4ef]'
+              : 'bg-white border-slate-200 hover:border-slate-300'"
+          >
+            <button
+              type="button"
+              class="w-full text-left p-4 sm:p-5 flex items-start justify-between gap-3"
+              @click="toggleStudent(student.id)"
+            >
+              <div class="flex items-start gap-3.5 min-w-0 flex-1">
+                <div class="w-11 h-11 rounded-full bg-slate-200 text-slate-600 font-bold flex items-center justify-center text-[13px] shrink-0 overflow-hidden">
+                  <img v-if="student.avatar" :src="student.avatar" :alt="student.name" class="w-full h-full object-cover" />
+                  <span v-else>{{ student.initials }}</span>
                 </div>
-                <p class="text-[13px] text-slate-500 mt-0.5">
-                  MSSV: {{ student.mssv }} · {{ student.entries.length }}/{{ config.minPerWeek }} nhật ký
-                </p>
+                <div class="min-w-0">
+                  <div class="flex flex-wrap items-center gap-2">
+                    <h3 class="font-semibold text-slate-900 text-[15px]">{{ student.name }}</h3>
+                    <span
+                      v-if="student.hasUnread"
+                      class="bg-[#e6f0fa] text-[#005EA3] text-[10px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wider"
+                    >Chưa đọc</span>
+                  </div>
+                  <p class="text-[13px] text-slate-500 mt-0.5">
+                    MSSV: {{ student.mssv }} · {{ student.submittedCount }}/{{ config.minPerWeek }} nhật ký
+                  </p>
+                </div>
+              </div>
+              <div class="flex items-center gap-2 shrink-0">
+                <span
+                  class="px-2.5 py-1 rounded-full text-[12px] font-semibold"
+                  :class="studentStatusBadgeClass(student.status)"
+                >
+                  {{ student.status }}
+                </span>
+                <span class="material-symbols-outlined text-slate-400 text-[22px]">
+                  {{ expandedIds.has(student.id) ? 'expand_less' : 'expand_more' }}
+                </span>
+              </div>
+            </button>
 
-                <div v-if="student.entries.length > 0" class="flex flex-wrap items-center gap-2 mt-2.5">
+            <div v-if="expandedIds.has(student.id)" class="px-4 sm:px-5 pb-5 space-y-3 border-t border-slate-200/70">
+              <p v-if="student.entries.length === 0" class="pt-4 text-[13px] text-slate-500">
+                Sinh viên chưa nộp nhật ký tuần này.
+              </p>
+
+              <template v-else>
+                <div class="flex flex-wrap items-center gap-2 pt-4">
                   <button
                     v-for="(entry, index) in student.entries"
                     :key="entry.id"
                     type="button"
-                    @click="openDiaryDetail(entry)"
-                    class="px-2.5 py-1 rounded-md text-[12px] font-medium text-[#005EA3] bg-blue-50/80 hover:bg-blue-100 transition"
+                    class="px-2.5 py-1 rounded-full text-[12px] font-medium border transition"
+                    :class="activeEntryId[student.id] === entry.id
+                      ? 'bg-[#005EA3] text-white border-[#005EA3]'
+                      : 'text-[#005EA3] bg-blue-50/80 border-blue-100 hover:bg-blue-100'"
+                    @click.stop="selectEntry(student, entry)"
                   >
-                    Nhật ký #{{ index + 1 }} ({{ entry.dateLabel }})
+                    Nhật ký #{{ index + 1 }} ({{ entry.weekdayLabel }} - {{ entry.dateLabel }})
                   </button>
                 </div>
-              </div>
-            </div>
 
-            <span
-              class="px-2.5 py-1 rounded-full text-[12px] font-semibold shrink-0"
-              :class="studentStatusBadgeClass(student.status)"
-            >
-              {{ student.status }}
-            </span>
-          </div>
+                <div class="bg-[#eef5fb] border border-[#d6e6f5] rounded-lg px-3.5 py-2.5 flex items-start gap-2.5 text-[13px] text-slate-700">
+                  <span class="material-symbols-outlined text-[#005EA3] text-[18px] shrink-0 mt-0.5">auto_awesome</span>
+                  <p class="leading-relaxed flex-1">
+                    <span class="font-semibold text-[#005EA3]">Tóm tắt AI:</span>
+                    <span class="ml-1">{{ getAiSummary(student) }}</span>
+                  </p>
+                </div>
 
-          <!-- AI Summary -->
-          <div class="mt-3.5 bg-[#eef5fb] border border-[#d6e6f5] rounded-lg px-3.5 py-2.5 flex items-start gap-2.5 text-[13px] text-slate-700">
-            <span class="material-symbols-outlined text-[#005EA3] text-[18px] shrink-0 mt-0.5">auto_awesome</span>
-            <p class="leading-relaxed flex-1">
-              <span class="font-semibold text-[#005EA3]">Tóm tắt AI:</span>
-              <span class="ml-1 text-slate-700">{{ getAiSummary(student) }}</span>
-            </p>
-            <button
-              type="button"
-              class="text-slate-400 hover:text-slate-600 shrink-0 p-0.5"
-              :title="student.entries.length ? 'Xem chi tiết' : 'Chi tiết'"
-              @click="student.entries.length ? openDiaryDetail(currentActiveEntry(student)) : null"
-            >
-              <span class="material-symbols-outlined text-[20px]">expand_more</span>
-            </button>
-          </div>
-        </div>
+                <div v-if="currentEntry(student)" class="space-y-3">
+                  <div
+                    v-if="planBanner(student)"
+                    class="bg-slate-100 border border-slate-200 rounded-lg px-3.5 py-2.5 text-[13px] text-slate-700"
+                  >
+                    <span class="font-semibold text-slate-800">Kế hoạch từ {{ planBanner(student).dateLabel }}:</span>
+                    <span class="ml-1">{{ planBanner(student).text }}</span>
+                  </div>
 
-        <div
-          v-if="filteredStudentDiaries.length === 0"
-          class="text-center py-10 bg-white border border-slate-200 rounded-xl text-slate-500"
-        >
-          <p>Không có sinh viên nào khớp với bộ lọc.</p>
-        </div>
-      </div>
-
-      <!-- TERM SUMMARY HEATMAP VIEW (Toàn kỳ) -->
-      <div v-else class="bg-white rounded-xl border border-slate-200 overflow-hidden">
-        <div class="overflow-x-auto">
-          <table class="w-full text-left border-collapse text-[13px]">
-            <thead>
-              <tr class="bg-[#f8f9fa] border-b border-slate-200 font-bold text-[11px] text-slate-500 uppercase tracking-wide">
-                <th class="py-3.5 px-5">Họ tên</th>
-                <th class="py-3.5 px-5">Mã số sinh viên</th>
-                <th class="py-3.5 px-5 text-center">Tỷ lệ</th>
-                <th class="py-3.5 px-5 text-center">Thiếu</th>
-                <th class="py-3.5 px-5 text-center">Không nộp</th>
-                <th class="py-3.5 px-5">Heatmap (Tuần 1-15)</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-slate-100">
-              <tr v-for="student in studentDiariesAllTerm" :key="student.id" class="hover:bg-slate-50/80 transition">
-                <td class="py-3.5 px-5 font-medium text-[#005EA3]">{{ student.name }}</td>
-                <td class="py-3.5 px-5 text-slate-600">{{ student.mssv }}</td>
-                <td class="py-3.5 px-5 text-center text-slate-700">{{ student.totalSubmitted }}/{{ config.minPerWeek * 15 }}</td>
-                <td class="py-3.5 px-5 text-center font-semibold text-red-500">{{ student.totalMissing }}</td>
-                <td class="py-3.5 px-5 text-center font-semibold text-red-500">{{ student.totalNone }}</td>
-                <td class="py-3.5 px-5">
-                  <div class="flex items-center gap-1">
-                    <div
-                      v-for="w in 15"
-                      :key="w"
-                      class="w-4 h-4 rounded-sm relative group"
-                      :class="getHeatmapColor(student, w)"
-                    >
-                      <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 hidden group-hover:block bg-slate-800 text-white text-[10px] py-1 px-2 rounded whitespace-nowrap z-10">
-                        Tuần {{ w }}: {{ student.weeklyCounts[w] || 0 }} / {{ config.minPerWeek }}
-                      </div>
+                  <div class="space-y-2">
+                    <div v-for="field in previewFields" :key="field.id">
+                      <h4 class="font-bold text-[11px] text-slate-500 uppercase mb-1">{{ field.label }}</h4>
+                      <p class="text-[13px] text-slate-800 whitespace-pre-wrap bg-white p-3 rounded border border-slate-100 min-h-[36px]">
+                        {{ fieldValue(currentEntry(student).rawData, field.id) }}
+                      </p>
                     </div>
                   </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+
+                  <div class="flex flex-wrap items-center gap-2">
+                    <button
+                      type="button"
+                      class="px-3 py-1.5 text-[13px] font-semibold text-[#005EA3] border border-[#005EA3]/40 rounded-md hover:bg-blue-50"
+                      @click.stop="openDiaryDetail(currentEntry(student), student)"
+                    >
+                      Xem đầy đủ
+                    </button>
+                  </div>
+
+                  <div class="pt-2 border-t border-slate-200">
+                    <label class="block text-[12px] font-bold text-slate-600 mb-2">Nhận xét / phản hồi trực tiếp</label>
+                    <textarea
+                      v-model="inlineFeedback[student.id]"
+                      rows="2"
+                      class="w-full border border-slate-300 rounded-[8px] px-3 py-2 text-[13px] outline-none focus:border-[#005EA3]"
+                      placeholder="Nhập nhận xét cho nhật ký này..."
+                      @click.stop
+                    />
+                    <div class="mt-2 flex justify-end">
+                      <button
+                        type="button"
+                        class="px-4 py-2 bg-[#005EA3] text-white font-bold rounded-[8px] text-[13px] hover:bg-blue-800 disabled:opacity-50"
+                        :disabled="!inlineFeedback[student.id]?.trim() || isSubmittingFeedback"
+                        @click.stop="submitInlineFeedback(student)"
+                      >
+                        Gửi nhận xét
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </template>
+            </div>
+          </div>
+
+          <div
+            v-if="filteredStudentDiaries.length === 0"
+            class="text-center py-10 bg-white border border-slate-200 rounded-xl text-slate-500"
+          >
+            <p>Không có nhật ký nào được viết.</p>
+          </div>
         </div>
-      </div>
+
+        <!-- Term heatmap -->
+        <div v-else class="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-[13px]">
+              <thead>
+                <tr class="bg-[#f8f9fa] border-b border-slate-200 font-bold text-[11px] text-slate-500 uppercase tracking-wide">
+                  <th class="py-3.5 px-5">Họ tên</th>
+                  <th class="py-3.5 px-5">Mã số sinh viên</th>
+                  <th class="py-3.5 px-5 text-center">Tỷ lệ (tuần đủ)</th>
+                  <th class="py-3.5 px-5 text-center">Thiếu</th>
+                  <th class="py-3.5 px-5 text-center">Không nộp</th>
+                  <th class="py-3.5 px-5">Heatmap (Tuần 1-{{ maxWeek }})</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100">
+                <tr v-for="student in studentDiariesAllTerm" :key="student.id" class="hover:bg-slate-50/80 transition">
+                  <td class="py-3.5 px-5 font-medium text-[#005EA3]">{{ student.name }}</td>
+                  <td class="py-3.5 px-5 text-slate-600">{{ student.mssv }}</td>
+                  <td class="py-3.5 px-5 text-center text-slate-700">{{ student.weeksEnough }}/{{ currentInternshipWeek }}</td>
+                  <td class="py-3.5 px-5 text-center font-semibold text-amber-600">{{ student.totalMissing }}</td>
+                  <td class="py-3.5 px-5 text-center font-semibold text-red-500">{{ student.totalNone }}</td>
+                  <td class="py-3.5 px-5">
+                    <div class="flex items-center gap-1 flex-wrap">
+                      <button
+                        v-for="w in maxWeek"
+                        :key="w"
+                        type="button"
+                        class="w-4 h-4 rounded-sm relative group"
+                        :class="getHeatmapColor(student, w)"
+                        :title="`Tuần ${w}: ${student.weeklyCounts[w] || 0}/${config.minPerWeek}`"
+                        @click="jumpToWeek(w)"
+                      />
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </template>
     </template>
 
-    <!-- Drawer for Diary Detail and Feedback -->
+    <!-- Full detail drawer -->
     <div v-if="isDrawerOpen" class="fixed inset-0 z-[100] bg-slate-900/50 backdrop-blur-sm flex justify-end" @click.self="closeDrawer">
-      <div class="bg-white w-[600px] h-full shadow-2xl flex flex-col animate-slide-in">
+      <div class="bg-white w-[600px] max-w-full h-full shadow-2xl flex flex-col animate-slide-in">
         <div class="p-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
           <h2 class="font-bold text-[16px] text-slate-800 flex items-center gap-2">
             <span class="material-symbols-outlined text-[#005EA3]">menu_book</span> Chi tiết Nhật ký
           </h2>
-          <button @click="closeDrawer" class="text-slate-400 hover:text-slate-600">✕</button>
+          <button type="button" class="text-slate-400 hover:text-slate-600" @click="closeDrawer">✕</button>
         </div>
-        
+
         <div class="p-6 overflow-y-auto flex-1 space-y-6">
           <div class="bg-blue-50/50 p-4 rounded-lg border border-blue-100 flex items-center gap-4">
             <div class="w-10 h-10 rounded bg-[#e2e8f0] text-slate-700 font-bold flex items-center justify-center text-[14px]">
-              {{ viewingStudent.initials }}
+              {{ viewingStudent?.initials }}
             </div>
             <div>
-              <p class="font-bold text-slate-900">{{ viewingStudent.name }}</p>
-              <p class="text-[12px] text-slate-500">MSSV: {{ viewingStudent.mssv }} • Lớp {{ classId }}</p>
+              <p class="font-bold text-slate-900">{{ viewingStudent?.name }}</p>
+              <p class="text-[12px] text-slate-500">MSSV: {{ viewingStudent?.mssv }} · Tuần {{ viewingDiary?.rawData?.week }}</p>
             </div>
+          </div>
+
+          <div
+            v-if="viewingPlanBanner"
+            class="bg-slate-100 border border-slate-200 rounded-lg px-3.5 py-2.5 text-[13px] text-slate-700"
+          >
+            <span class="font-semibold">Kế hoạch từ {{ viewingPlanBanner.dateLabel }}:</span>
+            {{ viewingPlanBanner.text }}
           </div>
 
           <div class="space-y-4">
             <div v-for="field in activeFields" :key="field.id">
               <h4 class="font-bold text-[12px] text-slate-500 uppercase mb-1">{{ field.label }}</h4>
-              <p class="text-[14px] text-slate-800 whitespace-pre-wrap bg-slate-50 p-3 rounded border border-slate-100 min-h-[40px]">{{ viewingDiary.rawData[field.id] || '---' }}</p>
+              <p class="text-[14px] text-slate-800 whitespace-pre-wrap bg-slate-50 p-3 rounded border border-slate-100 min-h-[40px]">
+                {{ fieldValue(viewingDiary?.rawData, field.id) }}
+              </p>
             </div>
           </div>
 
-          <!-- Feedbacks List -->
-          <div class="mt-8 pt-4 border-t border-slate-200">
-            <h3 class="font-bold text-[15px] text-slate-900 mb-4 flex items-center gap-1">
-              <span class="material-symbols-outlined text-[18px]">forum</span> Phản hồi của bạn
-            </h3>
-            
-            <div v-if="viewingDiary.rawData.feedbacks && viewingDiary.rawData.feedbacks.length > 0" class="space-y-3 mb-6">
-              <div v-for="(fb, i) in viewingDiary.rawData.feedbacks" :key="i" class="bg-[#F9FAFB] border border-slate-200 rounded-[8px] p-3">
+          <div class="mt-4 pt-4 border-t border-slate-200">
+            <h3 class="font-bold text-[15px] text-slate-900 mb-4">Phản hồi của bạn</h3>
+            <div v-if="viewingDiary?.rawData?.feedbacks?.length" class="space-y-3 mb-6">
+              <div
+                v-for="(fb, i) in viewingDiary.rawData.feedbacks"
+                :key="i"
+                class="bg-[#F9FAFB] border border-slate-200 rounded-[8px] p-3"
+              >
                 <div class="flex justify-between text-[11px] mb-1">
                   <span class="font-bold text-slate-700">{{ fb.teacherName }}</span>
                   <span class="text-slate-400">{{ formatDate(fb.timestamp) }}</span>
@@ -260,108 +341,154 @@
                 <p class="text-[13px] text-slate-800 leading-relaxed">{{ fb.content }}</p>
               </div>
             </div>
-
-            <!-- Write Feedback -->
-            <div>
-              <label class="block text-[12px] font-bold text-slate-600 mb-2">Thêm phản hồi mới:</label>
-              <textarea
-                v-model="feedbackContent"
-                rows="3"
-                class="w-full border border-slate-300 rounded-[8px] px-3 py-2 text-[13px] outline-none focus:border-[#005EA3]"
-                placeholder="Nhập nhận xét, góp ý hoặc đánh giá cho sinh viên..."
-              ></textarea>
-              <div class="mt-3 flex justify-end">
-                <button 
-                  @click="submitFeedback" 
-                  :disabled="!feedbackContent.trim() || isSubmittingFeedback" 
-                  class="px-5 py-2 bg-[#005EA3] text-white font-bold rounded-[8px] text-[13px] hover:bg-blue-800 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1"
-                >
-                  <span v-if="isSubmittingFeedback" class="material-symbols-outlined animate-spin text-[16px]">refresh</span>
-                  <span v-else class="material-symbols-outlined text-[16px]">send</span>
-                  Gửi phản hồi
-                </button>
-              </div>
+            <textarea
+              v-model="feedbackContent"
+              rows="3"
+              class="w-full border border-slate-300 rounded-[8px] px-3 py-2 text-[13px] outline-none focus:border-[#005EA3]"
+              placeholder="Nhập nhận xét..."
+            />
+            <div class="mt-3 flex justify-end">
+              <button
+                type="button"
+                class="px-5 py-2 bg-[#005EA3] text-white font-bold rounded-[8px] text-[13px] hover:bg-blue-800 disabled:opacity-50"
+                :disabled="!feedbackContent.trim() || isSubmittingFeedback"
+                @click="submitFeedback"
+              >
+                Gửi phản hồi
+              </button>
             </div>
           </div>
         </div>
       </div>
     </div>
-    
-    <!-- Toast -->
-    <div v-if="showToast" class="fixed top-24 right-8 z-50 flex items-center p-4 mb-4 text-gray-500 bg-white rounded-lg shadow-lg border border-gray-100" role="alert">
+
+    <div
+      v-if="showToast"
+      class="fixed top-24 right-8 z-50 flex items-center p-4 text-gray-500 bg-white rounded-lg shadow-lg border border-gray-100"
+      role="alert"
+    >
       <div class="inline-flex items-center justify-center shrink-0 w-8 h-8 rounded-lg text-green-500 bg-green-100">
         <span class="material-symbols-outlined text-[20px]">check_circle</span>
       </div>
       <div class="ml-3 text-sm font-normal text-gray-800">{{ toastMessage }}</div>
     </div>
-
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue';
+import { ref, computed, onMounted, reactive } from 'vue';
 import { useRoute } from 'vue-router';
 import api from '@/api/api';
+import { useAuthStore } from '@/stores/auth';
 
 const route = useRoute();
-const classId = computed(() => route.params.id || '101');
+const authStore = useAuthStore();
+const classId = computed(() => route.params.id || 'L001');
 
 const timeTab = ref('thisWeek');
-const selectedWeek = ref('13');
+const selectedWeek = ref(1);
 const statusFilter = ref('ALL');
+const maxWeek = ref(15);
+const internshipStart = ref(addDays(alignToMonday(new Date()), -7));
 
 const statusOptions = [
   { value: 'ALL', label: 'Tất cả' },
   { value: 'Nộp đủ', label: 'Nộp đủ' },
   { value: 'Nộp thiếu', label: 'Nộp thiếu' },
-  { value: 'Không nộp', label: 'Không nộp' }
+  { value: 'Không nộp', label: 'Không nộp' },
+  { value: 'Đang trong hạn', label: 'Đang trong hạn' },
 ];
 
-const weekOptions = [
-  { value: '15', label: 'Tuần 15 (05/06 - 11/06)' },
-  { value: '14', label: 'Tuần 14 (29/05 - 04/06)' },
-  { value: '13', label: 'Tuần 13 (22/05 - 28/05)' },
-  { value: '12', label: 'Tuần 12 (15/05 - 21/05)' },
-  { value: '11', label: 'Tuần 11 (08/05 - 14/05)' },
-];
+const STATUS_SORT = { 'Không nộp': 0, 'Nộp thiếu': 1, 'Nộp đủ': 2, 'Đang trong hạn': 3 };
 
 const allStudents = ref([]);
 const allDiaries = ref([]);
 const isLoading = ref(true);
-const config = ref({ minPerWeek: 2, fields: [] });
-const activeFields = computed(() => config.value.fields.filter(f => f.isEnabled));
+const config = ref({
+  isEnabled: true,
+  minPerWeek: 2,
+  deadlineDay: 0,
+  deadlineTime: '23:59',
+  fields: [],
+});
 
-// Drawer state
+const expandedIds = ref(new Set());
+const activeEntryId = reactive({});
+const inlineFeedback = reactive({});
+
 const isDrawerOpen = ref(false);
 const viewingDiary = ref(null);
 const viewingStudent = ref(null);
+const viewingPlanBanner = ref(null);
 const feedbackContent = ref('');
 const isSubmittingFeedback = ref(false);
-
 const showToast = ref(false);
 const toastMessage = ref('');
 
-onMounted(async () => {
-  await loadData();
+const activeFields = computed(() => (config.value.fields || []).filter((f) => f.isEnabled));
+const previewFields = computed(() => activeFields.value.slice(0, 3));
+
+const currentInternshipWeek = computed(() => weekNumberForDate(new Date()));
+
+const weekOptions = computed(() => {
+  const opts = [];
+  for (let w = 1; w <= maxWeek.value; w++) {
+    const start = addDays(internshipStart.value, (w - 1) * 7);
+    const end = addDays(start, 6);
+    opts.push({
+      value: w,
+      label: `Tuần ${w} (${fmtShort(start)} - ${fmtShort(end)})`,
+    });
+  }
+  return opts;
 });
 
-const loadData = async () => {
+onMounted(async () => {
+  await loadData();
+  selectedWeek.value = currentInternshipWeek.value;
+  // #region agent log
+  fetch('http://127.0.0.1:7500/ingest/7f531694-75ae-41c0-a883-0940871f5a5e', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-Debug-Session-Id': '19ef33' },
+    body: JSON.stringify({
+      sessionId: '19ef33',
+      runId: 'uc18-1',
+      hypothesisId: 'H1',
+      location: 'ClassDiaries.vue:onMounted',
+      message: 'teacher diaries loaded',
+      data: {
+        classId: classId.value,
+        students: allStudents.value.length,
+        diaries: allDiaries.value.length,
+        week: selectedWeek.value,
+        enabled: config.value.isEnabled,
+      },
+      timestamp: Date.now(),
+    }),
+  }).catch(() => {});
+  // #endregion
+});
+
+async function loadData() {
   isLoading.value = true;
   try {
-    // 1. Fetch config
     const confRes = await api.get(`/giangvien/classes/${classId.value}/diary-config`);
     if (confRes.data) {
       config.value = {
+        isEnabled: confRes.data.isEnabled !== false,
         minPerWeek: confRes.data.minPerWeek || 2,
-        fields: confRes.data.fields || []
+        deadlineDay: confRes.data.deadlineDay ?? 0,
+        deadlineTime: confRes.data.deadlineTime || '23:59',
+        fields: confRes.data.fields?.length ? confRes.data.fields : [],
       };
+      if (confRes.data.internshipStart) {
+        internshipStart.value = alignToMonday(new Date(confRes.data.internshipStart));
+      }
     }
 
-    // 2. Fetch students
     const stRes = await api.get(`/giangvien/classes/${classId.value}/students`);
-    allStudents.value = Array.isArray(stRes.data) ? stRes.data : (stRes.data?.items || []);
+    allStudents.value = Array.isArray(stRes.data) ? stRes.data : stRes.data?.items || [];
 
-    // 3. Fetch diaries for class
     const diariesRes = await api.get('/diaries', { params: { classId: classId.value } });
     allDiaries.value = diariesRes.data || [];
   } catch (error) {
@@ -369,40 +496,82 @@ const loadData = async () => {
   } finally {
     isLoading.value = false;
   }
-};
+}
 
-// Processed list for current week
+function setTimeTab(tab) {
+  timeTab.value = tab;
+  if (tab === 'thisWeek') selectedWeek.value = currentInternshipWeek.value;
+  if (tab === 'lastWeek') selectedWeek.value = Math.max(1, currentInternshipWeek.value - 1);
+}
+
+function jumpToWeek(w) {
+  selectedWeek.value = w;
+  timeTab.value = 'custom';
+}
+
+function isPastDeadline(weekNum) {
+  const deadline = deadlineForWeek(weekNum);
+  return Date.now() > deadline.getTime();
+}
+
+function deadlineForWeek(weekNum) {
+  const weekStart = addDays(internshipStart.value, (weekNum - 1) * 7); // Monday
+  // Find calendar day in Mon..Sun matching deadlineDay (0=Sun..6=Sat)
+  let deadlineDate = new Date(weekStart);
+  for (let i = 0; i < 7; i++) {
+    const d = addDays(weekStart, i);
+    if (d.getDay() === Number(config.value.deadlineDay ?? 0)) {
+      deadlineDate = d;
+      break;
+    }
+  }
+  const [hh, mm] = String(config.value.deadlineTime || '23:59').split(':').map(Number);
+  deadlineDate.setHours(hh || 23, mm || 59, 59, 999);
+  return deadlineDate;
+}
+
+function matchStudentDiary(d, st) {
+  const stIds = [st.maGhiDanh, st.maSoSinhVien, st.id, st.maNguoiDung].filter(Boolean).map(String);
+  return stIds.includes(String(d.userId));
+}
+
 const studentDiaries = computed(() => {
-  return allStudents.value.map(st => {
+  const week = String(selectedWeek.value);
+  const pastDeadline = isPastDeadline(selectedWeek.value);
+
+  return allStudents.value.map((st) => {
     const stId = String(st.maGhiDanh || st.maSoSinhVien || st.id);
-    
-    // Filter diaries by student AND week (only Submitted ones)
-    const stDiaries = allDiaries.value.filter(d => 
-      (String(d.userId) === stId || String(d.userId) === String(st.maSoSinhVien)) &&
-      String(d.week) === selectedWeek.value &&
-      d.status === 'Submitted'
-    );
+    const stDiaries = allDiaries.value
+      .filter((d) => matchStudentDiary(d, st) && String(d.week) === week && d.status === 'Submitted')
+      .sort((a, b) => new Date(a.ngayTao) - new Date(b.ngayTao));
 
-    // Sort descending by date
-    stDiaries.sort((a, b) => new Date(b.ngayTao) - new Date(a.ngayTao));
-
-    const entries = stDiaries.map(d => {
-      const dObj = new Date(d.ngayTao);
+    const entries = stDiaries.map((d, index) => {
+      const dObj = new Date(d.ngayTao || d.ngayCapNhat);
       return {
         id: d.id,
-        dateLabel: dObj.toLocaleDateString('vi-VN'),
-        rawData: d
+        dateLabel: dObj.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit' }),
+        weekdayLabel: weekdayVi(dObj),
+        index,
+        rawData: d,
+        isRead: !!d.isReadByTeacher,
       };
     });
 
-    let status = 'Không nộp';
-    if (entries.length >= config.value.minPerWeek) status = 'Nộp đủ';
-    else if (entries.length > 0) status = 'Nộp thiếu';
+    const submittedCount = entries.length;
+    let status = 'Đang trong hạn';
+    if (pastDeadline) {
+      if (submittedCount >= config.value.minPerWeek) status = 'Nộp đủ';
+      else if (submittedCount > 0) status = 'Nộp thiếu';
+      else status = 'Không nộp';
+    } else if (submittedCount >= config.value.minPerWeek) {
+      status = 'Nộp đủ';
+    }
 
-    const nameParts = (st.hoTen || 'Sinh Viên').trim().split(' ');
-    const initials = nameParts.length >= 2 
-      ? (nameParts[0][0] + nameParts[nameParts.length - 1][0]).toUpperCase() 
-      : nameParts[0].substring(0, 2).toUpperCase();
+    const nameParts = (st.hoTen || 'Sinh Viên').trim().split(/\s+/);
+    const initials =
+      nameParts.length >= 2
+        ? (nameParts[0][0] + nameParts[nameParts.length - 1][0]).toUpperCase()
+        : (nameParts[0] || 'SV').substring(0, 2).toUpperCase();
 
     return {
       id: stId,
@@ -411,153 +580,295 @@ const studentDiaries = computed(() => {
       avatar: st.anhDaiDien || st.avatar || null,
       mssv: st.maSoSinhVien || 'N/A',
       status,
-      isNew: entries.length > 0 && (new Date() - new Date(stDiaries[0].ngayTao) < 24 * 60 * 60 * 1000),
+      submittedCount,
+      hasUnread: entries.some((e) => !e.isRead),
       entries,
-      activeEntryIndex: 0,
+      allChronological: stDiaries,
     };
   });
 });
 
 const filteredStudentDiaries = computed(() => {
-  return studentDiaries.value.filter(st => {
-    return statusFilter.value === 'ALL' || st.status === statusFilter.value;
-  });
+  const list = studentDiaries.value.filter(
+    (st) => statusFilter.value === 'ALL' || st.status === statusFilter.value
+  );
+  return list.sort((a, b) => (STATUS_SORT[a.status] ?? 9) - (STATUS_SORT[b.status] ?? 9));
 });
 
-// Processed list for Term Heatmap
 const studentDiariesAllTerm = computed(() => {
-  return allStudents.value.map(st => {
-    const stId = String(st.maGhiDanh || st.maSoSinhVien || st.id);
-    
+  const upTo = currentInternshipWeek.value;
+  return allStudents.value.map((st) => {
     const weeklyCounts = {};
-    let totalSubmitted = 0;
-    
-    for (let w = 1; w <= 15; w++) {
-      const count = allDiaries.value.filter(d => 
-        (String(d.userId) === stId || String(d.userId) === String(st.maSoSinhVien)) &&
-        String(d.week) === String(w) &&
-        d.status === 'Submitted'
-      ).length;
-      weeklyCounts[w] = count;
-      totalSubmitted += count;
-    }
-    
+    let weeksEnough = 0;
     let totalMissing = 0;
     let totalNone = 0;
-    for (let w = 1; w <= 15; w++) {
-      if (weeklyCounts[w] === 0) totalNone++;
-      else if (weeklyCounts[w] < config.value.minPerWeek) totalMissing++;
+
+    for (let w = 1; w <= maxWeek.value; w++) {
+      const count = allDiaries.value.filter(
+        (d) => matchStudentDiary(d, st) && String(d.week) === String(w) && d.status === 'Submitted'
+      ).length;
+      weeklyCounts[w] = count;
+      if (w > upTo) continue;
+      if (!isPastDeadline(w)) continue;
+      if (count >= config.value.minPerWeek) weeksEnough++;
+      else if (count === 0) totalNone++;
+      else totalMissing++;
     }
 
-    const nameParts = (st.hoTen || 'Sinh Viên').trim().split(' ');
-    const initials = nameParts.length >= 2 
-      ? (nameParts[0][0] + nameParts[nameParts.length - 1][0]).toUpperCase() 
-      : nameParts[0].substring(0, 2).toUpperCase();
-
     return {
-      id: stId,
+      id: String(st.maGhiDanh || st.maSoSinhVien || st.id),
       name: st.hoTen,
       mssv: st.maSoSinhVien,
-      initials,
       weeklyCounts,
-      totalSubmitted,
+      weeksEnough,
       totalMissing,
-      totalNone
+      totalNone,
     };
   });
 });
 
 function getHeatmapColor(student, week) {
   const count = student.weeklyCounts[week] || 0;
-  if (count >= config.value.minPerWeek) return 'bg-[#0e7c25]'; // green
-  if (count > 0) return 'bg-[#ea580c]'; // orange (missing)
-  // For weeks in the past that are 0, red. Otherwise grey. We mock current week as 13.
-  if (week <= Number(selectedWeek.value)) return 'bg-[#dc2626]'; // red (not submitted)
-  return 'bg-[#cbd5e1]'; // grey (future)
+  if (week > currentInternshipWeek.value) return 'bg-[#cbd5e1]';
+  if (!isPastDeadline(week)) return 'bg-[#cbd5e1]';
+  if (count >= config.value.minPerWeek) return 'bg-[#0e7c25]';
+  if (count > 0) return 'bg-[#ea580c]';
+  return 'bg-[#dc2626]';
 }
 
-function currentActiveEntry(student) {
-  if (!student.entries || !student.entries.length) return null;
-  return student.entries[student.activeEntryIndex] || student.entries[0];
+function toggleStudent(id) {
+  const next = new Set(expandedIds.value);
+  if (next.has(id)) next.delete(id);
+  else {
+    next.add(id);
+    const st = studentDiaries.value.find((s) => s.id === id);
+    if (st?.entries?.length && !activeEntryId[id]) {
+      selectEntry(st, st.entries[st.entries.length - 1]);
+    }
+  }
+  expandedIds.value = next;
 }
 
-function getPreviewText(rawData) {
-  if (!rawData) return 'Không có nội dung';
-  return rawData.taskDescription || rawData.newKnowledge || 'Đã nộp nhật ký';
+function currentEntry(student) {
+  const id = activeEntryId[student.id];
+  return student.entries.find((e) => e.id === id) || student.entries[student.entries.length - 1] || null;
+}
+
+function planBanner(student) {
+  const entry = currentEntry(student);
+  if (!entry) return null;
+  const chron = student.allChronological || [];
+  const idx = chron.findIndex((d) => d.id === entry.id);
+  if (idx <= 0) return null;
+  const prev = chron[idx - 1];
+  if (!prev?.nextPlan?.trim()) return null;
+  const d = new Date(prev.ngayTao || prev.ngayCapNhat);
+  return {
+    dateLabel: d.toLocaleDateString('vi-VN'),
+    text: prev.nextPlan.trim(),
+  };
+}
+
+async function selectEntry(student, entry) {
+  activeEntryId[student.id] = entry.id;
+  if (!entry.isRead) {
+    try {
+      await api.put(`/diaries/${entry.id}/read`);
+      entry.isRead = true;
+      entry.rawData.isReadByTeacher = true;
+      const src = allDiaries.value.find((d) => d.id === entry.id);
+      if (src) src.isReadByTeacher = true;
+    } catch {
+      /* ignore */
+    }
+  }
+  // #region agent log
+  fetch('http://127.0.0.1:7500/ingest/7f531694-75ae-41c0-a883-0940871f5a5e', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-Debug-Session-Id': '19ef33' },
+    body: JSON.stringify({
+      sessionId: '19ef33',
+      runId: 'uc18-1',
+      hypothesisId: 'H2',
+      location: 'ClassDiaries.vue:selectEntry',
+      message: 'entry selected / mark read',
+      data: { diaryId: entry.id, studentId: student.id, week: selectedWeek.value },
+      timestamp: Date.now(),
+    }),
+  }).catch(() => {});
+  // #endregion
 }
 
 function getAiSummary(student) {
   if (!student.entries.length) {
-    return 'Sinh viên chưa nộp nhật ký cho tuần này. Kế hoạch tuần trước là nghiên cứu và hoàn thành công việc đã đề ra.';
+    return 'Sinh viên chưa nộp nhật ký cho tuần này.';
   }
-  const entry = currentActiveEntry(student)?.rawData;
-  const work = getPreviewText(entry);
-  const firstName = (student.name || '').trim().split(' ').pop() || 'Sinh viên';
-  if (student.status === 'Nộp đủ') {
-    return `${firstName} đã hoàn thành đủ nhật ký tuần này. Nội dung nổi bật: ${work}`;
+  const entry = currentEntry(student)?.rawData;
+  const work = entry?.taskDescription || entry?.newKnowledge || 'Đã nộp nhật ký';
+  const firstName = (student.name || '').trim().split(/\s+/).pop() || 'Sinh viên';
+  const lines = [
+    `${firstName}: ${student.submittedCount}/${config.value.minPerWeek} nhật ký tuần ${selectedWeek.value} (${student.status}).`,
+    `Nội dung gần nhất: ${String(work).slice(0, 160)}`,
+  ];
+  if (entry?.nextPlan) lines.push(`Kế hoạch tiếp theo: ${String(entry.nextPlan).slice(0, 120)}`);
+  return lines.join(' ');
+}
+
+function fieldValue(raw, fieldId) {
+  if (!raw) return '---';
+  const map = {
+    taskDescription: raw.taskDescription,
+    newKnowledge: raw.newKnowledge,
+    completionLevel: raw.completionLevel != null ? String(raw.completionLevel) : null,
+    issues: raw.issues,
+    solutions: raw.solutions,
+    feedback: raw.feedback || raw.mentorFeedback,
+    supportNeeded: raw.supportNeeded,
+    feeling: raw.feeling != null ? String(raw.feeling) : null,
+    nextPlan: raw.nextPlan,
+    proofFile: evidenceLabel(raw.evidence),
+    proofDescription: evidenceDesc(raw.evidence),
+  };
+  return map[fieldId] || raw[fieldId] || '---';
+}
+
+function evidenceLabel(evidence) {
+  try {
+    const e = typeof evidence === 'string' ? JSON.parse(evidence) : evidence;
+    return e?.fileName || e?.name || (e ? 'Đã đính kèm' : '---');
+  } catch {
+    return evidence || '---';
   }
-  return `${firstName} mới nộp ${student.entries.length}/${config.value.minPerWeek} nhật ký. Nội dung gần nhất: ${work}`;
+}
+
+function evidenceDesc(evidence) {
+  try {
+    const e = typeof evidence === 'string' ? JSON.parse(evidence) : evidence;
+    return e?.description || '---';
+  } catch {
+    return '---';
+  }
 }
 
 function studentStatusBadgeClass(status) {
   switch (status) {
-    case 'Nộp đủ': return 'bg-[#c6f6d5] text-[#276749]';
-    case 'Nộp thiếu': return 'bg-[#feebc8] text-[#c05621]';
-    case 'Không nộp': return 'bg-[#fed7d7] text-[#9b2c2c]';
-    default: return 'bg-slate-100 text-slate-600';
+    case 'Nộp đủ':
+      return 'bg-[#c6f6d5] text-[#276749]';
+    case 'Nộp thiếu':
+      return 'bg-[#feebc8] text-[#c05621]';
+    case 'Không nộp':
+      return 'bg-[#fed7d7] text-[#9b2c2c]';
+    case 'Đang trong hạn':
+      return 'bg-slate-200 text-slate-700';
+    default:
+      return 'bg-slate-100 text-slate-600';
   }
 }
 
-const formatDate = (isoString) => {
+function formatDate(isoString) {
   if (!isoString) return '';
   const d = new Date(isoString);
-  return d.toLocaleDateString('vi-VN') + ' ' + d.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
-};
+  return (
+    d.toLocaleDateString('vi-VN') +
+    ' ' +
+    d.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })
+  );
+}
 
-function openDiaryDetail(entry) {
-  const student = studentDiaries.value.find(s => s.entries.some(e => e.id === entry.id));
+function openDiaryDetail(entry, student) {
   viewingStudent.value = student;
   viewingDiary.value = entry;
+  viewingPlanBanner.value = planBanner(student);
   feedbackContent.value = '';
   isDrawerOpen.value = true;
+  selectEntry(student, entry);
 }
 
 function closeDrawer() {
   isDrawerOpen.value = false;
   viewingDiary.value = null;
   viewingStudent.value = null;
+  viewingPlanBanner.value = null;
 }
 
-async function submitFeedback() {
-  if (!feedbackContent.value.trim() || !viewingDiary.value) return;
+async function submitInlineFeedback(student) {
+  const entry = currentEntry(student);
+  const content = inlineFeedback[student.id]?.trim();
+  if (!entry || !content) return;
   isSubmittingFeedback.value = true;
-  
   try {
-    const diaryId = viewingDiary.value.id;
-    await api.put(`/diaries/${diaryId}/feedback`, {
-      teacherName: 'GVHD', // Should be authStore.user.hoTen
-      content: feedbackContent.value
+    await api.put(`/diaries/${entry.id}/feedback`, {
+      teacherName: authStore.user?.hoTen || 'GVHD',
+      content,
     });
-    
-    toastMessage.value = 'Đã gửi phản hồi thành công';
+    inlineFeedback[student.id] = '';
+    toastMessage.value = 'Đã gửi nhận xét thành công';
     showToast.value = true;
-    setTimeout(() => showToast.value = false, 3000);
-    
-    // Refresh to see the new feedback
+    setTimeout(() => {
+      showToast.value = false;
+    }, 3000);
     await loadData();
-    closeDrawer();
-  } catch (e) {
-    alert('Có lỗi xảy ra khi gửi phản hồi');
+  } catch {
+    toastMessage.value = 'Gửi nhận xét thất bại';
+    showToast.value = true;
   } finally {
     isSubmittingFeedback.value = false;
   }
 }
 
-watch(timeTab, (newVal) => {
-  if (newVal === 'thisWeek') selectedWeek.value = '13';
-  if (newVal === 'lastWeek') selectedWeek.value = '12';
-});
+async function submitFeedback() {
+  if (!feedbackContent.value.trim() || !viewingDiary.value) return;
+  isSubmittingFeedback.value = true;
+  try {
+    await api.put(`/diaries/${viewingDiary.value.id}/feedback`, {
+      teacherName: authStore.user?.hoTen || 'GVHD',
+      content: feedbackContent.value,
+    });
+    toastMessage.value = 'Đã gửi phản hồi thành công';
+    showToast.value = true;
+    setTimeout(() => {
+      showToast.value = false;
+    }, 3000);
+    await loadData();
+    closeDrawer();
+  } catch {
+    toastMessage.value = 'Có lỗi xảy ra khi gửi phản hồi';
+    showToast.value = true;
+  } finally {
+    isSubmittingFeedback.value = false;
+  }
+}
 
+function alignToMonday(d) {
+  const x = new Date(d);
+  x.setHours(0, 0, 0, 0);
+  const day = x.getDay();
+  const diff = day === 0 ? -6 : 1 - day;
+  x.setDate(x.getDate() + diff);
+  return x;
+}
+
+function addDays(d, n) {
+  const x = new Date(d);
+  x.setDate(x.getDate() + n);
+  return x;
+}
+
+function weekNumberForDate(date) {
+  const start = internshipStart.value;
+  const ms = alignToMonday(date) - start;
+  const w = Math.floor(ms / (7 * 24 * 60 * 60 * 1000)) + 1;
+  return Math.min(maxWeek.value, Math.max(1, w));
+}
+
+function fmtShort(d) {
+  return d.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit' });
+}
+
+function weekdayVi(d) {
+  const map = ['Chủ nhật', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'];
+  return map[d.getDay()] || '';
+}
 </script>
 
 <style scoped>
@@ -565,7 +876,11 @@ watch(timeTab, (newVal) => {
   animation: slideIn 0.3s forwards;
 }
 @keyframes slideIn {
-  from { transform: translateX(100%); }
-  to { transform: translateX(0); }
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
 }
 </style>

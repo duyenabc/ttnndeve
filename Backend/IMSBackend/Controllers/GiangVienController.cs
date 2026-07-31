@@ -95,6 +95,30 @@ namespace IMSBackend.Controllers
             });
         }
 
+        /// <summary>UC-18.1 — students in a class (demo: all SinhVien users).</summary>
+        [HttpGet("classes/{classId}/students")]
+        public async Task<IActionResult> GetClassStudents(string classId)
+        {
+            _ = classId; // reserved for enrollment mapping
+            var students = await _context.Users
+                .AsNoTracking()
+                .Where(u => u.VaiTro == "SinhVien")
+                .OrderBy(u => u.HoTen)
+                .Select(u => new
+                {
+                    id = u.MaNguoiDung,
+                    maGhiDanh = u.MaNguoiDung,
+                    maSoSinhVien = u.MaDinhDanh,
+                    hoTen = u.HoTen,
+                    email = u.Email,
+                    anhDaiDien = u.AnhDaiDien,
+                    lopSinhHoat = u.LopSinhHoat
+                })
+                .ToListAsync();
+
+            return Ok(students);
+        }
+
         private async Task<Class> FindClassAsync(string classId)
         {
             if (string.IsNullOrWhiteSpace(classId)) return null;
