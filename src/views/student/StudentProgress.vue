@@ -672,7 +672,7 @@
 
     <!-- TAB 3: NHẬT KÝ -->
     <div v-else-if="activeTab === 'diaries'">
-      <StudentDiaryTab classId="101" @writing-change="onDiaryWritingChange" />
+      <StudentDiaryTab classId="L001" @writing-change="onDiaryWritingChange" />
     </div>
 
     <!-- Legacy schedule tab (hidden from nav; kept for data) -->
