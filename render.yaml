@@ -1,5 +1,5 @@
 # Render Blueprint — https://render.com/docs/blueprint-spec
-# Sau khi tạo service, cập nhật URL thật vào env (xem README / checklist).
+# Sau khi tạo service, cập nhật URL thật vào Dashboard nếu khác mặc định.
 
 databases:
   - name: ims-db
@@ -25,9 +25,8 @@ services:
           property: connectionString
       - key: Jwt__Key
         generateValue: true
-      # TODO: đổi thành URL Static Site thật sau khi deploy frontend
+      # Đổi thành URL Static Site thật sau khi deploy (Dashboard → Environment)
       - key: Cors__Origins
-        sync: false
         value: https://ttnndeve.onrender.com
 
   # Vue static site
@@ -42,7 +41,6 @@ services:
         source: /*
         destination: /index.html
     envVars:
-      # TODO: đổi thành URL API thật (thường https://ims-api.onrender.com/api)
+      # Đổi thành URL API thật sau khi deploy (Dashboard → Environment), rồi Redeploy
       - key: VITE_API_BASE_URL
-        sync: false
         value: https://ims-api.onrender.com/api
