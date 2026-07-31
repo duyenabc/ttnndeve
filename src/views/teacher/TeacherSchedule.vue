@@ -201,7 +201,7 @@
               <input
                 v-model="createForm.tieuDe"
                 type="text"
-                placeholder="VD: [K64] Há»p nhÃ³m Äá»“ Ã¡n 1"
+                placeholder="VD: [K64] Há»p nhóm Äá»“ Ã¡n 1"
                 class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 outline-none focus:ring-2 focus:ring-blue-600"
               />
             </div>
@@ -283,7 +283,7 @@
               <textarea
                 v-model="createForm.noiDung"
                 rows="3"
-                placeholder="Ná»™i dung trao Ä‘á»•i hoáº·c yÃªu cáº§u chuáº©n bá»‹..."
+                placeholder="Ná»™i dung trao đổi hoáº·c yêu cầu chuẩn bị..."
                 class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 outline-none focus:ring-2 focus:ring-blue-600"
               ></textarea>
             </div>
@@ -395,7 +395,7 @@
   const scheduleEvents = ref([
     {
       id: 101,
-      tieuDe: '[K64] 09:00 - Há»p nhÃ³m Äá»“ Ã¡n 1',
+      tieuDe: '[K64] 09:00 - Há»p nhóm Äá»“ Ã¡n 1',
       dateStr: '2026-07-28',
       time: '09:00',
       hour: 9,

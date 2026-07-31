@@ -3,14 +3,14 @@
     <!-- Breadcrumb & Header -->
     <div>
       <nav class="flex items-center gap-2 text-xs text-slate-500 mb-2">
-        <router-link to="/teacher/classes" class="hover:text-blue-700 transition-colors">Lá»›p cá»§a tÃ´i</router-link>
+        <router-link to="/teacher/classes" class="hover:text-blue-700 transition-colors">L�:p của tôi</router-link>
         <span class="material-symbols-outlined text-[14px]">chevron_right</span>
         <span class="text-slate-700 font-medium">ÄÃ¡nh giÃ¡</span>
         <span class="material-symbols-outlined text-[14px]">chevron_right</span>
         <span class="font-bold text-slate-900">Äiá»ƒm danh</span>
       </nav>
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <h1 class="text-[28px] font-bold text-slate-900 tracking-tight">Quáº£n lÃ½ Äiá»ƒm danh Buá»•i há»p</h1>
+        <h1 class="text-[28px] font-bold text-slate-900 tracking-tight">Quản lý Äiá»ƒm danh Buá»•i há»p</h1>
       </div>
     </div>
 
@@ -32,7 +32,7 @@
         :to="`/teacher/classes/${classId}/violations`"
         class="pb-3 text-slate-500 hover:text-blue-700 font-semibold text-sm transition-colors flex items-center gap-1.5"
       >
-        Theo dÃµi vi pháº¡m
+        Theo dÃµi vi phạm
         <span class="bg-rose-100 text-rose-800 text-[10px] px-1.5 py-0.2 rounded-full font-bold">4</span>
       </router-link>
     </div>
@@ -42,8 +42,8 @@
       <div class="flex items-center gap-3">
         <label class="text-xs font-bold text-slate-700 whitespace-nowrap">Chá»n buá»•i há»p:</label>
         <select v-model="selectedMeeting" class="px-3.5 py-2 rounded-xl border border-slate-300 text-xs font-bold text-slate-800 outline-none focus:ring-2 focus:ring-blue-600 min-w-[280px]">
-          <option value="1">Buá»•i há»p hÆ°á»›ng dáº«n #04 - 20/10/2024</option>
-          <option value="2">Buá»•i há»p hÆ°á»›ng dáº«n #03 - 13/10/2024</option>
+          <option value="1">Buá»•i há»p hư�:ng dẫn #04 - 20/10/2024</option>
+          <option value="2">Buá»•i há»p hư�:ng dẫn #03 - 13/10/2024</option>
           <option value="3">Buá»•i há»p Ä‘á»™t xuáº¥t - 05/10/2024</option>
         </select>
         <span class="text-xs text-slate-500 font-medium hidden sm:inline">Tá»• chá»©c: 5 buá»•i</span>
@@ -64,9 +64,9 @@
         <table class="w-full text-left border-collapse text-xs">
           <thead>
             <tr class="bg-slate-50 border-b border-slate-200 font-bold uppercase text-[10px] text-slate-500">
-              <th class="px-6 py-3.5">Há» vÃ  tÃªn</th>
+              <th class="px-6 py-3.5">Há» và tên</th>
               <th class="px-6 py-3.5">MSSV</th>
-              <th class="px-6 py-3.5">Tráº¡ng thÃ¡i thá»±c táº­p</th>
+              <th class="px-6 py-3.5">Trạng thái thực tập</th>
               <th class="px-6 py-3.5 text-center">Váº¯ng (P / KP)</th>
               <th class="px-6 py-3.5">Äiá»ƒm danh buá»•i há»p</th>
               <th class="px-6 py-3.5">Ghi chÃº váº¯ng / LÃ½ do</th>
@@ -77,7 +77,7 @@
               v-for="st in students"
               :key="st.id"
               class="hover:bg-slate-50/80 transition"
-              :class="{ 'opacity-50 bg-slate-50': st.status === 'Dá»«ng thá»±c táº­p' }"
+              :class="{ 'opacity-50 bg-slate-50': st.status === 'Dá»«ng thực tập' }"
             >
               <td class="px-6 py-4">
                 <div class="flex items-center gap-2">
@@ -97,7 +97,7 @@
               <td class="px-6 py-4">
                 <span
                   class="px-2.5 py-0.5 rounded-full text-[10px] font-bold"
-                  :class="st.status === 'Äang thá»±c táº­p' ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-200 text-slate-700'"
+                  :class="st.status === 'Äang thực tập' ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-200 text-slate-700'"
                 >
                   {{ st.status }}
                 </span>
@@ -113,7 +113,7 @@
                       :name="`attendance-${st.id}`"
                       value="present"
                       v-model="st.attendance"
-                      :disabled="st.status === 'Dá»«ng thá»±c táº­p'"
+                      :disabled="st.status === 'Dá»«ng thực tập'"
                       class="text-emerald-600 focus:ring-emerald-500"
                     />
                     <span class="font-bold text-emerald-700">CÃ³ máº·t</span>
@@ -124,7 +124,7 @@
                       :name="`attendance-${st.id}`"
                       value="excused"
                       v-model="st.attendance"
-                      :disabled="st.status === 'Dá»«ng thá»±c táº­p'"
+                      :disabled="st.status === 'Dá»«ng thực tập'"
                       class="text-amber-600 focus:ring-amber-500"
                     />
                     <span class="font-bold text-amber-700">CÃ³ phÃ©p</span>
@@ -135,7 +135,7 @@
                       :name="`attendance-${st.id}`"
                       value="unexcused"
                       v-model="st.attendance"
-                      :disabled="st.status === 'Dá»«ng thá»±c táº­p'"
+                      :disabled="st.status === 'Dá»«ng thực tập'"
                       class="text-rose-600 focus:ring-rose-500"
                     />
                     <span class="font-bold text-rose-700">KhÃ´ng phÃ©p</span>
@@ -147,7 +147,7 @@
                   v-model="st.reason"
                   type="text"
                   placeholder="ThÃªm lÃ½ do váº¯ng..."
-                  :disabled="st.status === 'Dá»«ng thá»±c táº­p'"
+                  :disabled="st.status === 'Dá»«ng thực tập'"
                   class="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:ring-2 focus:ring-blue-600"
                 />
               </td>
@@ -242,7 +242,7 @@
         id: item.maSinhVien,
         name: item.hoTen,
         mssv: item.maSoSinhVien,
-        status: item.trangThaiThucTap === 'DangThucTap' ? 'Äang thá»±c táº­p' : 'Dá»«ng thá»±c táº­p',
+        status: item.trangThaiThucTap === 'DangThucTap' ? 'Äang thực tập' : 'Dá»«ng thực tập',
         absentPermitted: item.absentPermitted || 0,
         absentUnpermitted: item.absentUnpermitted || 0,
         attendance: item.attendance || 'present',
@@ -250,7 +250,7 @@
       }));
     } catch (err) {
       console.error(err);
-      showToast('KhÃ´ng thá»ƒ táº£i dá»¯ liá»‡u Ä‘iá»ƒm danh');
+      showToast('KhÃ´ng thá»ƒ táº£i dữ li�!u Ä‘iá»ƒm danh');
     } finally {
       loading.value = false;
     }
@@ -268,7 +268,7 @@
         reason: s.reason
       }));
       await api.post(`/giangvien/classes/${classId.value}/attendance`, { records });
-      showToast('LÆ°u dá»¯ liá»‡u Ä‘iá»ƒm danh thÃ nh cÃ´ng!');
+      showToast('LÆ°u dữ li�!u Ä‘iá»ƒm danh thÃ nh cÃ´ng!');
     } catch (err) {
       showToast('CÃ³ lá»—i xáº£y ra khi lÆ°u Ä‘iá»ƒm danh!');
     }

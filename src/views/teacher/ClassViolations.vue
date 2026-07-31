@@ -3,11 +3,11 @@
     <!-- Breadcrumb & Header -->
     <div>
       <nav class="flex items-center gap-2 text-xs text-slate-500 mb-2">
-        <router-link to="/teacher/classes" class="hover:text-blue-700 transition-colors">Lá»›p cá»§a tÃ´i</router-link>
+        <router-link to="/teacher/classes" class="hover:text-blue-700 transition-colors">L�:p của tôi</router-link>
         <span class="material-symbols-outlined text-[14px]">chevron_right</span>
         <span class="text-slate-700 font-medium">ÄÃ¡nh giÃ¡</span>
         <span class="material-symbols-outlined text-[14px]">chevron_right</span>
-        <span class="font-bold text-slate-900">Theo dÃµi vi pháº¡m</span>
+        <span class="font-bold text-slate-900">Theo dÃµi vi phạm</span>
       </nav>
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <h1 class="text-[28px] font-bold text-slate-900 tracking-tight">Theo dÃµi & Xá»­ lÃ½ Vi pháº¡m</h1>
@@ -32,7 +32,7 @@
         :to="`/teacher/classes/${classId}/violations`"
         class="pb-3 text-rose-700 border-b-2 border-rose-700 font-bold text-sm flex items-center gap-1.5"
       >
-        Theo dÃµi vi pháº¡m
+        Theo dÃµi vi phạm
         <span class="bg-rose-100 text-rose-800 text-[10px] px-1.5 py-0.2 rounded-full font-bold">
           {{ pendingCount }}
         </span>
@@ -42,15 +42,15 @@
     <!-- Loading State -->
     <div v-if="loading" class="bg-white rounded-2xl border border-slate-200 p-12 text-center flex flex-col items-center justify-center min-h-[300px]">
       <span class="animate-spin text-4xl text-blue-600 material-symbols-outlined">sync</span>
-      <p class="text-xs text-slate-500 mt-2">Äang táº£i danh sÃ¡ch vi pháº¡m...</p>
+      <p class="text-xs text-slate-500 mt-2">Äang táº£i danh sÃ¡ch vi phạm...</p>
     </div>
 
     <!-- Empty State -->
     <div v-else-if="violations.length === 0" class="bg-white rounded-2xl border border-slate-200 p-12 text-center flex flex-col items-center justify-center min-h-[300px] shadow-2xs">
       <span class="material-symbols-outlined text-[64px] text-slate-300 mb-3" style="font-variation-settings: 'FILL' 1">check_circle</span>
-      <h3 class="text-base font-bold text-slate-900">KhÃ´ng phÃ¡t hiá»‡n vi pháº¡m</h3>
+      <h3 class="text-base font-bold text-slate-900">KhÃ´ng phÃ¡t hi�!n vi phạm</h3>
       <p class="text-xs text-slate-500 max-w-md mt-1 leading-relaxed">
-        Lá»›p há»c hiá»‡n táº¡i chÆ°a cÃ³ sinh viÃªn nÃ o hoáº·c khÃ´ng ghi nháº­n trÆ°á»ng há»£p vi pháº¡m quy Ä‘á»‹nh thá»±c táº­p hay cháº­m bÃ¡o cÃ¡o nÃ o.
+        L�:p há»c hi�!n tại chưa có sinh viên nào hoặc không ghi nhận trÆ°á»ng há»£p vi phạm quy ��9nh thực tập hay chậm báo cáo nào.
       </p>
     </div>
 
@@ -60,12 +60,12 @@
         <table class="w-full text-left border-collapse text-xs">
           <thead>
             <tr class="bg-slate-50 border-b border-slate-200 font-bold uppercase text-[10px] text-slate-500">
-              <th class="px-6 py-3.5">Há» vÃ  tÃªn</th>
+              <th class="px-6 py-3.5">Há» và tên</th>
               <th class="px-6 py-3.5">MSSV</th>
-              <th class="px-6 py-3.5">Loáº¡i vi pháº¡m</th>
+              <th class="px-6 py-3.5">Loáº¡i vi phạm</th>
               <th class="px-6 py-3.5 text-center">Sá»‘ láº§n</th>
               <th class="px-6 py-3.5 text-center">NgÆ°á»¡ng</th>
-              <th class="px-6 py-3.5">Tráº¡ng thÃ¡i</th>
+              <th class="px-6 py-3.5">Trạng thái</th>
               <th class="px-6 py-3.5 text-right">Thao tÃ¡c</th>
             </tr>
           </thead>
@@ -107,7 +107,7 @@
                   @click="openStopDrawer(v)"
                   class="px-3.5 py-1.5 border border-rose-600 text-rose-600 hover:bg-rose-600 hover:text-white font-bold rounded-xl transition shadow-2xs"
                 >
-                  Dá»«ng thá»±c táº­p
+                  Dá»«ng thực tập
                 </button>
                 <span v-else class="text-slate-400 text-[11px]">ÄÃ£ xá»­ lÃ½</span>
               </td>
@@ -126,22 +126,22 @@
       <div class="w-full max-w-md bg-white h-full shadow-2xl flex flex-col justify-between p-6 overflow-y-auto space-y-6">
         <div class="space-y-6">
           <div class="flex justify-between items-center border-b border-slate-100 pb-3">
-            <h3 class="font-bold text-slate-900 text-base">XÃ¡c nháº­n buá»™c dá»«ng thá»±c táº­p</h3>
+            <h3 class="font-bold text-slate-900 text-base">XÃ¡c nháº­n buá»™c dá»«ng thực tập</h3>
             <button @click="selectedViolation = null" class="text-slate-400 hover:text-slate-600">âœ•</button>
           </div>
 
           <div class="space-y-1 text-xs">
             <p class="text-slate-800 font-bold">
-              Buá»™c dá»«ng thá»±c táº­p Ä‘á»‘i vá»›i sinh viÃªn:
+              Buá»™c dá»«ng thực tập Ä‘á»‘i vá»›i sinh viên:
               <span class="text-rose-700 text-sm block mt-0.5">{{ selectedViolation.studentName }} ({{ selectedViolation.mssv }})</span>
             </p>
             <p class="text-slate-500 leading-relaxed">
-              Sinh viÃªn váº«n Ä‘Æ°á»£c giá»¯ láº¡i trong danh sÃ¡ch lá»›p, dá»¯ liá»‡u lá»‹ch sá»­ Ä‘Æ°á»£c giá»¯ nguyÃªn nhÆ°ng sáº½ khÃ´ng thá»ƒ ná»™p bÃ i tiáº¿p.
+              Sinh viên váº«n Ä‘Æ°á»£c giá»¯ láº¡i trong danh sÃ¡ch lá»›p, dữ li�!u lá»‹ch sá»­ Ä‘Æ°á»£c giá»¯ nguyÃªn nhÆ°ng sáº½ không thá»ƒ ná»™p bÃ i tiáº¿p.
             </p>
           </div>
 
           <div class="space-y-1 text-xs">
-            <label class="font-bold text-slate-900 block">LÃ½ do buá»™c dá»«ng thá»±c táº­p <span class="text-rose-600">*</span></label>
+            <label class="font-bold text-slate-900 block">LÃ½ do buá»™c dá»«ng thực tập <span class="text-rose-600">*</span></label>
             <textarea
               v-model="stopReason"
               rows="5"
@@ -149,7 +149,7 @@
               class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 outline-none focus:ring-2 focus:ring-rose-600"
             ></textarea>
             <p v-if="errorReason" class="text-rose-600 text-[11px] font-semibold mt-1">
-              Vui lÃ²ng nháº­p lÃ½ do buá»™c dá»«ng thá»±c táº­p!
+              Vui lÃ²ng nháº­p lÃ½ do buá»™c dá»«ng thực tập!
             </p>
           </div>
         </div>
@@ -192,7 +192,7 @@
   const classId = computed(() => route.params.id || '1');
 
   const selectedViolation = ref(null);
-  const stopReason = ref('Vi pháº¡m vÆ°á»£t má»©c quy Ä‘á»‹nh (Váº¯ng khÃ´ng phÃ©p liÃªn tiáº¿p)');
+  const stopReason = ref('Vi pháº¡m vÆ°á»£t má»©c quy ��9nh (Váº¯ng không phÃ©p liÃªn tiáº¿p)');
   const errorReason = ref(false);
   const toastMsg = ref('');
 
@@ -216,7 +216,7 @@
         studentId: s.maSinhVien,
         studentName: s.hoTen,
         mssv: s.maSoSinhVien || s.maDinhDanh || `SV${s.maSinhVien}`,
-        type: 'Váº¯ng khÃ´ng phÃ©p liÃªn tiáº¿p',
+        type: 'Váº¯ng không phÃ©p liÃªn tiáº¿p',
         count: 4,
         threshold: 3,
         status: isStopped ? 'ÄÃ£ xá»­ lÃ½' : 'Chá» xá»­ lÃ½'
@@ -232,7 +232,7 @@
         studentId: s.maSinhVien,
         studentName: s.hoTen,
         mssv: s.maSoSinhVien || s.maDinhDanh || `SV${s.maSinhVien}`,
-        type: 'Ná»™p bÃ¡o cÃ¡o trá»…',
+        type: 'Ná»™p báo cáo trá»…',
         count: 3,
         threshold: 3,
         status: isStopped ? 'ÄÃ£ xá»­ lÃ½' : 'Chá» xá»­ lÃ½'
@@ -248,7 +248,7 @@
         studentId: s.maSinhVien,
         studentName: s.hoTen,
         mssv: s.maSoSinhVien || s.maDinhDanh || `SV${s.maSinhVien}`,
-        type: 'KhÃ´ng ná»™p bÃ¡o cÃ¡o tuáº§n',
+        type: 'KhÃ´ng ná»™p báo cáo tuáº§n',
         count: 2,
         threshold: 3,
         status: isStopped ? 'ÄÃ£ xá»­ lÃ½' : 'ÄÃ£ xá»­ lÃ½'
@@ -300,7 +300,7 @@
         await api.post(`/giangvien/students/${selectedViolation.value.studentId}/stop`, {
           lyDo: stopReason.value
         });
-        showToast(`ÄÃ£ buá»™c dá»«ng thá»±c táº­p thÃ nh cÃ´ng cho sinh viÃªn ${selectedViolation.value.studentName}`);
+        showToast(`ÄÃ£ buá»™c dá»«ng thực tập thÃ nh cÃ´ng cho sinh viên ${selectedViolation.value.studentName}`);
         selectedViolation.value = null;
         // Reload details immediately to refresh statuses dynamically
         await loadData();

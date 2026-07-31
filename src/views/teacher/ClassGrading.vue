@@ -3,7 +3,7 @@
     <!-- Breadcrumbs & Header -->
     <div>
       <nav class="flex items-center gap-2 text-xs text-slate-500 mb-2">
-        <router-link to="/teacher/classes" class="hover:text-blue-700 transition-colors">Lá»›p cá»§a tÃ´i</router-link>
+        <router-link to="/teacher/classes" class="hover:text-blue-700 transition-colors">L�:p của tôi</router-link>
         <span class="material-symbols-outlined text-[14px]">chevron_right</span>
         <span class="text-slate-700 font-medium">ÄÃ¡nh giÃ¡</span>
         <span class="material-symbols-outlined text-[14px]">chevron_right</span>
@@ -32,7 +32,7 @@
             class="px-3 py-2 rounded-xl border border-slate-300 text-slate-700 hover:bg-slate-100 font-bold text-xs flex items-center gap-1.5 transition shadow-2xs bg-white"
           >
             <span class="material-symbols-outlined text-[18px] text-emerald-600">file_download</span>
-            Xuáº¥t BÃ¡o cÃ¡o (Excel/PDF)
+            Xuất Báo cáo (Excel/PDF)
           </button>
 
           <button
@@ -65,7 +65,7 @@
         :to="`/teacher/classes/${classId}/violations`"
         class="pb-3 text-slate-500 hover:text-blue-700 font-semibold text-sm transition-colors flex items-center gap-1.5 shrink-0"
       >
-        Theo dÃµi vi pháº¡m
+        Theo dÃµi vi phạm
         <span class="bg-rose-100 text-rose-800 text-[10px] px-1.5 py-0.2 rounded-full font-bold">4</span>
       </router-link>
     </div>
@@ -98,13 +98,13 @@
         <input
           v-model="searchQuery"
           type="text"
-          placeholder="TÃ¬m kiáº¿m MSSV, tÃªn sinh viÃªn..."
+          placeholder="TÃ¬m kiáº¿m MSSV, tên sinh viên..."
           class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs outline-none focus:ring-2 focus:ring-blue-600"
         />
       </div>
 
       <div class="flex items-center gap-3 text-xs">
-        <span class="text-slate-500">Äang hiá»ƒn thá»‹ <strong class="text-slate-900">{{ filteredStudents.length }}</strong> sinh viÃªn</span>
+        <span class="text-slate-500">Äang hiá»ƒn thá»‹ <strong class="text-slate-900">{{ filteredStudents.length }}</strong> sinh viên</span>
         <button
           @click="autoCalculate"
           class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl transition flex items-center gap-1.5"
@@ -122,7 +122,7 @@
           <thead>
             <!-- Group Header Row -->
             <tr class="bg-slate-100/80 border-b border-slate-200 font-bold uppercase text-[10px] text-slate-600">
-              <th class="px-4 py-3 sticky left-0 bg-slate-100 z-10 w-48 border-r border-slate-200">Sinh viÃªn</th>
+              <th class="px-4 py-3 sticky left-0 bg-slate-100 z-10 w-48 border-r border-slate-200">Sinh viên</th>
               <th class="px-3 py-3 font-mono text-slate-500 w-24 border-r border-slate-200">MSSV</th>
 
               <!-- Dynamic Category Headers -->
@@ -187,7 +187,7 @@
               <th class="px-4 py-2 text-center bg-slate-100 font-black text-slate-900">
                 (Äiá»ƒm 10)
               </th>
-              <th class="px-4 py-2 text-center">Tráº¡ng thÃ¡i</th>
+              <th class="px-4 py-2 text-center">Trạng thái</th>
             </tr>
           </thead>
 
@@ -266,7 +266,7 @@
         <div class="px-6 py-4 bg-[#005EA3] text-white flex justify-between items-center">
           <div>
             <h3 class="font-bold text-base">Cáº¥u hÃ¬nh Ä‘iá»ƒm: {{ editingSubItem.name }}</h3>
-            <p class="text-[11px] text-blue-100">Äiá»u chá»‰nh thang Ä‘iá»ƒm, Ä‘iá»ƒm liá»‡t vÃ  tá»· lá»‡ trá»±c tiáº¿p</p>
+            <p class="text-[11px] text-blue-100">Äiá»u chá»‰nh thang Ä‘iá»ƒm, Ä‘iá»ƒm liá»‡t và tá»· lá»‡ trá»±c tiáº¿p</p>
           </div>
           <button @click="editingSubItem = null" class="text-white/80 hover:text-white font-bold text-lg">âœ•</button>
         </div>
@@ -283,7 +283,7 @@
               <input v-model.number="editingSubItem.maxScore" type="number" min="1" max="100" class="w-full px-3 py-2 border rounded-xl font-bold" />
             </div>
             <div>
-              <label class="block font-bold text-slate-700 mb-1">Tá»· lá»‡ % nhÃ³m</label>
+              <label class="block font-bold text-slate-700 mb-1">Tá»· lá»‡ % nhóm</label>
               <input v-model.number="editingSubItem.ratio" type="number" min="0" max="100" class="w-full px-3 py-2 border rounded-xl font-bold text-blue-800" />
             </div>
             <div>
@@ -297,7 +297,7 @@
             <select v-model="editingSubItem.gradingMethod" class="w-full px-3 py-2 border rounded-xl font-semibold">
               <option value="direct">Nháº­p Ä‘iá»ƒm trá»±c tiáº¿p</option>
               <option value="rubric">Cháº¥m theo Rubric tiÃªu chÃ­</option>
-              <option value="submission">Tá»± Ä‘á»™ng tá»« BÃ i ná»™p Sá»± kiá»‡n</option>
+              <option value="submission">Tá»± Ä‘á»™ng tá»« Bài n�"p Sự ki�!n</option>
               <option value="diary">Tá»± Ä‘á»™ng tá»« Sá»• Nháº­t kÃ½</option>
               <option value="attendance">Tá»± Ä‘á»™ng tá»« Äiá»ƒm danh</option>
             </select>
@@ -311,7 +311,7 @@
       </div>
     </div>
 
-    <!-- Modal Xuáº¥t bÃ¡o cÃ¡o Ä‘iá»ƒm (Excel & PDF) -->
+    <!-- Modal Xuất báo cáo Ä‘iá»ƒm (Excel & PDF) -->
     <div
       v-if="showExportModal"
       class="fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4"
@@ -323,8 +323,8 @@
               <span class="material-symbols-outlined text-[24px] text-emerald-400">output</span>
             </div>
             <div>
-              <h3 class="font-bold text-base">Xuáº¥t BÃ¡o cÃ¡o & Báº£ng Ä‘iá»ƒm Thá»±c táº­p</h3>
-              <p class="text-xs text-slate-300">Xuáº¥t dá»¯ liá»‡u chÃ­nh thá»©c cho Lá»›p {{ classId }}</p>
+              <h3 class="font-bold text-base">Xuất Báo cáo & Bảng �iỒm Thá»±c táº­p</h3>
+              <p class="text-xs text-slate-300">Xuất dữ li�!u chính thức cho L�:p {{ classId }}</p>
             </div>
           </div>
           <button @click="showExportModal = false" class="text-slate-400 hover:text-white transition">
@@ -336,18 +336,18 @@
           <div class="bg-blue-50 p-4 rounded-2xl border border-blue-100 flex items-start gap-3">
             <span class="material-symbols-outlined text-blue-700 text-[20px] shrink-0 mt-0.5">info</span>
             <div class="space-y-1">
-              <p class="font-bold text-blue-900">BÃ¡o cÃ¡o tá»•ng há»£p bao gá»“m:</p>
+              <p class="font-bold text-blue-900">Báo cáo tá»•ng há»£p bao gá»“m:</p>
               <ul class="list-disc list-inside text-slate-600 space-y-0.5">
-                <li>Danh sÃ¡ch sinh viÃªn, MSSV vÃ  cÃ¡c cá»™t Ä‘iá»ƒm QuÃ¡ trÃ¬nh, Giá»¯a ká»³, Cuá»‘i ká»³.</li>
-                <li>Tá»•ng Ä‘iá»ƒm há»‡ 10, quy Ä‘á»•i Ä‘iá»ƒm chá»¯ (A, B+, B, C, D, F) vÃ  ÄÃ¡nh giÃ¡ Äáº¡t/KhÃ´ng Ä‘áº¡t.</li>
-                <li>Thá»‘ng kÃª tá»· lá»‡ Äáº¡t/KhÃ´ng Ä‘áº¡t vÃ  khung kÃ½ xÃ¡c nháº­n cá»§a Giáº£ng viÃªn & Bá»™ mÃ´n.</li>
+                <li>Danh sách sinh viên, MSSV và cÃ¡c cá»™t Ä‘iá»ƒm QuÃ¡ trÃ¬nh, Giá»¯a ká»³, Cuá»‘i ká»³.</li>
+                <li>Tá»•ng Ä‘iá»ƒm há»‡ 10, quy đổi Ä‘iá»ƒm chá»¯ (A, B+, B, C, D, F) và ÄÃ¡nh giÃ¡ Äáº¡t/KhÃ´ng Ä‘áº¡t.</li>
+                <li>Thá»‘ng kÃª tá»· lá»‡ Äáº¡t/KhÃ´ng Ä‘áº¡t và khung kÃ½ xÃ¡c nháº­n của Giáº£ng viÃªn & Bá»™ mÃ´n.</li>
               </ul>
             </div>
           </div>
 
           <div class="grid grid-cols-2 gap-3">
             <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 text-center">
-              <span class="text-[11px] font-bold text-slate-500 uppercase block">Tá»•ng sinh viÃªn</span>
+              <span class="text-[11px] font-bold text-slate-500 uppercase block">Tá»•ng sinh viên</span>
               <span class="text-xl font-black text-slate-900">{{ filteredStudents.length }}</span>
             </div>
             <div class="p-3 bg-emerald-50 rounded-xl border border-emerald-200 text-center">
@@ -369,7 +369,7 @@
                   <span class="material-symbols-outlined text-[22px]">table_chart</span>
                 </div>
                 <span>Táº£i file Excel (.xlsx)</span>
-                <span class="text-[10px] text-emerald-700 font-normal">Äáº§y Ä‘á»§ cÃ´ng thá»©c & dá»¯ liá»‡u thÃ´</span>
+                <span class="text-[10px] text-emerald-700 font-normal">Äáº§y Ä‘á»§ cÃ´ng thá»©c & dữ li�!u thÃ´</span>
               </button>
 
               <button
@@ -432,7 +432,7 @@
       badgeBg: 'bg-emerald-100 text-emerald-800',
       subItems: [
         { id: 's1_1', name: 'ChuyÃªn cáº§n', maxScore: 10, ratio: 40, minPassScore: 4.0, gradingMethod: 'attendance' },
-        { id: 's1_2', name: 'Nháº­t kÃ½ thá»±c táº­p', maxScore: 10, ratio: 60, minPassScore: 5.0, gradingMethod: 'diary' }
+        { id: 's1_2', name: 'Nháº­t kÃ½ thực tập', maxScore: 10, ratio: 60, minPassScore: 5.0, gradingMethod: 'diary' }
       ]
     },
     {
@@ -444,8 +444,8 @@
       textColor: 'text-sky-700',
       badgeBg: 'bg-sky-100 text-sky-800',
       subItems: [
-        { id: 's2_1', name: 'BÃ¡o cÃ¡o tiáº¿n Ä‘á»™ (GV)', maxScore: 10, ratio: 50, minPassScore: 4.0, gradingMethod: 'submission' },
-        { id: 's2_2', name: 'ÄÃ¡nh giÃ¡ Doanh nghiá»‡p (GK)', maxScore: 10, ratio: 50, minPassScore: 4.0, gradingMethod: 'direct' }
+        { id: 's2_1', name: 'Báo cáo tiáº¿n Ä‘á»™ (GV)', maxScore: 10, ratio: 50, minPassScore: 4.0, gradingMethod: 'submission' },
+        { id: 's2_2', name: 'ÄÃ¡nh giÃ¡ Doanh nghi�!p (GK)', maxScore: 10, ratio: 50, minPassScore: 4.0, gradingMethod: 'direct' }
       ]
     },
     {
@@ -457,9 +457,9 @@
       textColor: 'text-indigo-700',
       badgeBg: 'bg-indigo-100 text-indigo-800',
       subItems: [
-        { id: 's3_1', name: 'BÃ¡o cÃ¡o / KhÃ³a luáº­n', maxScore: 10, ratio: 40, minPassScore: 4.0, gradingMethod: 'rubric' },
-        { id: 's3_2', name: 'ÄÃ¡nh giÃ¡ Doanh nghiá»‡p (CK)', maxScore: 10, ratio: 40, minPassScore: 5.0, gradingMethod: 'direct' },
-        { id: 's3_3', name: 'Báº£o vá»‡ / BÃ¡o cÃ¡o', maxScore: 10, ratio: 20, minPassScore: 4.0, gradingMethod: 'rubric' }
+        { id: 's3_1', name: 'Báo cáo / KhÃ³a luáº­n', maxScore: 10, ratio: 40, minPassScore: 4.0, gradingMethod: 'rubric' },
+        { id: 's3_2', name: 'ÄÃ¡nh giÃ¡ Doanh nghi�!p (CK)', maxScore: 10, ratio: 40, minPassScore: 5.0, gradingMethod: 'direct' },
+        { id: 's3_3', name: 'Báº£o vá»‡ / Báo cáo', maxScore: 10, ratio: 20, minPassScore: 4.0, gradingMethod: 'rubric' }
       ]
     }
   ]);
@@ -570,7 +570,7 @@
     window.dispatchEvent(new CustomEvent('grading-structure-updated', {
       detail: { classId: classId.value, groups: categories.value }
     }));
-    showToast('ÄÃ£ cáº­p nháº­t cáº¥u hÃ¬nh Ä‘iá»ƒm Sub Item vÃ  tá»± Ä‘á»™ng Ä‘á»“ng bá»™!');
+    showToast('ÄÃ£ cáº­p nháº­t cáº¥u hÃ¬nh Ä‘iá»ƒm Sub Item và tá»± Ä‘á»™ng Ä‘á»“ng bá»™!');
   }
 
   const catQT = computed(() => categories.value[0]);
@@ -664,10 +664,10 @@
       ["TRÆ¯á»œNG Äáº I Há»ŒC KINH Táº¾ - Äáº I Há»ŒC ÄÃ€ Náº´NG"],
       ["KHOA CÃ”NG NGHá»† THÃ”NG TIN - Bá»˜ MÃ”N Há»† THá»NG THÃ”NG TIN"],
       ["Báº¢NG ÄIá»‚M Tá»”NG Há»¢P THá»°C Táº¬P DOANH NGHIá»†P"],
-      [`MÃ£ lá»›p thá»±c táº­p: Lá»šP ${classId.value} | Há»c ká»³ I - NÄƒm há»c 2025-2026`],
-      [`Giáº£ng viÃªn hÆ°á»›ng dáº«n: TS. Nguyá»…n VÄƒn A`],
+      [`MÃ£ lá»›p thực tập: Lá»šP ${classId.value} | Há»c ká»³ I - NÄƒm há»c 2025-2026`],
+      [`Giáº£ng viÃªn hư�:ng dẫn: TS. Nguyá»…n VÄƒn A`],
       [""],
-      ["STT", "MSSV", "Há» vÃ  tÃªn", "Ä.QuÃ¡ trÃ¬nh (20%)", "Ä.Giá»¯a ká»³ (30%)", "Ä.Cuá»‘i ká»³ (50%)", "Tá»•ng Ä‘iá»ƒm (Thang 10)", "Äiá»ƒm chá»¯", "ÄÃ¡nh giÃ¡"]
+      ["STT", "MSSV", "Há» và tên", "Ä.QuÃ¡ trÃ¬nh (20%)", "Ä.Giá»¯a ká»³ (30%)", "Ä.Cuá»‘i ká»³ (50%)", "Tá»•ng Ä‘iá»ƒm (Thang 10)", "Äiá»ƒm chá»¯", "ÄÃ¡nh giÃ¡"]
     ];
 
     filteredStudents.value.forEach((st, idx) => {
@@ -703,7 +703,7 @@
     XLSX.utils.book_append_sheet(wb, ws, "BangDiemThucTap");
     XLSX.writeFile(wb, `BaoCao_BangDiem_ThucTap_Lop_${classId.value}.xlsx`);
 
-    showToast('âœ“ ÄÃ£ xuáº¥t thÃ nh cÃ´ng file Excel Báº£ng Ä‘iá»ƒm Thá»±c táº­p (.xlsx)');
+    showToast('âœ“ ÄÃ£ xuáº¥t thÃ nh cÃ´ng file Excel Bảng �iỒm Thá»±c táº­p (.xlsx)');
     showExportModal.value = false;
   }
 
@@ -745,7 +745,7 @@
       <!DOCTYPE html>
       <html>
       <head>
-        <title>BÃ¡o cÃ¡o Báº£ng Ä‘iá»ƒm Thá»±c táº­p - Lá»›p ${classId.value}</title>
+        <title>Báo cáo Bảng �iỒm Thá»±c táº­p - L�:p ${classId.value}</title>
         <meta charset="utf-8" />
         <style>
           body { font-family: "Times New Roman", Times, serif; margin: 20mm 15mm; color: #111; line-height: 1.3; }
@@ -786,14 +786,14 @@
         </table>
 
         <div class="title">Báº¢NG ÄIá»‚M Tá»”NG Há»¢P THá»°C Táº¬P DOANH NGHIá»†P</div>
-        <div class="subtitle">Lá»›p hÆ°á»›ng dáº«n: <strong>Lá»šP ${classId.value}</strong> â€¢ Há»c ká»³ I - NÄƒm há»c 2025-2026</div>
+        <div class="subtitle">L�:p hư�:ng dẫn: <strong>Lá»šP ${classId.value}</strong> â€¢ Há»c ká»³ I - NÄƒm há»c 2025-2026</div>
 
         <table class="data-table">
           <thead>
             <tr>
               <th style="width: 35px;">STT</th>
               <th style="width: 80px;">MSSV</th>
-              <th>Há» vÃ  tÃªn sinh viÃªn</th>
+              <th>Há» và tên sinh viên</th>
               <th style="width: 80px;">QuÃ¡ trÃ¬nh<br/>(20%)</th>
               <th style="width: 80px;">Giá»¯a ká»³<br/>(30%)</th>
               <th style="width: 80px;">Cuá»‘i ká»³<br/>(50%)</th>
@@ -809,9 +809,9 @@
 
         <div class="stats-box">
           <strong>Tá»”NG Há»¢P TÃŒNH HÃŒNH Lá»šP:</strong><br/>
-          - Tá»•ng sá»‘ sinh viÃªn Ä‘Ã¡nh giÃ¡: <strong>${filteredStudents.value.length}</strong> sinh viÃªn<br/>
-          - Sá»‘ sinh viÃªn Äáº T (â‰¥ 4.0): <strong>${passedCount}</strong> / ${filteredStudents.value.length} (${passRate}%)<br/>
-          - Sá»‘ sinh viÃªn KHÃ”NG Äáº T (&lt; 4.0): <strong>${filteredStudents.value.length - passedCount}</strong> sinh viÃªn
+          - Tá»•ng sá»‘ sinh viên Ä‘Ã¡nh giÃ¡: <strong>${filteredStudents.value.length}</strong> sinh viên<br/>
+          - Sá»‘ sinh viên Äáº T (â‰¥ 4.0): <strong>${passedCount}</strong> / ${filteredStudents.value.length} (${passRate}%)<br/>
+          - Sá»‘ sinh viên KHÃ”NG Äáº T (&lt; 4.0): <strong>${filteredStudents.value.length - passedCount}</strong> sinh viên
         </div>
 
         <table class="signature-section">
@@ -819,13 +819,13 @@
             <td>
               <br/>
               <strong>TRÆ¯á»œNG Bá»˜ MÃ”N</strong><br/>
-              <span style="font-style: italic; font-size: 11px;">(KÃ½ vÃ  ghi rÃµ há» tÃªn)</span>
+              <span style="font-style: italic; font-size: 11px;">(KÃ½ và ghi rÃµ há» tên)</span>
               <br/><br/><br/><br/>
             </td>
             <td>
               <em>ÄÃ  Náºµng, ngÃ y ${new Date().getDate()} thÃ¡ng ${new Date().getMonth() + 1} nÄƒm ${new Date().getFullYear()}</em><br/>
               <strong>GIáº¢NG VIÃŠN HÆ¯á»šNG DáºªN</strong><br/>
-              <span style="font-style: italic; font-size: 11px;">(KÃ½ vÃ  ghi rÃµ há» tÃªn)</span>
+              <span style="font-style: italic; font-size: 11px;">(KÃ½ và ghi rÃµ há» tên)</span>
               <br/><br/><br/><br/>
               <strong>TS. Nguyá»…n VÄƒn A</strong>
             </td>
@@ -836,7 +836,7 @@
     `);
     printWindow.document.close();
     showExportModal.value = false;
-    showToast('ÄÃ£ má»Ÿ giao diá»‡n In / Xuáº¥t bÃ¡o cÃ¡o PDF thÃ nh cÃ´ng!');
+    showToast('ÄÃ£ má»Ÿ giao diá»‡n In / Xuất báo cáo PDF thÃ nh cÃ´ng!');
   }
 
   function showToast(msg) {

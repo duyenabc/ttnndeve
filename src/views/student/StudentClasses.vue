@@ -6,9 +6,9 @@
         <div>
           <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
             <span class="material-symbols-outlined text-[#005EA3] text-[28px]">school</span>
-            Lá»›p thá»±c táº­p cá»§a tÃ´i
+            L�:p thực tập của tôi
           </h1>
-          <p class="text-xs text-slate-500 mt-1">Danh sÃ¡ch cÃ¡c lá»›p há»c pháº§n thá»±c táº­p Ä‘Ã£ ghi danh hoáº·c chá» tham gia.</p>
+          <p class="text-xs text-slate-500 mt-1">Danh sách cÃ¡c lá»›p há»c pháº§n thực tập đã ghi danh hoặc chá» tham gia.</p>
         </div>
 
         <button
@@ -38,7 +38,7 @@
                 <div class="absolute inset-0 bg-cover bg-center opacity-30 group-hover:scale-105 transition-transform duration-500" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBoNj0OnfLqaRQIPoQKP_hTlVAVcryzicOk7ZBfBgERjRmj4FYpE2WaMPkCpNNlZZQ4DvU2HO2RC0VNJ2tPhE_b5jENCsfcpWd-GIV62So7pnVsql4pHph2Ebj6wblysT0sd89xuj5P5i9eBt0m1J_YpzQ8-Np6A1s2MCcdZ_9MqJDKBEkxLZTVPL82GcCXedYtNv7EPsRGIUt9SGOqIiBvSkIug03ccDmbN_dbG1WPnKkum6lrzUwTKjjlZ2GuKs4owPAQuDRfo3Xr')"></div>
                 <span class="material-symbols-outlined text-white text-[48px] relative z-10 drop-shadow">laptop_mac</span>
                 <div class="absolute top-3 right-3 bg-emerald-500 text-white text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider shadow-xs">
-                  Äang thá»±c táº­p
+                  Äang thực tập
                 </div>
               </div>
 
@@ -55,7 +55,7 @@
                   </div>
                   <div class="flex items-center gap-2">
                     <span class="material-symbols-outlined text-slate-400 text-[18px]">task_alt</span>
-                    <span>Tiáº¿n Ä‘á»™: 4/12 BÃ¡o cÃ¡o</span>
+                    <span>Tiến ��": 4/12 Báo cáo</span>
                   </div>
                 </div>
               </div>
@@ -94,7 +94,7 @@
 
               <div class="p-5 space-y-4">
                 <div>
-                  <h4 class="font-bold text-base text-slate-900 line-clamp-1 group-hover:text-[#005EA3] transition">Ká»¹ thuáº­t pháº§n má»m - NhÃ³m 02</h4>
+                  <h4 class="font-bold text-base text-slate-900 line-clamp-1 group-hover:text-[#005EA3] transition">Ká»¹ thuáº­t pháº§n má»m - Nhóm 02</h4>
                   <p class="text-xs text-slate-500 mt-0.5 font-medium">GVHD: ThS. Tráº§n Thá»‹ B</p>
                 </div>
 
@@ -105,7 +105,7 @@
                   </div>
                   <div class="flex items-center gap-2">
                     <span class="material-symbols-outlined text-slate-400 text-[18px]">group</span>
-                    <span>45 Sinh viÃªn</span>
+                    <span>45 Sinh viên</span>
                   </div>
                 </div>
               </div>
@@ -180,7 +180,7 @@
           <div class="space-y-3">
             <div class="inline-flex items-center gap-2 px-3 py-1 bg-amber-50 text-amber-800 rounded-full text-xs font-bold border border-amber-200">
               <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
-              Lá»›p há»c chá» ghi danh
+              L�:p há»c chá» ghi danh
             </div>
             <h2 class="text-2xl lg:text-3xl font-extrabold text-slate-900">{{ selectedClassDetail?.tenLop }}</h2>
             <p class="text-xs text-slate-500">MÃ£ lá»›p: <strong class="text-slate-800 font-mono">KTPM2026_02</strong></p>
@@ -209,7 +209,7 @@
           <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 flex items-center gap-3">
             <span class="material-symbols-outlined text-[#005EA3] text-[28px] p-2 bg-blue-100 rounded-xl">person</span>
             <div>
-              <p class="text-[11px] font-bold text-slate-400 uppercase">Giáº£ng viÃªn hÆ°á»›ng dáº«n</p>
+              <p class="text-[11px] font-bold text-slate-400 uppercase">Giáº£ng viÃªn hư�:ng dẫn</p>
               <p class="text-xs font-bold text-slate-900 mt-0.5">ThS. Tráº§n Thá»‹ B</p>
             </div>
           </div>
@@ -225,7 +225,7 @@
           <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 flex items-center gap-3">
             <span class="material-symbols-outlined text-[#005EA3] text-[28px] p-2 bg-blue-100 rounded-xl">schedule</span>
             <div>
-              <p class="text-[11px] font-bold text-slate-400 uppercase">Thá»i gian sinh hoáº¡t</p>
+              <p class="text-[11px] font-bold text-slate-400 uppercase">Thá»i gian sinh hoạt</p>
               <p class="text-xs font-bold text-slate-900 mt-0.5">Thá»© 3 (Tiáº¿t 1 - 4)</p>
             </div>
           </div>
@@ -243,32 +243,32 @@
         <div class="space-y-4 pt-4">
           <h3 class="font-bold text-sm text-slate-900 flex items-center gap-2">
             <span class="material-symbols-outlined text-[#005EA3]">timeline</span>
-            Lá»™ trÃ¬nh mÃ´n há»c & CÃ¡c cá»™t má»‘c thá»±c táº­p
+            Lá»™ trÃ¬nh mÃ´n há»c & Các cá»™t má»‘c thực tập
           </h3>
 
           <div class="relative pl-8 border-l-2 border-blue-200 ml-3 space-y-6 py-2">
             <div class="relative">
               <span class="absolute -left-[41px] top-0.5 w-4 h-4 rounded-full bg-[#005EA3] ring-4 ring-blue-100"></span>
-              <h4 class="font-bold text-xs text-slate-900">Giai Ä‘oáº¡n 1: Khá»Ÿi Ä‘á»™ng vÃ  Äá» xuáº¥t Ä‘á» tÃ i</h4>
-              <p class="text-xs text-slate-500 mt-1">Sinh viÃªn thÃ nh láº­p nhÃ³m vÃ  ná»™p Ä‘á» cÆ°Æ¡ng chi tiáº¿t cho giáº£ng viÃªn phÃª duyá»‡t.</p>
+              <h4 class="font-bold text-xs text-slate-900">Giai Ä‘oáº¡n 1: Khá»Ÿi Ä‘á»™ng và Äá» xuáº¥t Ä‘á» tÃ i</h4>
+              <p class="text-xs text-slate-500 mt-1">Sinh viên thÃ nh láº­p nhóm và ná»™p Ä‘á» cÆ°Æ¡ng chi tiáº¿t cho giảng viên phÃª duyá»‡t.</p>
             </div>
 
             <div class="relative">
               <span class="absolute -left-[41px] top-0.5 w-4 h-4 rounded-full bg-slate-300"></span>
-              <h4 class="font-bold text-xs text-slate-800">Giai Ä‘oáº¡n 2: PhÃ¢n tÃ­ch vÃ  Thiáº¿t káº¿ há»‡ thá»‘ng</h4>
-              <p class="text-xs text-slate-500 mt-1">XÃ¡c Ä‘á»‹nh yÃªu cáº§u, thiáº¿t káº¿ Database vÃ  Mockup giao diá»‡n ngÆ°á»i dÃ¹ng.</p>
+              <h4 class="font-bold text-xs text-slate-800">Giai Ä‘oáº¡n 2: PhÃ¢n tÃ­ch và Thiáº¿t káº¿ há»‡ thá»‘ng</h4>
+              <p class="text-xs text-slate-500 mt-1">Xác định yêu cầu, thiết kế Database và Mockup giao diá»‡n ngÆ°á»i dÃ¹ng.</p>
             </div>
 
             <div class="relative">
               <span class="absolute -left-[41px] top-0.5 w-4 h-4 rounded-full bg-slate-300"></span>
-              <h4 class="font-bold text-xs text-slate-800">Giai Ä‘oáº¡n 3: PhÃ¡t triá»ƒn vÃ  Kiá»ƒm thá»­</h4>
-              <p class="text-xs text-slate-500 mt-1">CÃ i Ä‘áº·t mÃ£ nguá»“n, triá»ƒn khai cÃ¡c tÃ­nh nÄƒng cá»‘t lÃµi vÃ  kiá»ƒm thá»­ Ä‘Æ¡n vá»‹.</p>
+              <h4 class="font-bold text-xs text-slate-800">Giai Ä‘oáº¡n 3: PhÃ¡t triá»ƒn và Kiá»ƒm thá»­</h4>
+              <p class="text-xs text-slate-500 mt-1">CÃ i Ä‘áº·t mÃ£ nguá»“n, triá»ƒn khai cÃ¡c tÃ­nh nÄƒng cá»‘t lÃµi và kiá»ƒm thá»­ Ä‘Æ¡n vá»‹.</p>
             </div>
 
             <div class="relative">
               <span class="absolute -left-[41px] top-0.5 w-4 h-4 rounded-full bg-slate-300"></span>
-              <h4 class="font-bold text-xs text-slate-800">Giai Ä‘oáº¡n 4: BÃ¡o cÃ¡o cuá»‘i ká»³</h4>
-              <p class="text-xs text-slate-500 mt-1">HoÃ n thiá»‡n sáº£n pháº©m, Ä‘Ã³ng gÃ³i mÃ£ nguá»“n vÃ  thuyáº¿t trÃ¬nh trÆ°á»›c há»™i Ä‘á»“ng.</p>
+              <h4 class="font-bold text-xs text-slate-800">Giai Ä‘oáº¡n 4: Báo cáo cu�i ká»³</h4>
+              <p class="text-xs text-slate-500 mt-1">HoÃ n thi�!n sáº£n pháº©m, Ä‘Ã³ng gÃ³i mÃ£ nguá»“n và thuyáº¿t trÃ¬nh trÆ°á»›c há»™i Ä‘á»“ng.</p>
             </div>
           </div>
         </div>
@@ -282,9 +282,9 @@
       </div>
 
       <div>
-        <h2 class="text-2xl font-black text-slate-900">ChÃ o má»«ng Ä‘áº¿n vá»›i ká»³ thá»±c táº­p!</h2>
+        <h2 class="text-2xl font-black text-slate-900">ChÃ o má»«ng Ä‘áº¿n vá»›i ká»³ thực tập!</h2>
         <p class="text-xs text-slate-600 mt-2 max-w-md mx-auto">
-          ChÃºc má»«ng báº¡n Ä‘Ã£ ghi danh thÃ nh cÃ´ng. HÃ£y hoÃ n táº¥t cÃ¡c bÆ°á»›c chuáº©n bá»‹ dÆ°á»›i Ä‘Ã¢y Ä‘á»ƒ báº¯t Ä‘áº§u quÃ¡ trÃ¬nh thá»±c táº­p cá»§a mÃ¬nh.
+          ChÃºc má»«ng báº¡n đã ghi danh thÃ nh cÃ´ng. HÃ£y hoÃ n táº¥t cÃ¡c bÆ°á»›c chuẩn bị dÆ°á»›i Ä‘Ã¢y Ä‘á»ƒ báº¯t �ầu quÃ¡ trÃ¬nh thực tập của mÃ¬nh.
         </p>
       </div>
 
@@ -294,8 +294,8 @@
           <div class="flex items-center gap-4">
             <div class="w-10 h-10 rounded-full bg-blue-50 text-[#005EA3] font-bold flex items-center justify-center text-sm shrink-0">1</div>
             <div>
-              <h4 class="font-bold text-xs text-slate-900">Khai bÃ¡o Ä‘Æ¡n vá»‹ thá»±c táº­p</h4>
-              <p class="text-[11px] text-slate-500 mt-0.5">ThÃ´ng tin vá» doanh nghiá»‡p báº¡n sáº½ lÃ m viá»‡c</p>
+              <h4 class="font-bold text-xs text-slate-900">Khai bÃ¡o Ä‘Æ¡n vá»‹ thực tập</h4>
+              <p class="text-[11px] text-slate-500 mt-0.5">Thông tin vá» doanh nghiá»‡p báº¡n sáº½ lÃ m viá»‡c</p>
             </div>
           </div>
           <router-link to="/student/progress" class="px-4 py-2 bg-blue-50 hover:bg-[#005EA3] hover:text-white text-[#005EA3] font-bold rounded-xl text-xs transition">
@@ -309,7 +309,7 @@
             <div class="w-10 h-10 rounded-full bg-blue-50 text-[#005EA3] font-bold flex items-center justify-center text-sm shrink-0">2</div>
             <div>
               <h4 class="font-bold text-xs text-slate-900">ÄÄƒng kÃ½ Ä‘á» tÃ i</h4>
-              <p class="text-[11px] text-slate-500 mt-0.5">Ná»™p tÃªn Ä‘á» tÃ i thá»±c táº­p Ä‘Ã£ Ä‘Æ°á»£c duyá»‡t</p>
+              <p class="text-[11px] text-slate-500 mt-0.5">Ná»™p tên Ä‘á» tÃ i thực tập đã Ä‘Æ°á»£c duyá»‡t</p>
             </div>
           </div>
           <router-link to="/student/progress" class="px-4 py-2 bg-blue-50 hover:bg-[#005EA3] hover:text-white text-[#005EA3] font-bold rounded-xl text-xs transition">
@@ -322,8 +322,8 @@
           <div class="flex items-center gap-4">
             <div class="w-10 h-10 rounded-full bg-blue-50 text-[#005EA3] font-bold flex items-center justify-center text-sm shrink-0">3</div>
             <div>
-              <h4 class="font-bold text-xs text-slate-900">Äá»c tÃ i liá»‡u hÆ°á»›ng dáº«n</h4>
-              <p class="text-[11px] text-slate-500 mt-0.5">Quy Ä‘á»‹nh vÃ  cÃ¡c biá»ƒu máº«u bÃ¡o cÃ¡o</p>
+              <h4 class="font-bold text-xs text-slate-900">Äá»c tÃ i liá»‡u hư�:ng dẫn</h4>
+              <p class="text-[11px] text-slate-500 mt-0.5">Quy Ä‘á»‹nh và cÃ¡c biá»ƒu máº«u báo cáo</p>
             </div>
           </div>
           <router-link to="/documents" class="px-4 py-2 bg-blue-50 hover:bg-[#005EA3] hover:text-white text-[#005EA3] font-bold rounded-xl text-xs transition">
@@ -359,7 +359,7 @@
         </div>
 
         <p class="text-xs text-slate-600 leading-relaxed">
-          MÃ£ lá»›p thÆ°á»ng cÃ³ 8 kÃ½ tá»± do giáº£ng viÃªn cung cáº¥p Ä‘á»ƒ tham gia vÃ o lá»›p há»c nhanh chÃ³ng. (Gá»£i Ã½ thá»­: <strong class="text-[#005EA3]">VALID</strong>)
+          MÃ£ lá»›p thÆ°á»ng cÃ³ 8 kÃ½ tá»± do giảng viên cung cáº¥p Ä‘á»ƒ tham gia vào lá»›p há»c nhanh chÃ³ng. (Gá»£i Ã½ thá»­: <strong class="text-[#005EA3]">VALID</strong>)
         </p>
 
         <div class="space-y-4">
@@ -394,7 +394,7 @@
               @click="confirmEnrollFromModal"
               class="w-full mt-2 py-2.5 bg-[#005EA3] text-white rounded-xl font-bold text-xs hover:bg-blue-800 transition"
             >
-              Ghi danh vÃ o lá»›p nÃ y
+              Ghi danh vào lá»›p nÃ y
             </button>
           </div>
 
@@ -427,7 +427,7 @@
 
   const pendingClass = {
     id: 2,
-    tenLop: 'Ká»¹ thuáº­t pháº§n má»m - NhÃ³m 02',
+    tenLop: 'Ká»¹ thuáº­t pháº§n má»m - Nhóm 02',
     gv: 'ThS. Tráº§n Thá»‹ B',
     status: 'pending'
   };
@@ -466,7 +466,7 @@
       } else {
         searchResult.value = {
           success: false,
-          error: 'MÃ£ lá»›p khÃ´ng tá»“n táº¡i hoáº·c Ä‘Ã£ háº¿t háº¡n ghi danh. Thá»­ nháº­p "VALID"'
+          error: 'MÃ£ lá»›p không tá»“n tại hoặc đã háº¿t háº¡n ghi danh. Thá»­ nháº­p "VALID"'
         };
       }
     }, 800);

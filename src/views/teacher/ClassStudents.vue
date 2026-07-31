@@ -3,16 +3,16 @@
     <!-- Breadcrumb & Header -->
     <div class="flex flex-col gap-2">
       <nav class="flex items-center gap-2 text-xs text-slate-500 font-medium">
-        <router-link to="/teacher/classes" class="hover:text-blue-600 transition-colors">Lá»›p cá»§a tÃ´i</router-link>
+        <router-link to="/teacher/classes" class="hover:text-blue-600 transition-colors">L�:p của tôi</router-link>
         <span class="material-symbols-outlined text-[14px]">chevron_right</span>
-        <span class="text-slate-800 font-bold">{{ cls?.tenLop || 'Lá»›p' }}</span>
+        <span class="text-slate-800 font-bold">{{ cls?.tenLop || 'L�:p' }}</span>
         <span class="material-symbols-outlined text-[14px]">chevron_right</span>
-        <span class="text-slate-500">Quáº£n lÃ½ Sinh viÃªn</span>
+        <span class="text-slate-500">Quản lý Sinh viên</span>
       </nav>
 
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 class="text-3xl font-bold text-slate-900 tracking-tight">{{ cls?.tenLop || 'Lá»›p hÆ°á»›ng dáº«n' }}</h1>
+          <h1 class="text-3xl font-bold text-slate-900 tracking-tight">{{ cls?.tenLop || 'L�:p hư�:ng dẫn' }}</h1>
           <p class="text-xs text-slate-500 mt-1">{{ cls?.tenKy }}</p>
         </div>
         <button
@@ -20,7 +20,7 @@
           @click="$router.push(`/teacher/classes/${maLop}/grading`)"
         >
           <span class="material-symbols-outlined text-[18px]">grade</span>
-          Chuyá»ƒn sang Báº£ng Ä‘iá»ƒm
+          Chuyá»ƒn sang Bảng �iỒm
         </button>
       </div>
     </div>
@@ -33,7 +33,7 @@
         @click="activeTab = 'students'"
       >
         <span class="material-symbols-outlined text-[18px]">groups</span>
-        Danh sÃ¡ch sinh viÃªn
+        Danh sách sinh viên
         <span class="bg-blue-100 text-blue-800 text-[10px] px-2 py-0.5 rounded-full font-extrabold">
           {{ students.length }}
         </span>
@@ -45,7 +45,7 @@
         @click="activeTab = 'groups'"
       >
         <span class="material-symbols-outlined text-[18px]">diversity_3</span>
-        NhÃ³m sinh viÃªn
+        Nhóm sinh viên
         <span class="bg-slate-100 text-slate-700 text-[10px] px-2 py-0.5 rounded-full font-extrabold">
           {{ groups.length }}
         </span>
@@ -103,13 +103,13 @@
               class="text-xs font-bold text-blue-600 hover:bg-blue-50 px-2.5 py-1 rounded-lg transition-colors flex items-center gap-1"
               @click="openEnroll"
             >
-              <span class="material-symbols-outlined text-[16px]">edit</span> Chá»‰nh sá»­a
+              <span class="material-symbols-outlined text-[16px]">edit</span> Chá»‰nh sửa
             </button>
           </div>
 
           <div class="space-y-3 my-2">
             <div class="flex items-center justify-between text-xs">
-              <span class="text-slate-600 font-medium">Tráº¡ng thÃ¡i má»Ÿ form:</span>
+              <span class="text-slate-600 font-medium">Trạng thái má»Ÿ form:</span>
               <span
                 class="px-3 py-1 rounded-full font-bold text-[11px]"
                 :class="cls?.ghiDanhMo ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' : 'bg-slate-100 text-slate-600 border border-slate-200'"
@@ -139,7 +139,7 @@
             <span class="material-symbols-outlined text-[20px] absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
             <input
               v-model="search"
-              placeholder="TÃ¬m kiáº¿m há» tÃªn, MSSV, Ä‘Æ¡n vá»‹ thá»±c táº­p..."
+              placeholder="TÃ¬m kiáº¿m há» tên, MSSV, Ä‘Æ¡n vá»‹ thực tập..."
               class="w-full pl-10 pr-3 py-2 border border-slate-300 rounded-xl text-xs font-medium focus:ring-2 focus:ring-blue-600 outline-none"
               @input="reloadStudents"
             />
@@ -149,9 +149,9 @@
             <select v-model="statusFilter" class="px-3 py-2 border border-slate-300 rounded-xl text-xs font-medium text-slate-800 outline-none" @change="reloadStudents">
               <option value="all">Táº¥t cáº£ tráº¡ng thÃ¡i</option>
               <option value="ChoGhiDanh">Chá» ghi danh</option>
-              <option value="DangThucTap">Äang thá»±c táº­p</option>
+              <option value="DangThucTap">Äang thực tập</option>
               <option value="HoanThanh">HoÃ n thÃ nh</option>
-              <option value="DungThucTap">Dá»«ng thá»±c táº­p</option>
+              <option value="DungThucTap">Dá»«ng thực tập</option>
             </select>
 
             <button
@@ -159,7 +159,7 @@
               @click="showExportModal = true"
             >
               <span class="material-symbols-outlined text-[18px] text-emerald-600">file_download</span>
-              Xuáº¥t BÃ¡o cÃ¡o
+              Xuất Báo cáo
             </button>
 
             <button
@@ -168,7 +168,7 @@
               @click="openImport"
             >
               <span class="material-symbols-outlined text-[16px]">upload</span>
-              Import sinh viÃªn
+              Import sinh viên
             </button>
           </div>
         </div>
@@ -180,7 +180,7 @@
         >
           <div class="flex items-center gap-3">
             <span class="text-xs font-bold text-blue-900">
-              ÄÃ£ chá»n <strong class="text-blue-700 text-sm font-black">{{ selected.length }}</strong> sinh viÃªn
+              ÄÃ£ chá»n <strong class="text-blue-700 text-sm font-black">{{ selected.length }}</strong> sinh viên
             </span>
             <button class="text-xs text-slate-500 hover:text-slate-800 underline" @click="selected = []">
               Bá» chá»n táº¥t cáº£
@@ -192,7 +192,7 @@
             @click="openConfirmGroup"
           >
             <span class="material-symbols-outlined text-[16px]">group_add</span>
-            Gom nhÃ³m sinh viÃªn
+            Gom nhóm sinh viên
           </button>
         </div>
       </div>
@@ -206,23 +206,23 @@
                 <th class="p-4 w-10">
                   <input type="checkbox" :checked="allChecked" class="rounded border-slate-300 text-blue-600" @change="toggleAll" />
                 </th>
-                <th class="p-4">Há» vÃ  tÃªn</th>
-                <th class="p-4">NhÃ³m</th>
-                <th class="p-4">ÄÆ¡n vá»‹ thá»±c táº­p</th>
-                <th class="p-4">Tráº¡ng thÃ¡i</th>
-                <th class="p-4">Tiáº¿n Ä‘á»™</th>
+                <th class="p-4">Há» và tên</th>
+                <th class="p-4">Nhóm</th>
+                <th class="p-4">ÄÆ¡n vá»‹ thực tập</th>
+                <th class="p-4">Trạng thái</th>
+                <th class="p-4">Tiến ��"</th>
                 <th class="p-4 text-right">Thao tÃ¡c</th>
               </tr>
             </thead>
 
             <tbody class="divide-y divide-slate-100">
               <tr v-if="loadingStudents">
-                <td colspan="7" class="p-10 text-center text-slate-500">Äang táº£i danh sÃ¡ch sinh viÃªn...</td>
+                <td colspan="7" class="p-10 text-center text-slate-500">Äang táº£i danh sÃ¡ch sinh viên...</td>
               </tr>
               <tr v-else-if="!students.length">
                 <td colspan="7" class="p-12 text-center text-slate-500">
                   <span class="material-symbols-outlined text-[48px] block mb-2 opacity-40">group</span>
-                  ChÆ°a tÃ¬m tháº¥y sinh viÃªn nÃ o trong lá»›p nÃ y.
+                  ChÆ°a tÃ¬m tháº¥y sinh viên nào trong lá»›p nÃ y.
                 </td>
               </tr>
               <tr
@@ -294,7 +294,7 @@
                     <button
                       v-if="s.trangThaiThucTap !== 'DungThucTap'"
                       class="p-1.5 rounded-lg hover:bg-rose-50 text-rose-600 transition-colors"
-                      title="Dá»«ng thá»±c táº­p"
+                      title="Dá»«ng thực tập"
                       @click="openStop(s)"
                     >
                       <span class="material-symbols-outlined text-[18px]">block</span>
@@ -314,14 +314,14 @@
         <div>
           <h3 class="font-bold text-base text-slate-900 flex items-center gap-2">
             <span class="material-symbols-outlined text-blue-600">diversity_3</span>
-            XÃ¡c nháº­n & Quáº£n lÃ½ nhÃ³m sinh viÃªn
+            XÃ¡c nháº­n & Quản lý nhóm sinh viên
           </h3>
-          <p class="text-xs text-slate-500 mt-0.5">Duyá»‡t cÃ¡c yÃªu cáº§u gom nhÃ³m tá»± nguyá»‡n cá»§a sinh viÃªn hoáº·c chá»§ Ä‘á»™ng táº¡o nhÃ³m má»›i.</p>
+          <p class="text-xs text-slate-500 mt-0.5">Duyệt các yêu cầu gom nhóm tự nguyện của sinh viên hoặc chủ động tạo nhóm mới.</p>
         </div>
 
         <div class="flex items-center gap-2">
           <select v-model="groupStatusFilter" class="px-3.5 py-2 border border-slate-300 rounded-xl text-xs font-semibold text-slate-800 outline-none">
-            <option value="all">Táº¥t cáº£ tráº¡ng thÃ¡i nhÃ³m</option>
+            <option value="all">Táº¥t cáº£ tráº¡ng thÃ¡i nhóm</option>
             <option value="ChoXacNhan">Chá» xÃ¡c nháº­n</option>
             <option value="DaXacNhan">ÄÃ£ xÃ¡c nháº­n</option>
             <option value="TuChoi">Tá»« chá»‘i</option>
@@ -332,17 +332,17 @@
       <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs">
         <div v-if="!filteredGroups.length" class="p-12 text-center text-slate-500">
           <span class="material-symbols-outlined text-[48px] block mb-2 opacity-40">diversity_3</span>
-          <p class="font-bold text-slate-800">KhÃ´ng cÃ³ nhÃ³m sinh viÃªn nÃ o</p>
-          <p class="text-xs text-slate-500 mt-1">Chuyá»ƒn sang tab "Danh sÃ¡ch sinh viÃªn", tÃ­ch chá»n Ã­t nháº¥t 2 sinh viÃªn vÃ  nháº¥n "Gom nhÃ³m sinh viÃªn".</p>
+          <p class="font-bold text-slate-800">KhÃ´ng cÃ³ nhóm sinh viên nào</p>
+          <p class="text-xs text-slate-500 mt-1">Chuyá»ƒn sang tab "Danh sách sinh viên", tÃ­ch chá»n Ã­t nháº¥t 2 sinh viên và nháº¥n "Gom nhóm sinh viên".</p>
         </div>
 
         <table v-else class="w-full text-left text-xs border-collapse">
           <thead>
             <tr class="bg-slate-50 border-b border-slate-200 text-slate-600 font-bold uppercase tracking-wider">
-              <th class="p-4">TÃªn / MÃ£ nhÃ³m</th>
+              <th class="p-4">TÃªn / MÃ£ nhóm</th>
               <th class="p-4">ThÃ nh viÃªn</th>
               <th class="p-4">Äá» tÃ i & ÄÆ¡n vá»‹</th>
-              <th class="p-4">Tráº¡ng thÃ¡i</th>
+              <th class="p-4">Trạng thái</th>
               <th class="p-4 text-right">Thao tÃ¡c phÃª duyá»‡t</th>
             </tr>
           </thead>
@@ -385,14 +385,14 @@
 
               <td class="p-4 text-right">
                 <div class="flex items-center justify-end gap-2">
-                  <!-- Button XÃ¡c nháº­n gom nhÃ³m -->
+                  <!-- Button XÃ¡c nháº­n gom nhóm -->
                   <button
                     v-if="g.trangThai === 'ChoXacNhan' || !g.trangThai"
                     class="px-3 py-1.5 rounded-xl text-white font-bold text-xs bg-emerald-600 hover:bg-emerald-700 active:scale-95 transition-all shadow-xs flex items-center gap-1"
                     @click="confirmGroup(g)"
                   >
                     <span class="material-symbols-outlined text-[16px]">check_circle</span>
-                    XÃ¡c nháº­n gom nhÃ³m
+                    XÃ¡c nháº­n gom nhóm
                   </button>
 
                   <!-- Button Tá»« chá»‘i -->
@@ -405,10 +405,10 @@
                     Tá»« chá»‘i
                   </button>
 
-                  <!-- Button Giáº£i tÃ¡n nhÃ³m -->
+                  <!-- Button Giáº£i tÃ¡n nhóm -->
                   <button
                     class="p-1.5 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50 font-bold transition-colors"
-                    title="Giáº£i tÃ¡n nhÃ³m nÃ y"
+                    title="Giáº£i tÃ¡n nhóm nÃ y"
                     @click="disband(g)"
                   >
                     <span class="material-symbols-outlined text-[18px]">group_off</span>
@@ -432,7 +432,7 @@
       <div class="w-full max-w-[420px] bg-white rounded-2xl shadow-2xl p-6">
         <h3 class="font-bold text-lg text-slate-900 mb-2">Reset mÃ£ tham gia lá»›p?</h3>
         <p class="text-xs text-slate-600 leading-relaxed mb-6">
-          MÃ£ tham gia hiá»‡n táº¡i sáº½ bá»‹ vÃ´ hiá»‡u hÃ³a vÃ  táº¡o mÃ£ má»›i. Sinh viÃªn Ä‘ang giá»¯ mÃ£ cÅ© sáº½ khÃ´ng thá»ƒ gia nháº­p lá»›p ná»¯a.
+          MÃ£ tham gia hi�!n tại sáº½ bá»‹ vÃ´ hiá»‡u hÃ³a và táº¡o mÃ£ má»›i. Sinh viên Ä‘ang giá»¯ mÃ£ cÅ© sáº½ không thá»ƒ gia nháº­p lá»›p ná»¯a.
         </p>
         <div class="flex justify-end gap-3">
           <button class="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100" @click="showReset = false">Há»§y</button>
@@ -449,7 +449,7 @@
         <h3 class="font-bold text-lg text-slate-900 mb-4">Thiáº¿t láº­p ghi danh</h3>
         <div class="space-y-4">
           <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">Tráº¡ng thÃ¡i form ghi danh</label>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Trạng thái form ghi danh</label>
             <select v-model="enrollForm.ghiDanhMo" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-xs font-semibold outline-none focus:ring-2 focus:ring-blue-600">
               <option :value="true">Äang má»Ÿ ghi danh</option>
               <option :value="false">ÄÃ£ Ä‘Ã³ng ghi danh</option>
@@ -462,7 +462,7 @@
         </div>
         <div class="flex justify-end gap-3 mt-6">
           <button class="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100" @click="showEnroll = false">Há»§y</button>
-          <button class="px-5 py-2 rounded-xl text-xs font-bold text-white shadow-sm" style="background-color:#005EA3;" @click="saveEnroll">LÆ°u thay Ä‘á»•i</button>
+          <button class="px-5 py-2 rounded-xl text-xs font-bold text-white shadow-sm" style="background-color:#005EA3;" @click="saveEnroll">LÆ°u thay đổi</button>
         </div>
       </div>
     </div>
@@ -472,14 +472,14 @@
       <div class="w-full max-w-[520px] bg-white rounded-2xl shadow-2xl overflow-hidden">
         <div class="p-6 border-b border-slate-200 bg-slate-50 flex justify-between items-center">
           <div>
-            <h3 class="font-bold text-base text-blue-900">Import sinh viÃªn vÃ o lá»›p</h3>
+            <h3 class="font-bold text-base text-blue-900">Import sinh viên vào lá»›p</h3>
             <p class="text-xs text-slate-500">Nháº­p danh sÃ¡ch MÃ£ Sá»‘ Sinh ViÃªn</p>
           </div>
           <button class="material-symbols-outlined text-slate-400 hover:text-slate-700" @click="showImport = false">close</button>
         </div>
 
         <div class="p-6 space-y-4">
-          <p class="text-xs text-slate-600">Nháº­p danh sÃ¡ch mÃ£ sá»‘ sinh viÃªn (má»—i dÃ²ng má»™t MSSV):</p>
+          <p class="text-xs text-slate-600">Nháº­p danh sÃ¡ch mÃ£ sá»‘ sinh viên (má»—i dÃ²ng má»™t MSSV):</p>
           <textarea
             v-model="importText"
             rows="6"
@@ -501,7 +501,7 @@
         <div class="p-4 bg-slate-50 border-t border-slate-200 flex justify-end gap-3">
           <button class="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-200" @click="showImport = false">ÄÃ³ng</button>
           <button class="px-5 py-2 rounded-xl text-xs font-bold text-white shadow-sm" style="background-color:#005EA3;" @click="doImport">
-            Báº¯t Ä‘áº§u thÃªm
+            Báº¯t �ầu thÃªm
           </button>
         </div>
       </div>
@@ -510,16 +510,16 @@
     <!-- Modal Dá»«ng Thá»±c Táº­p -->
     <div v-if="stopTarget" class="fixed inset-0 z-[80] flex items-center justify-center bg-black/40 backdrop-blur-xs px-4" @click.self="stopTarget = null">
       <div class="w-full max-w-[440px] bg-white rounded-2xl shadow-2xl p-6">
-        <h3 class="font-bold text-lg text-slate-900 mb-1">Dá»«ng thá»±c táº­p</h3>
+        <h3 class="font-bold text-lg text-slate-900 mb-1">Dá»«ng thực tập</h3>
         <p class="text-xs text-slate-500 mb-4">
-          Cáº­p nháº­t tráº¡ng thÃ¡i dá»«ng thá»±c táº­p cho <strong>{{ stopTarget.hoTen }}</strong>.
+          Cáº­p nháº­t tráº¡ng thÃ¡i dá»«ng thực tập cho <strong>{{ stopTarget.hoTen }}</strong>.
         </p>
 
         <div class="space-y-4">
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">LÃ½ do dá»«ng</label>
             <select v-model="stopForm.lyDo" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-xs font-semibold outline-none focus:ring-2 focus:ring-blue-600">
-              <option value="Xin rÃºt thá»±c táº­p">Xin rÃºt thá»±c táº­p</option>
+              <option value="Xin rÃºt thực tập">Xin rÃºt thực tập</option>
               <option value="Vi pháº¡m">Vi pháº¡m quy cháº¿</option>
               <option value="Máº¥t liÃªn láº¡c">Máº¥t liÃªn láº¡c</option>
               <option value="KhÃ¡c">LÃ½ do khÃ¡c</option>
@@ -538,23 +538,23 @@
       </div>
     </div>
 
-    <!-- Modal Chuyá»ƒn Lá»›p Thá»±c Táº­p -->
+    <!-- Modal Chuyá»ƒn L�:p Thá»±c Táº­p -->
     <div v-if="transferTarget" class="fixed inset-0 z-[80] flex items-center justify-center bg-black/40 backdrop-blur-xs px-4" @click.self="transferTarget = null">
       <div class="w-full max-w-[480px] bg-white rounded-2xl shadow-2xl p-6">
         <div class="flex justify-between items-start mb-4">
           <div>
             <h3 class="font-bold text-lg text-blue-900">YÃªu cáº§u Ä‘iá»u chuyá»ƒn lá»›p há»c</h3>
-            <p class="text-xs text-slate-500">Sinh viÃªn: <strong>{{ transferTarget.hoTen }}</strong> ({{ transferTarget.maSoSinhVien }})</p>
+            <p class="text-xs text-slate-500">Sinh viên: <strong>{{ transferTarget.hoTen }}</strong> ({{ transferTarget.maSoSinhVien }})</p>
           </div>
           <button class="material-symbols-outlined text-slate-400 hover:text-slate-700" @click="transferTarget = null">close</button>
         </div>
 
         <div class="space-y-4">
           <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">Chá»n giáº£ng viÃªn / Lá»›p Ä‘Ã­ch <span class="text-rose-500">*</span></label>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Chá»n giảng viên / L�:p �ích <span class="text-rose-500">*</span></label>
             <input
               v-model="transferForm.lopDich"
-              placeholder="Nháº­p tÃªn giáº£ng viÃªn hoáº·c mÃ£ lá»›p (VD: TT-K64-B12)"
+              placeholder="Nháº­p tên giảng viên hoặc mÃ£ lá»›p (VD: TT-K64-B12)"
               class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-blue-600"
             />
           </div>
@@ -564,7 +564,7 @@
             <textarea
               v-model="transferForm.lyDo"
               rows="3"
-              placeholder="Nháº­p lÃ½ do Ä‘iá»u chuyá»ƒn lá»›p thá»±c táº­p..."
+              placeholder="Nháº­p lÃ½ do Ä‘iá»u chuyá»ƒn lá»›p thực tập..."
               class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-blue-600"
             ></textarea>
           </div>
@@ -578,25 +578,25 @@
             :disabled="!transferForm.lopDich || !transferForm.lyDo"
             @click="confirmTransfer"
           >
-            Gá»­i yÃªu cáº§u
+            Gửi yêu cầu
           </button>
         </div>
       </div>
     </div>
 
-    <!-- Modal XÃ¡c Nháº­n Gom NhÃ³m -->
+    <!-- Modal XÃ¡c Nháº­n Gom Nhóm -->
     <div v-if="showConfirmGroup" class="fixed inset-0 z-[80] flex items-center justify-center bg-black/40 backdrop-blur-xs px-4" @click.self="showConfirmGroup = false">
       <div class="w-full max-w-[480px] bg-white rounded-2xl shadow-2xl p-6 space-y-4">
         <div class="flex items-center justify-between">
           <h3 class="font-bold text-lg text-blue-900 flex items-center gap-2">
             <span class="material-symbols-outlined text-blue-600">group_add</span>
-            XÃ¡c nháº­n táº¡o nhÃ³m sinh viÃªn
+            XÃ¡c nháº­n táº¡o nhóm sinh viên
           </h3>
           <button class="material-symbols-outlined text-slate-400 hover:text-slate-700" @click="showConfirmGroup = false">close</button>
         </div>
 
         <p class="text-xs text-slate-600 leading-relaxed">
-          Há»‡ thá»‘ng sáº½ táº¡o nhÃ³m má»›i gá»“m <strong class="text-blue-700 font-extrabold">{{ selectedStudents.length }} sinh viÃªn</strong>:
+          Há»‡ thá»‘ng sáº½ tạo nhóm mới gá»“m <strong class="text-blue-700 font-extrabold">{{ selectedStudents.length }} sinh viên</strong>:
         </p>
 
         <div class="max-h-36 overflow-y-auto border border-slate-200 rounded-xl p-3 bg-slate-50 space-y-1.5 text-xs">
@@ -607,9 +607,9 @@
         </div>
 
         <div class="space-y-1">
-          <label class="block text-[11px] font-bold uppercase text-slate-500">TÃªn / MÃ£ nhÃ³m tá»± Ä‘á»™ng</label>
+          <label class="block text-[11px] font-bold uppercase text-slate-500">TÃªn / MÃ£ nhóm tá»± Ä‘á»™ng</label>
           <input
-            :value="'NhÃ³m ' + String(groups.length + 1).padStart(2, '0')"
+            :value="'Nhóm ' + String(groups.length + 1).padStart(2, '0')"
             readonly
             class="w-full px-3 py-2 bg-slate-100 border border-slate-200 rounded-lg text-xs font-mono font-bold text-slate-700 outline-none"
           />
@@ -622,13 +622,13 @@
             style="background-color:#005EA3;"
             @click="confirmCreateGroup"
           >
-            XÃ¡c nháº­n gom nhÃ³m
+            XÃ¡c nháº­n gom nhóm
           </button>
         </div>
       </div>
     </div>
 
-    <!-- Drawer Há»“ sÆ¡ Chi tiáº¿t Sinh viÃªn (6 Tabs) -->
+    <!-- Drawer Há»“ sÆ¡ Chi tiáº¿t Sinh viên (6 Tabs) -->
     <div v-if="detail" class="fixed inset-0 z-[85] flex justify-end bg-black/40 backdrop-blur-xs" @click.self="detail = null">
       <div class="w-full max-w-[620px] h-full bg-white shadow-2xl flex flex-col justify-between overflow-hidden">
         <!-- Drawer Header -->
@@ -646,7 +646,7 @@
               </span>
             </div>
             <h3 class="font-extrabold text-2xl text-slate-900">{{ detail.hoTen }}</h3>
-            <p class="text-xs text-slate-500 font-mono mt-0.5">MSSV: {{ detail.maSoSinhVien }} â€¢ Lá»›p: {{ detail.lopSinhHoat || 'K64' }}</p>
+            <p class="text-xs text-slate-500 font-mono mt-0.5">MSSV: {{ detail.maSoSinhVien }} â€¢ L�:p: {{ detail.lopSinhHoat || 'K64' }}</p>
           </div>
           <button class="material-symbols-outlined text-slate-400 hover:text-slate-700 transition-colors" @click="detail = null">
             close
@@ -659,7 +659,7 @@
             v-for="t in [
               { id: 'overview', label: 'Tá»•ng quan' },
               { id: 'logs', label: 'Nháº­t kÃ½' },
-              { id: 'submissions', label: 'BÃ i ná»™p' },
+              { id: 'submissions', label: 'Bài n�"p' },
               { id: 'grades', label: 'Äiá»ƒm' },
               { id: 'history', label: 'Lá»‹ch sá»­ Ä‘Ã¡nh giÃ¡' },
               { id: 'notes', label: 'Ghi chÃº' }
@@ -679,32 +679,32 @@
           <div v-if="activeDetailTab === 'overview'" class="space-y-6">
             <div class="space-y-3">
               <h4 class="font-bold text-slate-900 uppercase tracking-wider text-[11px] text-blue-900 border-b border-slate-100 pb-1">
-                ThÃ´ng tin cÃ¡ nhÃ¢n & Lá»›p
+                Thông tin cá nhân & L�:p
               </h4>
               <div class="grid grid-cols-2 gap-3 text-slate-700">
-                <div><span class="text-slate-400 block text-[10px] uppercase">Lá»›p sinh hoáº¡t:</span> <strong>{{ detail.lopSinhHoat || '-' }}</strong></div>
+                <div><span class="text-slate-400 block text-[10px] uppercase">L�:p sinh hoạt:</span> <strong>{{ detail.lopSinhHoat || '-' }}</strong></div>
                 <div><span class="text-slate-400 block text-[10px] uppercase">Email:</span> <strong class="truncate block">{{ detail.email || '-' }}</strong></div>
                 <div><span class="text-slate-400 block text-[10px] uppercase">Sá»‘ Ä‘iá»‡n thoáº¡i:</span> <strong>{{ detail.soDienThoai || '-' }}</strong></div>
-                <div><span class="text-slate-400 block text-[10px] uppercase">NhÃ³m:</span> <strong>{{ detail.tenNhom || '-' }}</strong></div>
+                <div><span class="text-slate-400 block text-[10px] uppercase">Nhóm:</span> <strong>{{ detail.tenNhom || '-' }}</strong></div>
               </div>
             </div>
 
             <div class="space-y-3">
               <h4 class="font-bold text-slate-900 uppercase tracking-wider text-[11px] text-blue-900 border-b border-slate-100 pb-1">
-                ÄÆ¡n vá»‹ & Vá»‹ trÃ­ thá»±c táº­p
+                ÄÆ¡n vá»‹ & V�9 trí thực tập
               </h4>
               <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
                 <div>
-                  <span class="text-slate-400 text-[10px] uppercase block">Doanh nghiá»‡p:</span>
+                  <span class="text-slate-400 text-[10px] uppercase block">Doanh nghi�!p:</span>
                   <p class="font-bold text-blue-900 text-sm">{{ detail.donViThucTap || 'ChÆ°a cáº­p nháº­t' }}</p>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                   <div>
-                    <span class="text-slate-400 text-[10px] uppercase block">Vá»‹ trÃ­:</span>
+                    <span class="text-slate-400 text-[10px] uppercase block">V�9 trí:</span>
                     <p class="font-medium text-slate-800">{{ detail.viTriThucTap || '--' }}</p>
                   </div>
                   <div>
-                    <span class="text-slate-400 text-[10px] uppercase block">NgÆ°á»i hÆ°á»›ng dáº«n:</span>
+                    <span class="text-slate-400 text-[10px] uppercase block">NgÆ°á»i hư�:ng dẫn:</span>
                     <p class="font-medium text-slate-800">{{ detail.mentor || 'Anh Nguyá»…n VÄƒn A' }}</p>
                   </div>
                 </div>
@@ -723,7 +723,7 @@
 
             <div class="space-y-3">
               <h4 class="font-bold text-slate-900 uppercase tracking-wider text-[11px] text-blue-900 border-b border-slate-100 pb-1">
-                Tiáº¿n Ä‘á»™ ná»™p nháº­t kÃ½ (15 tuáº§n)
+                Tiến ��" ná»™p nháº­t kÃ½ (15 tuáº§n)
               </h4>
               <div class="p-4 rounded-xl border border-slate-200 bg-white">
                 <div class="flex flex-wrap gap-2 mb-3">
@@ -753,27 +753,27 @@
                 <span>TÃ³m táº¯t AI & Tá»•ng há»£p cÃ´ng viá»‡c</span>
               </div>
               <p class="text-slate-700 leading-relaxed">
-                Sinh viÃªn Ä‘Ã£ hoÃ n thÃ nh thiáº¿t láº­p mÃ´i trÆ°á»ng phÃ¡t triá»ƒn vÃ  tÃ¬m hiá»ƒu kiáº¿n trÃºc Microservices. ÄÃ£ thá»±c hiá»‡n sÆ¡ Ä‘á»“ luá»“ng dá»¯ liá»‡u cho module xÃ¡c thá»±c ngÆ°á»i dÃ¹ng. Dáº¥u hiá»‡u nghiÃªn cá»©u chá»§ Ä‘á»™ng.
+                Sinh viên đã hoÃ n thÃ nh thiáº¿t láº­p mÃ´i trÆ°á»ng phÃ¡t triá»ƒn và tÃ¬m hiá»ƒu kiáº¿n trÃºc Microservices. ÄÃ£ thá»±c hi�!n sÆ¡ Ä‘á»“ luá»“ng dữ li�!u cho module xÃ¡c thá»±c ngÆ°á»i dÃ¹ng. Dáº¥u hiá»‡u nghiÃªn cá»©u chủ động.
               </p>
             </div>
 
             <div class="space-y-2 pt-2">
-              <label class="block font-bold text-slate-800 text-[11px] uppercase tracking-wider">Pháº£n há»“i / Gá»£i Ã½ cho sinh viÃªn</label>
-              <textarea v-model="teacherFeedback" rows="3" placeholder="Nháº­p nháº­n xÃ©t cá»§a báº¡n cho sinh viÃªn..." class="w-full p-3 border border-slate-300 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-blue-600"></textarea>
+              <label class="block font-bold text-slate-800 text-[11px] uppercase tracking-wider">Pháº£n há»“i / Gá»£i Ã½ cho sinh viên</label>
+              <textarea v-model="teacherFeedback" rows="3" placeholder="Nháº­p nháº­n xÃ©t của báº¡n cho sinh viên..." class="w-full p-3 border border-slate-300 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-blue-600"></textarea>
               <div class="flex justify-end">
                 <button class="bg-[#005EA3] text-white px-4 py-2 rounded-xl font-bold text-xs shadow-xs hover:opacity-90" @click="saveFeedback">
-                  Gá»­i pháº£n há»“i
+                  Gửi pháº£n há»“i
                 </button>
               </div>
             </div>
           </div>
 
-          <!-- Tab 3: BÃ i ná»™p -->
+          <!-- Tab 3: Bài n�"p -->
           <div v-else-if="activeDetailTab === 'submissions'" class="space-y-3">
             <div v-for="sub in [
               { title: 'Äá» cÆ°Æ¡ng chi tiáº¿t', deadline: '15/08/2024', submitted: '14/08/2024 15:30', status: 'DaNop', cls: 'bg-emerald-100 text-emerald-800' },
-              { title: 'BÃ¡o cÃ¡o giá»¯a ká»³', deadline: '10/09/2024', submitted: '12/09/2024 09:15', status: 'NopTre', cls: 'bg-amber-100 text-amber-800' },
-              { title: 'BÃ¡o cÃ¡o cuá»‘i ká»³ & KhÃ³a luáº­n', deadline: '20/12/2024', submitted: '--', status: 'ChuaNop', cls: 'bg-slate-100 text-slate-600' }
+              { title: 'Báo cáo giá»¯a ká»³', deadline: '10/09/2024', submitted: '12/09/2024 09:15', status: 'NopTre', cls: 'bg-amber-100 text-amber-800' },
+              { title: 'Báo cáo cu�i ká»³ & KhÃ³a luáº­n', deadline: '20/12/2024', submitted: '--', status: 'ChuaNop', cls: 'bg-slate-100 text-slate-600' }
             ]" :key="sub.title" class="p-3.5 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between">
               <div>
                 <p class="font-bold text-slate-900 text-xs">{{ sub.title }}</p>
@@ -792,7 +792,7 @@
 
           <!-- Tab 4: Äiá»ƒm -->
           <div v-else-if="activeDetailTab === 'grades'" class="space-y-3">
-            <div v-if="!detail.diem || !detail.diem.length" class="text-slate-400 italic">ChÆ°a cÃ³ cá»™t Ä‘iá»ƒm nÃ o.</div>
+            <div v-if="!detail.diem || !detail.diem.length" class="text-slate-400 italic">ChÆ°a cÃ³ cá»™t Ä‘iá»ƒm nào.</div>
             <div v-else class="space-y-2">
               <div v-for="d in detail.diem" :key="d.maCotDiem" class="flex justify-between items-center p-3 bg-slate-50 rounded-xl border border-slate-200">
                 <span class="font-medium text-slate-700">{{ d.tenCot }}</span>
@@ -818,9 +818,9 @@
           <!-- Tab 6: Ghi chÃº -->
           <div v-else-if="activeDetailTab === 'notes'" class="space-y-4">
             <div class="bg-amber-50/70 border border-amber-200 rounded-xl p-3 text-[11px] text-amber-900">
-              Ghi chÃº riÃªng tÆ° cá»§a giáº£ng viÃªn (Chá»‰ báº¡n má»›i nhÃ¬n tháº¥y ghi chÃº nÃ y).
+              Ghi chÃº riÃªng tÆ° của giảng viên (Chá»‰ báº¡n má»›i nhÃ¬n tháº¥y ghi chÃº nÃ y).
             </div>
-            <textarea v-model="internalNote" rows="4" placeholder="Nháº­p ghi chÃº riÃªng tÆ° vá» sinh viÃªn nÃ y..." class="w-full p-3 border border-slate-300 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-blue-600"></textarea>
+            <textarea v-model="internalNote" rows="4" placeholder="Nháº­p ghi chÃº riÃªng tÆ° vá» sinh viên nÃ y..." class="w-full p-3 border border-slate-300 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-blue-600"></textarea>
             <div class="flex justify-end">
               <button class="bg-[#005EA3] text-white px-5 py-2 rounded-xl font-bold text-xs shadow-xs hover:opacity-90" @click="saveNote">
                 LÆ°u ghi chÃº
@@ -838,7 +838,7 @@
       </div>
     </div>
 
-    <!-- Modal Xuáº¥t BÃ¡o CÃ¡o Danh SÃ¡ch Sinh ViÃªn -->
+    <!-- Modal Xuất BÃ¡o CÃ¡o Danh SÃ¡ch Sinh ViÃªn -->
     <div
       v-if="showExportModal"
       class="fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4"
@@ -850,8 +850,8 @@
               <span class="material-symbols-outlined text-[24px] text-emerald-400">group</span>
             </div>
             <div>
-              <h3 class="font-bold text-base">Xuáº¥t BÃ¡o cÃ¡o Danh sÃ¡ch Sinh viÃªn</h3>
-              <p class="text-xs text-slate-300">Xuáº¥t danh sÃ¡ch sinh viÃªn lá»›p thá»±c táº­p {{ cls?.tenLop || maLop }}</p>
+              <h3 class="font-bold text-base">Xuất Báo cáo Danh sách Sinh viên</h3>
+              <p class="text-xs text-slate-300">Xuất danh sÃ¡ch sinh viên lá»›p thực tập {{ cls?.tenLop || maLop }}</p>
             </div>
           </div>
           <button @click="showExportModal = false" class="text-slate-400 hover:text-white transition">
@@ -863,18 +863,18 @@
           <div class="bg-blue-50 p-4 rounded-2xl border border-blue-100 flex items-start gap-3">
             <span class="material-symbols-outlined text-blue-700 text-[20px] shrink-0 mt-0.5">info</span>
             <div class="space-y-1">
-              <p class="font-bold text-blue-900">BÃ¡o cÃ¡o bao gá»“m thÃ´ng tin chi tiáº¿t:</p>
+              <p class="font-bold text-blue-900">Báo cáo bao gá»“m thÃ´ng tin chi tiáº¿t:</p>
               <ul class="list-disc list-inside text-slate-600 space-y-0.5">
-                <li>STT, MSSV, Há» vÃ  tÃªn sinh viÃªn, Lá»›p sinh hoáº¡t.</li>
-                <li>Doanh nghiá»‡p thá»±c táº­p, Vá»‹ trÃ­ cÃ´ng viá»‡c, TÃªn nhÃ³m ghÃ©p.</li>
-                <li>Tráº¡ng thÃ¡i ghi danh & ÄÃ¡nh giÃ¡ tiáº¿n Ä‘á»™ ná»™p nháº­t kÃ½.</li>
+                <li>STT, MSSV, Há» và tên sinh viên, L�:p sinh hoạt.</li>
+                <li>Doanh nghi�!p thực tập, V�9 trí cÃ´ng viá»‡c, TÃªn nhóm ghÃ©p.</li>
+                <li>Trạng thái ghi danh & ÄÃ¡nh giÃ¡ tiáº¿n Ä‘á»™ ná»™p nháº­t kÃ½.</li>
               </ul>
             </div>
           </div>
 
           <div class="grid grid-cols-2 gap-3">
             <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 text-center">
-              <span class="text-[11px] font-bold text-slate-500 uppercase block">Sá»‘ lÆ°á»£ng sinh viÃªn</span>
+              <span class="text-[11px] font-bold text-slate-500 uppercase block">S� lượng sinh viên</span>
               <span class="text-xl font-black text-slate-900">{{ (filteredStudents || students).length }}</span>
             </div>
             <div class="p-3 bg-emerald-50 rounded-xl border border-emerald-200 text-center">
@@ -896,7 +896,7 @@
                   <span class="material-symbols-outlined text-[22px]">table_chart</span>
                 </div>
                 <span>Táº£i file Excel (.xlsx)</span>
-                <span class="text-[10px] text-emerald-700 font-normal">Xuáº¥t file Excel chuáº©n cáº¥u trÃºc</span>
+                <span class="text-[10px] text-emerald-700 font-normal">Xuất file Excel chuáº©n cáº¥u trÃºc</span>
               </button>
 
               <button
@@ -942,7 +942,7 @@
   const statusFilter = ref('all');
   const toast = ref('');
 
-  const statusLabels = { ChoGhiDanh: 'Chá» ghi danh', DangThucTap: 'Äang thá»±c táº­p', HoanThanh: 'HoÃ n thÃ nh', DungThucTap: 'Dá»«ng thá»±c táº­p' };
+  const statusLabels = { ChoGhiDanh: 'Chá» ghi danh', DangThucTap: 'Äang thực tập', HoanThanh: 'HoÃ n thÃ nh', DungThucTap: 'Dá»«ng thực tập' };
   const statusCls = { ChoGhiDanh: 'bg-amber-100 text-amber-800 border border-amber-200', DangThucTap: 'bg-emerald-100 text-emerald-800 border border-emerald-200', HoanThanh: 'bg-blue-100 text-blue-800 border border-blue-200', DungThucTap: 'bg-rose-100 text-rose-800 border border-rose-200' };
   const progressLabels = { DungTienDo: 'ÄÃºng tiáº¿n Ä‘á»™', ChamTienDo: 'Cháº­m tiáº¿n Ä‘á»™', CanhBao: 'Cáº£nh bÃ¡o', CanXuLy: 'Cáº§n xá»­ lÃ½' };
   const progressCls = { DungTienDo: 'bg-emerald-100 text-emerald-800', ChamTienDo: 'bg-amber-100 text-amber-800', CanhBao: 'bg-orange-100 text-orange-800', CanXuLy: 'bg-rose-100 text-rose-800' };
@@ -951,7 +951,7 @@
 
   function showToast(m) { toast.value = m; setTimeout(() => (toast.value = ''), 3000); }
   function formatDate(d) { return new Date(d).toLocaleString('vi-VN'); }
-  function copy(text) { navigator.clipboard?.writeText(text || ''); showToast('ÄÃ£ sao chÃ©p vÃ o bá»™ nhá»› táº¡m'); }
+  function copy(text) { navigator.clipboard?.writeText(text || ''); showToast('ÄÃ£ sao chÃ©p vào bá»™ nhá»› táº¡m'); }
 
   const allChecked = computed(() => students.value.length > 0 && selected.value.length === students.value.length);
   function toggleAll(e) { selected.value = e.target.checked ? students.value.map((s) => s.maGhiDanh) : []; }
@@ -1022,7 +1022,7 @@
     if (!codes.length) { showToast('Vui lÃ²ng nháº­p danh sÃ¡ch MSSV'); return; }
     const res = await api.post(`/giangvien/classes/${maLop}/students`, { maSoSinhViens: codes });
     importResults.value = res.data.ketQua || [];
-    showToast(res.data.message || 'ÄÃ£ xá»­ lÃ½ danh sÃ¡ch sinh viÃªn');
+    showToast(res.data.message || 'ÄÃ£ xá»­ lÃ½ danh sÃ¡ch sinh viên');
     await Promise.all([reloadStudents(), loadClass()]);
   }
 
@@ -1042,10 +1042,10 @@
   async function confirmGroup(g) {
     try {
       const res = await api.post(`/giangvien/groups/${g.maNhom}/confirm`);
-      showToast(res.data?.message || `ÄÃ£ xÃ¡c nháº­n nhÃ³m ${g.tenNhom}`);
+      showToast(res.data?.message || `ÄÃ£ xÃ¡c nháº­n nhóm ${g.tenNhom}`);
       await Promise.all([reloadStudents(), loadGroups()]);
     } catch {
-      showToast('Thao tÃ¡c tháº¥t báº¡i');
+      showToast('Thao tÃ¡c thất bại');
     }
   }
 
@@ -1058,15 +1058,15 @@
     if (!rejectTargetGroup.value) return;
     try {
       const res = await api.post(`/giangvien/groups/${rejectTargetGroup.value.maNhom}/reject`, { lyDo: rejectReason.value });
-      showToast(res.data?.message || 'ÄÃ£ tá»« chá»‘i gom nhÃ³m');
+      showToast(res.data?.message || 'ÄÃ£ tá»« chá»‘i gom nhóm');
       rejectTargetGroup.value = null;
       await Promise.all([reloadStudents(), loadGroups()]);
     } catch {
-      showToast('Tá»« chá»‘i gom nhÃ³m tháº¥t báº¡i');
+      showToast('Tá»« chá»‘i gom nhóm thất bại');
     }
   }
 
-  // Gom nhÃ³m
+  // Gom nhóm
   const showConfirmGroup = ref(false);
   const selectedStudents = computed(() => students.value.filter(s => selected.value.includes(s.maGhiDanh)));
 
@@ -1085,20 +1085,20 @@
     try {
       const res = await api.post(`/giangvien/classes/${maLop}/groups`, { maGhiDanhs: selected.value });
       selected.value = [];
-      showToast(res.data?.message || 'Táº¡o nhÃ³m thÃ nh cÃ´ng');
+      showToast(res.data?.message || 'Táº¡o nhóm thÃ nh cÃ´ng');
       await Promise.all([reloadStudents(), loadGroups()]);
     } catch {
-      showToast('Táº¡o nhÃ³m tháº¥t báº¡i');
+      showToast('Táº¡o nhóm thất bại');
     }
   }
 
   async function disband(g) {
     try {
       await api.delete(`/giangvien/groups/${g.maNhom}`);
-      showToast('ÄÃ£ giáº£i tÃ¡n nhÃ³m thÃ nh cÃ´ng');
+      showToast('ÄÃ£ giáº£i tÃ¡n nhóm thÃ nh cÃ´ng');
       await Promise.all([reloadStudents(), loadGroups()]);
     } catch {
-      showToast('Giáº£i tÃ¡n nhÃ³m tháº¥t báº¡i');
+      showToast('Giáº£i tÃ¡n nhóm thất bại');
     }
   }
 
@@ -1115,23 +1115,23 @@
     if (!transferTarget.value) return;
     try {
       const res = await api.post(`/giangvien/students/${transferTarget.value.maGhiDanh}/transfer`, transferForm.value);
-      showToast(res.data?.message || 'ÄÃ£ gá»­i yÃªu cáº§u chuyá»ƒn lá»›p');
+      showToast(res.data?.message || 'ÄÃ£ gá»­i yêu cầu chuyá»ƒn lá»›p');
       transferTarget.value = null;
       await reloadStudents();
     } catch {
-      showToast('Gá»­i yÃªu cáº§u chuyá»ƒn lá»›p tháº¥t báº¡i');
+      showToast('Gửi yêu cầu chuyá»ƒn lá»›p thất bại');
     }
   }
 
-  // Dá»«ng thá»±c táº­p
+  // Dá»«ng thực tập
   const stopTarget = ref(null);
-  const stopForm = ref({ lyDo: 'Xin rÃºt thá»±c táº­p', lyDoKhac: '' });
-  function openStop(s) { stopTarget.value = s; stopForm.value = { lyDo: 'Xin rÃºt thá»±c táº­p', lyDoKhac: '' }; }
+  const stopForm = ref({ lyDo: 'Xin rÃºt thực tập', lyDoKhac: '' });
+  function openStop(s) { stopTarget.value = s; stopForm.value = { lyDo: 'Xin rÃºt thực tập', lyDoKhac: '' }; }
   async function confirmStop() {
     const lyDo = stopForm.value.lyDo === 'KhÃ¡c' ? (stopForm.value.lyDoKhac || 'KhÃ¡c') : stopForm.value.lyDo;
     const res = await api.post(`/giangvien/students/${stopTarget.value.maGhiDanh}/stop`, { lyDo });
     stopTarget.value = null;
-    showToast(res.data.message || 'ÄÃ£ cáº­p nháº­t tráº¡ng thÃ¡i dá»«ng thá»±c táº­p');
+    showToast(res.data.message || 'ÄÃ£ cáº­p nháº­t tráº¡ng thÃ¡i dá»«ng thực tập');
     await reloadStudents();
   }
 
@@ -1147,10 +1147,10 @@
       ["TRÆ¯á»œNG Äáº I Há»ŒC KINH Táº¾ - Äáº I Há»ŒC ÄÃ€ Náº´NG"],
       ["KHOA CÃ”NG NGHá»† THÃ”NG TIN - Bá»˜ MÃ”N Há»† THá»NG THÃ”NG TIN"],
       ["DANH SÃCH SINH VIÃŠN THá»°C Táº¬P DOANH NGHIá»†P"],
-      [`MÃ£ lá»›p thá»±c táº­p: ${cls.value?.tenLop || maLop} | ${cls.value?.tenKy || 'Há»c ká»³ I - 2025-2026'}`],
-      [`Giáº£ng viÃªn hÆ°á»›ng dáº«n: TS. Nguyá»…n VÄƒn A`],
+      [`MÃ£ lá»›p thực tập: ${cls.value?.tenLop || maLop} | ${cls.value?.tenKy || 'Há»c ká»³ I - 2025-2026'}`],
+      [`Giáº£ng viÃªn hư�:ng dẫn: TS. Nguyá»…n VÄƒn A`],
       [""],
-      ["STT", "MSSV", "Há» vÃ  tÃªn", "Lá»›p SH", "Doanh nghiá»‡p thá»±c táº­p", "Vá»‹ trÃ­ thá»±c táº­p", "NhÃ³m", "Tráº¡ng thÃ¡i", "Tiáº¿n Ä‘á»™"]
+      ["STT", "MSSV", "Há» và tên", "L�:p SH", "Doanh nghi�!p thực tập", "V�9 trí thực tập", "Nhóm", "Trạng thái", "Tiến ��""]
     ];
 
     const list = students.value;
@@ -1163,7 +1163,7 @@
         st.dnName || st.company || 'ChÆ°a Ä‘Äƒng kÃ½',
         st.viTri || st.position || 'Thá»±c táº­p sinh',
         st.tenNhom || 'ChÆ°a xáº¿p',
-        statusLabels[st.trangThai] || st.trangThai || 'Äang thá»±c táº­p',
+        statusLabels[st.trangThai] || st.trangThai || 'Äang thực tập',
         progressLabels[st.tienDo] || st.tienDo || 'ÄÃºng tiáº¿n Ä‘á»™'
       ]);
     });
@@ -1176,7 +1176,7 @@
     XLSX.utils.book_append_sheet(wb, ws, "DanhSachSinhVien");
     XLSX.writeFile(wb, `DanhSach_SinhVien_ThucTap_${maLop}.xlsx`);
 
-    showToast('âœ“ ÄÃ£ xuáº¥t thÃ nh cÃ´ng file Excel Danh sÃ¡ch Sinh viÃªn (.xlsx)');
+    showToast('âœ“ ÄÃ£ xuáº¥t thÃ nh cÃ´ng file Excel Danh sách Sinh viên (.xlsx)');
     showExportModal.value = false;
   }
 
@@ -1196,7 +1196,7 @@
         <td style="text-align: center; padding: 6px;">${st.lopSinhHoat || 'CNTT'}</td>
         <td style="padding: 6px;">${st.dnName || st.company || 'ChÆ°a Ä‘Äƒng kÃ½'}</td>
         <td style="text-align: center; padding: 6px;">${st.tenNhom || '-'}</td>
-        <td style="text-align: center; font-weight: bold; padding: 6px;">${statusLabels[st.trangThai] || 'Äang thá»±c táº­p'}</td>
+        <td style="text-align: center; font-weight: bold; padding: 6px;">${statusLabels[st.trangThai] || 'Äang thực tập'}</td>
       </tr>
     `).join('');
 
@@ -1204,7 +1204,7 @@
       <!DOCTYPE html>
       <html>
       <head>
-        <title>Danh sÃ¡ch Sinh viÃªn Thá»±c táº­p - Lá»›p ${maLop}</title>
+        <title>Danh sách Sinh viên Thá»±c táº­p - L�:p ${maLop}</title>
         <meta charset="utf-8" />
         <style>
           body { font-family: "Times New Roman", Times, serif; margin: 20mm 15mm; color: #111; line-height: 1.3; }
@@ -1244,18 +1244,18 @@
         </table>
 
         <div class="title">DANH SÃCH SINH VIÃŠN Lá»šP THá»°C Táº¬P DOANH NGHIá»†P</div>
-        <div class="subtitle">Lá»›p: <strong>${cls.value?.tenLop || maLop}</strong> â€¢ Sá»‘ lÆ°á»£ng: <strong>${list.length} sinh viÃªn</strong></div>
+        <div class="subtitle">L�:p: <strong>${cls.value?.tenLop || maLop}</strong> â€¢ S� lượng: <strong>${list.length} sinh viên</strong></div>
 
         <table class="data-table">
           <thead>
             <tr>
               <th style="width: 35px;">STT</th>
               <th style="width: 85px;">MSSV</th>
-              <th>Há» vÃ  tÃªn sinh viÃªn</th>
-              <th style="width: 75px;">Lá»›p SH</th>
-              <th>Doanh nghiá»‡p thá»±c táº­p</th>
-              <th style="width: 80px;">NhÃ³m</th>
-              <th style="width: 100px;">Tráº¡ng thÃ¡i</th>
+              <th>Há» và tên sinh viên</th>
+              <th style="width: 75px;">L�:p SH</th>
+              <th>Doanh nghi�!p thực tập</th>
+              <th style="width: 80px;">Nhóm</th>
+              <th style="width: 100px;">Trạng thái</th>
             </tr>
           </thead>
           <tbody>
@@ -1268,13 +1268,13 @@
             <td>
               <br/>
               <strong>XÃC NHáº¬N Bá»˜ MÃ”N</strong><br/>
-              <span style="font-style: italic; font-size: 11px;">(KÃ½ vÃ  ghi rÃµ há» tÃªn)</span>
+              <span style="font-style: italic; font-size: 11px;">(KÃ½ và ghi rÃµ há» tên)</span>
               <br/><br/><br/><br/>
             </td>
             <td>
               <em>ÄÃ  Náºµng, ngÃ y ${new Date().getDate()} thÃ¡ng ${new Date().getMonth() + 1} nÄƒm ${new Date().getFullYear()}</em><br/>
               <strong>GIáº¢NG VIÃŠN HÆ¯á»šNG DáºªN</strong><br/>
-              <span style="font-style: italic; font-size: 11px;">(KÃ½ vÃ  ghi rÃµ há» tÃªn)</span>
+              <span style="font-style: italic; font-size: 11px;">(KÃ½ và ghi rÃµ há» tên)</span>
               <br/><br/><br/><br/>
               <strong>TS. Nguyá»…n VÄƒn A</strong>
             </td>
@@ -1303,7 +1303,7 @@
 
   function saveFeedback() {
     if (!teacherFeedback.value.trim()) return;
-    showToast('ÄÃ£ gá»­i pháº£n há»“i cho sinh viÃªn');
+    showToast('ÄÃ£ gá»­i pháº£n há»“i cho sinh viên');
     teacherFeedback.value = '';
   }
 

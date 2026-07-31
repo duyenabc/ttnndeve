@@ -4,13 +4,13 @@
     <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div>
         <nav class="flex items-center gap-2 text-xs text-slate-500 mb-2">
-          <router-link to="/teacher/classes" class="hover:text-blue-700 transition-colors">Lá»›p cá»§a tÃ´i</router-link>
+          <router-link to="/teacher/classes" class="hover:text-blue-700 transition-colors">L�:p của tôi</router-link>
           <span class="material-symbols-outlined text-[14px]">chevron_right</span>
           <span class="font-bold text-slate-900">Kho tÃ i liá»‡u & biá»ƒu máº«u</span>
         </nav>
         <h1 class="text-[28px] font-bold text-slate-900 tracking-tight">Kho TÃ i liá»‡u & Biá»ƒu máº«u IMS</h1>
         <p class="text-xs text-slate-500 mt-1">
-          Tra cá»©u, Ä‘Äƒng táº£i biá»ƒu máº«u chÃ­nh thá»©c, quy cháº¿ thá»±c táº­p vÃ  tÃ i liá»‡u hÆ°á»›ng dáº«n dÃ nh cho Giáº£ng viÃªn & Sinh viÃªn
+          Tra cá»©u, Ä‘Äƒng táº£i biá»ƒu máº«u chính thức, quy cháº¿ thực tập và tÃ i liá»‡u hư�:ng dẫn dÃ nh cho Giáº£ng viÃªn & Sinh viên
         </p>
       </div>
 
@@ -58,7 +58,7 @@
             <input
               v-model="searchQuery"
               type="text"
-              placeholder="TÃ¬m kiáº¿m tÃªn tÃ i liá»‡u, biá»ƒu máº«u..."
+              placeholder="TÃ¬m kiáº¿m tên tÃ i liá»‡u, biá»ƒu máº«u..."
               class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs outline-none focus:ring-2 focus:ring-blue-600"
             />
           </div>
@@ -155,7 +155,7 @@
               <input
                 v-model="uploadForm.name"
                 type="text"
-                placeholder="Tá»± Ä‘á»™ng láº¥y tÃªn file náº¿u Ä‘á»ƒ trá»‘ng..."
+                placeholder="Tá»± Ä‘á»™ng láº¥y tên file náº¿u Ä‘á»ƒ trá»‘ng..."
                 class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 outline-none focus:ring-2 focus:ring-blue-600"
               />
             </div>
@@ -171,7 +171,7 @@
                   <span class="material-symbols-outlined text-[28px]">cloud_upload</span>
                 </div>
                 <div>
-                  <p class="font-bold text-slate-800">KÃ©o tháº£ hoáº·c <span class="text-blue-700 underline">Click Ä‘á»ƒ chá»n</span></p>
+                  <p class="font-bold text-slate-800">KÃ©o tháº£ hoặc <span class="text-blue-700 underline">Click Ä‘á»ƒ chá»n</span></p>
                   <p class="text-[11px] text-slate-400 mt-0.5">Há»— trá»£: .pdf, .docx, .xlsx (Tá»‘i Ä‘a 10MB)</p>
                 </div>
                 <input ref="fileInputRef" type="file" class="hidden" accept=".pdf,.doc,.docx,.xls,.xlsx" @change="onFileSelected" />
@@ -216,7 +216,7 @@
           </div>
           <div>
             <h3 class="font-bold text-base text-slate-900">XÃ³a vÄ©nh viá»…n tÃ i liá»‡u?</h3>
-            <p class="text-slate-500 mt-0.5">HÃ nh Ä‘á»™ng nÃ y khÃ´ng thá»ƒ hoÃ n tÃ¡c.</p>
+            <p class="text-slate-500 mt-0.5">HÃ nh Ä‘á»™ng nÃ y không thá»ƒ hoÃ n tÃ¡c.</p>
           </div>
         </div>
 
@@ -355,7 +355,7 @@
 
   function submitUpload() {
     if (!selectedFile.value && !uploadForm.value.name.trim()) {
-      showToast('Vui lÃ²ng chá»n tá»‡p tin hoáº·c nháº­p tÃªn tÃ i liá»‡u!');
+      showToast('Vui lÃ²ng chá»n tá»‡p tin hoặc nháº­p tên tÃ i liá»‡u!');
       return;
     }
 

@@ -13,7 +13,7 @@
             />
           </div>
           <p class="text-[13px] leading-relaxed text-white/80 font-normal">
-            ChÃºng tÃ´i tin tÆ°á»Ÿng ráº±ng giÃ¡o dá»¥c Ä‘áº¡i há»c Ä‘Ã³ng vai trÃ² then chá»‘t trong "kiáº¿n táº¡o xÃ£ há»™i tÆ°Æ¡ng lai". Há»‡ thá»‘ng quáº£n lÃ½ thá»±c táº­p (IMS) Ä‘Æ°á»£c thiáº¿t káº¿ nháº±m tá»‘i Æ°u hÃ³a quy trÃ¬nh hÆ°á»›ng dáº«n vÃ  theo sÃ¡t lá»™ trÃ¬nh phÃ¡t triá»ƒn cá»§a sinh viÃªn.
+            ChÃºng tôi tin tÆ°á»Ÿng ráº±ng giÃ¡o dá»¥c Ä‘áº¡i há»c Ä‘Ã³ng vai trÃ² then chá»‘t trong "kiáº¿n táº¡o xÃ£ há»™i tÆ°Æ¡ng lai". Há»‡ thá»‘ng quáº£n lÃ½ thực tập (IMS) Ä‘Æ°á»£c thiết kế nháº±m tá»‘i Æ°u hÃ³a quy trÃ¬nh hư�:ng dẫn và theo sÃ¡t lá»™ trÃ¬nh phÃ¡t triá»ƒn của sinh viên.
           </p>
           <router-link to="/documents" class="text-[13px] font-semibold text-white hover:text-amber-300 transition-colors duration-300 flex items-center gap-1 w-fit">
             Xem thÃªm kho tÃ i liá»‡u Â»
@@ -29,7 +29,7 @@
             <div class="flex items-start space-x-3">
               <span class="material-symbols-outlined text-[#f37021] text-[20px] mt-0.5 shrink-0">location_on</span>
               <span class="text-[13px] text-white/80 leading-relaxed">
-                Trung tÃ¢m Sá»‘ vÃ  Há»c Liá»‡u, TrÆ°á»ng Äáº¡i há»c Kinh táº¿, ÄH ÄÃ  Náºµng.
+                Trung tÃ¢m Sá»‘ và Há»c Liá»‡u, TrÆ°á»ng Äáº¡i há»c Kinh táº¿, ÄH ÄÃ  Náºµng.
               </span>
             </div>
             <a href="tel:02363525656" class="flex items-center space-x-3 group cursor-pointer">
@@ -57,22 +57,22 @@
               </li>
               <li>
                 <router-link to="/student/progress" class="text-white/80 hover:text-amber-300 transition-colors flex items-center gap-1.5">
-                  <span class="material-symbols-outlined text-[16px]">chevron_right</span> Tiáº¿n trÃ¬nh cá»§a tÃ´i
+                  <span class="material-symbols-outlined text-[16px]">chevron_right</span> Tiáº¿n trÃ¬nh của tôi
                 </router-link>
               </li>
               <li>
                 <router-link to="/student/classes" class="text-white/80 hover:text-amber-300 transition-colors flex items-center gap-1.5">
-                  <span class="material-symbols-outlined text-[16px]">chevron_right</span> Lá»›p thá»±c táº­p cá»§a tÃ´i
+                  <span class="material-symbols-outlined text-[16px]">chevron_right</span> L�:p thực tập của tôi
                 </router-link>
               </li>
               <li>
                 <router-link to="/diaries" class="text-white/80 hover:text-amber-300 transition-colors flex items-center gap-1.5">
-                  <span class="material-symbols-outlined text-[16px]">chevron_right</span> Nháº­t kÃ½ thá»±c táº­p
+                  <span class="material-symbols-outlined text-[16px]">chevron_right</span> Nháº­t kÃ½ thực tập
                 </router-link>
               </li>
               <li>
                 <router-link to="/scores" class="text-white/80 hover:text-amber-300 transition-colors flex items-center gap-1.5">
-                  <span class="material-symbols-outlined text-[16px]">chevron_right</span> Báº£ng Ä‘iá»ƒm & ÄÃ¡nh giÃ¡
+                  <span class="material-symbols-outlined text-[16px]">chevron_right</span> Bảng �iỒm & ÄÃ¡nh giÃ¡
                 </router-link>
               </li>
               <li>
@@ -90,12 +90,12 @@
               </li>
               <li>
                 <router-link to="/teacher/classes" class="text-white/80 hover:text-amber-300 transition-colors flex items-center gap-1.5">
-                  <span class="material-symbols-outlined text-[16px]">chevron_right</span> Lá»›p cá»§a tÃ´i
+                  <span class="material-symbols-outlined text-[16px]">chevron_right</span> L�:p của tôi
                 </router-link>
               </li>
               <li>
                 <router-link to="/teacher/schedule" class="text-white/80 hover:text-amber-300 transition-colors flex items-center gap-1.5">
-                  <span class="material-symbols-outlined text-[16px]">chevron_right</span> Lá»‹ch hÆ°á»›ng dáº«n
+                  <span class="material-symbols-outlined text-[16px]">chevron_right</span> Lá»‹ch hư�:ng dẫn
                 </router-link>
               </li>
               <li>
@@ -113,7 +113,7 @@
               </li>
               <li>
                 <router-link to="/giaovu-requests" class="text-white/80 hover:text-amber-300 transition-colors flex items-center gap-1.5">
-                  <span class="material-symbols-outlined text-[16px]">chevron_right</span> YÃªu cáº§u cá»§a tÃ´i
+                  <span class="material-symbols-outlined text-[16px]">chevron_right</span> YÃªu cáº§u của tôi
                 </router-link>
               </li>
               <li>
@@ -131,7 +131,7 @@
               </li>
               <li>
                 <router-link to="/admin/accounts" class="text-white/80 hover:text-amber-300 transition-colors flex items-center gap-1.5">
-                  <span class="material-symbols-outlined text-[16px]">chevron_right</span> Quáº£n lÃ½ tÃ i khoáº£n
+                  <span class="material-symbols-outlined text-[16px]">chevron_right</span> Quản lý tÃ i khoáº£n
                 </router-link>
               </li>
               <li>
@@ -179,7 +179,7 @@
           <button
             @click="scrollToTop"
             class="self-end mt-6 w-10 h-10 bg-[#1d3573] border border-white/20 rounded-xl flex items-center justify-center hover:bg-[#f37021] transition-colors shadow-lg active:scale-95"
-            title="LÃªn Ä‘áº§u trang"
+            title="LÃªn �ầu trang"
           >
             <span class="material-symbols-outlined text-white">keyboard_control_key</span>
           </button>
@@ -191,7 +191,7 @@
     <div class="bg-[#1d3573] py-5 border-t border-white/10">
       <div class="w-full mx-auto px-6 text-center">
         <p class="text-[13px] font-medium text-white/80 tracking-wide">
-          Â© Báº£n quyá»n TrÆ°á»ng Äáº¡i há»c Kinh táº¿, Äáº¡i há»c ÄÃ  Náºµng | PhÃ¡t triá»ƒn bá»Ÿi <span class="text-white font-bold">Trung tÃ¢m Sá»‘ vÃ  Há»c Liá»‡u</span>
+          Â© Báº£n quyá»n TrÆ°á»ng Äáº¡i há»c Kinh táº¿, Äáº¡i há»c ÄÃ  Náºµng | PhÃ¡t triá»ƒn bá»Ÿi <span class="text-white font-bold">Trung tÃ¢m Sá»‘ và Há»c Liá»‡u</span>
         </p>
       </div>
     </div>

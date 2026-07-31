@@ -4,9 +4,9 @@
     <div class="flex justify-between items-end">
       <div>
         <nav class="flex items-center text-xs text-slate-500 mb-1 gap-2 font-medium">
-          <router-link to="/teacher/classes" class="hover:text-blue-600 transition-colors">Lá»›p cá»§a tÃ´i</router-link>
+          <router-link to="/teacher/classes" class="hover:text-blue-600 transition-colors">L�:p của tôi</router-link>
           <span class="material-symbols-outlined text-[14px]">chevron_right</span>
-          <span class="text-slate-900 font-bold">{{ classInfo?.tenLop || 'Lá»›p Thá»±c táº­p K64' }}</span>
+          <span class="text-slate-900 font-bold">{{ classInfo?.tenLop || 'L�:p Thá»±c táº­p K64' }}</span>
           <span class="material-symbols-outlined text-[14px]">chevron_right</span>
           <span class="text-slate-800 font-bold">Dashboard</span>
         </nav>
@@ -20,14 +20,14 @@
           class="px-4 py-2 bg-blue-50 text-[#005EA3] hover:bg-blue-100 rounded-xl font-bold text-xs flex items-center gap-1.5 transition"
         >
           <span class="material-symbols-outlined text-[18px]">groups</span>
-          Quáº£n lÃ½ sinh viÃªn
+          Quản lý sinh viên
         </router-link>
         <router-link
           :to="`/teacher/classes/${maLop}/grading`"
           class="px-4 py-2 bg-[#005EA3] hover:bg-blue-800 text-white rounded-xl font-bold text-xs flex items-center gap-1.5 transition shadow-xs"
         >
           <span class="material-symbols-outlined text-[18px]">grade</span>
-          Báº£ng Ä‘iá»ƒm lá»›p
+          Bảng �iỒm lá»›p
         </router-link>
       </div>
     </div>
@@ -68,7 +68,7 @@
               <span class="material-symbols-outlined text-slate-300 text-[22px]">circle</span>
               <div>
                 <h4 class="font-bold text-slate-900 text-xs">Cáº¥u hÃ¬nh má»‘c tiáº¿n Ä‘á»™</h4>
-                <p class="text-[11px] text-slate-500 mt-0.5">Thiáº¿t láº­p timeline thá»±c táº­p.</p>
+                <p class="text-[11px] text-slate-500 mt-0.5">Thiáº¿t láº­p timeline thực tập.</p>
               </div>
             </div>
             <router-link :to="`/teacher/classes/${maLop}/settings`" class="text-blue-600 font-bold text-[11px] flex items-center gap-1 group-hover:translate-x-1 transition-transform shrink-0">
@@ -82,7 +82,7 @@
               <span class="material-symbols-outlined text-slate-300 text-[22px]">circle</span>
               <div>
                 <h4 class="font-bold text-slate-900 text-xs">Cáº¥u hÃ¬nh nháº­t kÃ½</h4>
-                <p class="text-[11px] text-slate-500 mt-0.5">Quy Ä‘á»‹nh ná»™p bÃ¡o cÃ¡o tuáº§n.</p>
+                <p class="text-[11px] text-slate-500 mt-0.5">Quy Ä‘á»‹nh ná»™p báo cáo tuáº§n.</p>
               </div>
             </div>
             <router-link :to="`/teacher/classes/${maLop}/diaries`" class="text-blue-600 font-bold text-[11px] flex items-center gap-1 group-hover:translate-x-1 transition-transform shrink-0">
@@ -123,7 +123,7 @@
             <div class="flex items-start gap-3">
               <span class="material-symbols-outlined text-slate-300 text-[22px]">circle</span>
               <div>
-                <h4 class="font-bold text-slate-900 text-xs">ThÃªm sinh viÃªn</h4>
+                <h4 class="font-bold text-slate-900 text-xs">ThÃªm sinh viên</h4>
                 <p class="text-[11px] text-slate-500 mt-0.5">Import danh sÃ¡ch tá»« file Excel.</p>
               </div>
             </div>
@@ -139,7 +139,7 @@
     <div class="grid grid-cols-12 gap-6">
       <!-- Left Timeline Sidebar (Vertical) -->
       <div class="col-span-12 lg:col-span-2 bg-white rounded-2xl border border-slate-200 p-5 shadow-xs flex flex-col justify-between">
-        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4">Lá»™ trÃ¬nh thá»±c táº­p</h3>
+        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4">Lá»™ trÃ¬nh thực tập</h3>
         <div class="relative flex flex-col items-center h-full min-h-[320px]">
           <div class="absolute top-3 bottom-3 w-0.5 bg-slate-200"></div>
           
@@ -182,7 +182,7 @@
         <!-- Loading Spinner -->
         <div v-if="loading" class="bg-white rounded-2xl border border-slate-200 p-12 text-center flex flex-col items-center justify-center min-h-[350px]">
           <span class="animate-spin text-4xl text-blue-600 material-symbols-outlined">sync</span>
-          <p class="text-sm text-slate-500 mt-2">Äang táº£i dá»¯ liá»‡u tá»•ng quan...</p>
+          <p class="text-sm text-slate-500 mt-2">Äang táº£i dữ li�!u tá»•ng quan...</p>
         </div>
 
         <template v-else>
@@ -198,7 +198,7 @@
                   Hoáº¡t Ä‘á»™ng tá»‘t
                 </span>
                 <span v-else class="text-slate-500 font-extrabold text-xs bg-slate-100 px-2.5 py-1 rounded-full">
-                  ChÆ°a cÃ³ dá»¯ liá»‡u
+                  ChÆ°a cÃ³ dữ li�!u
                 </span>
               </div>
               <div>
@@ -210,7 +210,7 @@
               </div>
             </div>
 
-            <!-- Sinh viÃªn cháº­m tiáº¿n Ä‘á»™ -->
+            <!-- Sinh viên chậm tiáº¿n Ä‘á»™ -->
             <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs flex flex-col justify-between">
               <div class="flex justify-between items-start mb-3">
                 <div class="p-2.5 bg-rose-50 text-rose-600 rounded-xl">
@@ -227,7 +227,7 @@
                 <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">Cháº­m tiáº¿n Ä‘á»™</p>
                 <h2 class="text-3xl font-black text-rose-600 mt-1">{{ String(delayedCount).padStart(2, '0') }}</h2>
               </div>
-              <p class="text-xs text-slate-500 mt-3 font-medium">Sinh viÃªn chÆ°a ná»™p nháº­t kÃ½ tuáº§n há»c trÆ°á»›c.</p>
+              <p class="text-xs text-slate-500 mt-3 font-medium">Sinh viên chÆ°a ná»™p nháº­t kÃ½ tuáº§n há»c trÆ°á»›c.</p>
             </div>
 
             <!-- Lá»‹ch háº¹n sáº¯p tá»›i -->
@@ -251,9 +251,9 @@
           <!-- Empty State when there is no activity data yet -->
           <div v-if="!hasRealData" class="bg-white rounded-2xl border border-slate-200 p-12 text-center flex flex-col items-center justify-center min-h-[380px] shadow-2xs">
             <span class="material-symbols-outlined text-[72px] text-slate-300 mb-4" style="font-variation-settings: 'FILL' 1">analytics</span>
-            <h3 class="text-lg font-bold text-slate-900">ChÆ°a cÃ³ dá»¯ liá»‡u thá»‘ng kÃª biá»ƒu Ä‘á»“</h3>
+            <h3 class="text-lg font-bold text-slate-900">ChÆ°a cÃ³ dữ li�!u thá»‘ng kÃª biá»ƒu Ä‘á»“</h3>
             <p class="text-sm text-slate-500 max-w-lg mt-2 mx-auto leading-relaxed">
-              Biá»ƒu Ä‘á»“ phÃ¢n tÃ­ch vÃ  báº£ng heatmap tiáº¿n Ä‘á»™ chÆ°a cÃ³ dá»¯ liá»‡u hoáº¡t Ä‘á»™ng do sinh viÃªn chÆ°a Ä‘Äƒng kÃ½ Ä‘á» tÃ i thá»±c táº­p hoáº·c chÆ°a cÃ³ lÆ°á»£t ná»™p nháº­t kÃ½ nÃ o. Dá»¯ liá»‡u sáº½ tá»± Ä‘á»™ng Ä‘á»“ng bá»™ thá»i gian thá»±c ngay khi sinh viÃªn báº¯t Ä‘áº§u khai bÃ¡o Ä‘á» tÃ i vÃ  ná»™p bÃ¡o cÃ¡o.
+              Biá»ƒu Ä‘á»“ phÃ¢n tÃ­ch và báº£ng heatmap tiáº¿n Ä‘á»™ chưa có dữ li�!u hoáº¡t Ä‘á»™ng do sinh viên chÆ°a Ä‘Äƒng kÃ½ Ä‘á» tÃ i thực tập hoặc chưa có lÆ°á»£t ná»™p nháº­t kÃ½ nào. Dá»¯ liá»‡u sáº½ tá»± Ä‘á»™ng Ä‘á»“ng bá»™ thá»i gian thá»±c ngay khi sinh viên báº¯t �ầu khai bÃ¡o Ä‘á» tÃ i và ná»™p báo cáo.
             </p>
             <div class="mt-8 flex flex-wrap gap-3 justify-center">
               <router-link
@@ -261,14 +261,14 @@
                 class="px-5 py-2.5 bg-blue-50 hover:bg-blue-100 text-[#005EA3] rounded-xl font-bold text-xs flex items-center gap-1.5 transition"
               >
                 <span class="material-symbols-outlined text-[18px]">group_add</span>
-                Danh sÃ¡ch & MÃ£ ghi danh lá»›p
+                Danh sách & MÃ£ ghi danh lá»›p
               </router-link>
               <router-link
                 :to="`/teacher/classes/${maLop}/topics`"
                 class="px-5 py-2.5 bg-[#005EA3] hover:bg-blue-800 text-white rounded-xl font-bold text-xs flex items-center gap-1.5 transition shadow-xs"
               >
                 <span class="material-symbols-outlined text-[18px]">assignment_turned_in</span>
-                PhÃª duyá»‡t Ä‘á» tÃ i thá»±c táº­p
+                PhÃª duyá»‡t Ä‘á» tÃ i thực tập
               </router-link>
             </div>
           </div>
@@ -277,13 +277,13 @@
           <div v-else class="space-y-6">
             <!-- 4. Charts Section -->
             <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <!-- Chart 1: Tráº¡ng thÃ¡i sinh viÃªn (Pie/Donut) -->
+              <!-- Chart 1: Trạng thái sinh viên (Pie/Donut) -->
               <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs">
-                <h4 class="font-bold text-base text-slate-900 mb-6">Tráº¡ng thÃ¡i Sinh viÃªn</h4>
+                <h4 class="font-bold text-base text-slate-900 mb-6">Trạng thái Sinh viên</h4>
                 <div class="flex items-center gap-8 justify-around">
                   <div class="relative w-32 h-32 flex items-center justify-center shrink-0">
                     <svg class="w-full h-full -rotate-90" viewBox="0 0 36 36">
-                      <!-- Segment 1: Äang thá»±c táº­p (approved topics) -->
+                      <!-- Segment 1: Äang thực tập (approved topics) -->
                       <circle cx="18" cy="18" fill="transparent" r="15.915" stroke="#005EA3" :stroke-dasharray="`${chartSegments.approved.dash} ${100 - chartSegments.approved.dash}`" :stroke-dashoffset="chartSegments.approved.offset" stroke-width="4"></circle>
                       <!-- Segment 2: Chá» duyá»‡t Ä‘á» tÃ i (pending topics) -->
                       <circle cx="18" cy="18" fill="transparent" r="15.915" stroke="#f97316" :stroke-dasharray="`${chartSegments.pending.dash} ${100 - chartSegments.pending.dash}`" :stroke-dashoffset="chartSegments.pending.offset" stroke-width="4"></circle>
@@ -298,7 +298,7 @@
                   <div class="space-y-3 text-xs">
                     <div class="flex items-center gap-2">
                       <span class="w-3 h-3 bg-[#005EA3] rounded-sm shrink-0"></span>
-                      <span class="font-semibold text-slate-700">Äang thá»±c táº­p ({{ approvedTopicsCount }})</span>
+                      <span class="font-semibold text-slate-700">Äang thực tập ({{ approvedTopicsCount }})</span>
                     </div>
                     <div class="flex items-center gap-2">
                       <span class="w-3 h-3 bg-orange-500 rounded-sm shrink-0"></span>
@@ -312,10 +312,10 @@
                 </div>
               </div>
 
-              <!-- Chart 2: Tiáº¿n Ä‘á»™ ná»™p bÃ¡o cÃ¡o (Line/Area) -->
+              <!-- Chart 2: Tiến ��" ná»™p báo cáo (Line/Area) -->
               <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs flex flex-col justify-between">
                 <div class="flex justify-between items-center mb-4">
-                  <h4 class="font-bold text-base text-slate-900">Tiáº¿n Ä‘á»™ ná»™p nháº­t kÃ½ (Tá»· lá»‡ %)</h4>
+                  <h4 class="font-bold text-base text-slate-900">Tiến ��" ná»™p nháº­t kÃ½ (Tá»· lá»‡ %)</h4>
                   <span class="text-xs font-bold text-slate-500 bg-slate-100 px-2.5 py-1 rounded-lg">ToÃ n khÃ³a (8 tuáº§n)</span>
                 </div>
 
@@ -349,7 +349,7 @@
               <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
                   <h4 class="font-bold text-base text-slate-900">TÃ¬nh tráº¡ng ná»™p nháº­t kÃ½ theo tuáº§n</h4>
-                  <p class="text-xs text-slate-500 mt-0.5">Thá»‘ng kÃª viá»‡c hoÃ n thÃ nh nháº­t kÃ½ thá»±c táº­p cá»§a sinh viÃªn qua cÃ¡c má»‘c tuáº§n</p>
+                  <p class="text-xs text-slate-500 mt-0.5">Thá»‘ng kÃª viá»‡c hoÃ n thÃ nh nháº­t kÃ½ thực tập của sinh viên qua cÃ¡c má»‘c tuáº§n</p>
                 </div>
 
                 <div class="flex items-center gap-4 text-[11px] font-bold">
@@ -372,7 +372,7 @@
                 <div class="min-w-[650px]">
                   <!-- Header Row -->
                   <div class="grid grid-cols-[200px_repeat(8,1fr)] mb-3 pb-2 border-b border-slate-100 text-[11px] font-bold text-slate-400 text-center uppercase tracking-wider">
-                    <div class="text-left px-2">Há» vÃ  tÃªn</div>
+                    <div class="text-left px-2">Há» và tên</div>
                     <div>T1</div>
                     <div>T2</div>
                     <div>T3</div>
@@ -641,7 +641,7 @@ async function loadDashboardData() {
     const resClass = await api.get(`/giangvien/classes/${maLop.value}`);
     classInfo.value = resClass.data;
   } catch {
-    classInfo.value = { tenLop: 'Lá»›p Thá»±c táº­p K64', tenKy: 'Há»c ká»³ 1 - 2024 â€¢ DUE' };
+    classInfo.value = { tenLop: 'L�:p Thá»±c táº­p K64', tenKy: 'Há»c ká»³ 1 - 2024 â€¢ DUE' };
   }
 
   try {

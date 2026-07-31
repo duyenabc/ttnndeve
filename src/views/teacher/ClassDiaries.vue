@@ -217,7 +217,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
@@ -234,52 +234,76 @@ const statusOptions = [
   { value: 'Không nộp', label: 'Không nộp' }
 ];
 
-const studentDiaries = ref([
-  {
-    id: 1,
-    name: 'Lê Khả Anh Huy',
-    initials: 'AH',
-    avatar: null,
-    mssv: '20246015',
-    status: 'Không nộp',
-    isNew: false,
-    expectedCount: 1,
-    entries: [],
-    aiSummary: 'Sinh viên chưa nộp nhật ký cho tuần này. Kế hoạch tuần trước là nghiên cứu WebSockets.',
-    activeEntryIndex: 0
-  },
-  {
-    id: 2,
-    name: 'Võ Đức Trung Quân',
-    initials: 'VQ',
-    avatar: 'https://i.pravatar.cc/150?u=a042581f4e29026704d',
-    mssv: '20246012',
-    status: 'Nộp đủ',
-    isNew: true,
-    expectedCount: 2,
-    entries: [
-      { id: 101, dateLabel: 'Thứ 3 - 14/05', aiSummary: 'Quân đã tích hợp thành công API và xử lý xong các lỗi hiển thị trên thiết bị di động. Đang tập trung tối ưu hóa hiệu suất CSS.' },
-      { id: 102, dateLabel: 'Thứ 5 - 16/05', aiSummary: 'Hoàn thiện giao diện responsive và bắt đầu viết unit test cho các component chính.' }
-    ],
-    aiSummary: '',
-    activeEntryIndex: 0
-  },
-  {
-    id: 3,
-    name: 'Đồng Văn Triệu Doãn',
-    initials: 'DĐ',
-    avatar: 'https://i.pravatar.cc/150?u=a042581f4e29026704e',
-    mssv: '20246012',
-    status: 'Nộp thiếu',
-    isNew: false,
-    expectedCount: 2,
-    entries: [
-      { id: 103, dateLabel: 'Thứ 3 - 14/05', aiSummary: 'Doãn đã tích hợp thành công API và xử lý xong các lỗi hiển thị trên thiết bị di động. Đang tập trung tối ưu hóa hiệu suất CSS.' }
-    ],
-    aiSummary: '',
-    activeEntryIndex: 0
+const studentDiaries = ref([]);
+const isLoading = ref(true);
+
+import api from '@/api/api';
+
+onMounted(async () => {
+  isLoading.value = true;
+  try {
+    // 1. Fetch students for this class
+    const stRes = await api.get(`/giangvien/classes/${classId.value}/students`);
+    const studentsData = Array.isArray(stRes.data) ? stRes.data : (stRes.data?.items || []);
+
+    // 2. Fetch all diaries (mock DB)
+    const diariesRes = await api.get('/diaries').catch(() => ({ data: [] }));
+    const allDiaries = diariesRes.data || [];
+
+    // 3. Map real data
+    studentDiaries.value = studentsData.map(st => {
+      // Find diaries matching this student's ID or MSSV
+      const stId = st.maGhiDanh || st.maSoSinhVien || st.id;
+      // In the mock DB, userId might be saved as string
+      const stDiaries = allDiaries.filter(d => 
+        String(d.userId) === String(stId) || 
+        String(d.userId) === String(st.maSoSinhVien)
+      );
+
+      // Sort by date descending
+      stDiaries.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+      const entries = stDiaries.map(d => {
+        const dObj = new Date(d.date);
+        return {
+          id: d.id,
+          dateLabel: dObj.toLocaleDateString('vi-VN'),
+          aiSummary: d.content || 'Không có nội dung'
+        };
+      });
+
+      let status = 'Không nộp';
+      if (entries.length >= 2) status = 'Nộp đủ';
+      else if (entries.length === 1) status = 'Nộp thiếu';
+
+      const nameParts = (st.hoTen || 'Sinh Viên').trim().split(' ');
+      const initials = nameParts.length >= 2 
+        ? (nameParts[0][0] + nameParts[nameParts.length - 1][0]).toUpperCase() 
+        : nameParts[0].substring(0, 2).toUpperCase();
+
+      return {
+        id: stId,
+        name: st.hoTen || 'Chưa cập nhật tên',
+        initials,
+        avatar: null, // can use real avatar if API provides
+        mssv: st.maSoSinhVien || 'N/A',
+        status,
+        isNew: entries.length > 0 && (new Date() - new Date(stDiaries[0].date) < 24*60*60*1000), // New if latest entry is < 24h
+        expectedCount: 2, // Mock 2 per week
+        entries,
+        aiSummary: entries.length > 0 
+          ? `Nhật ký gần nhất: ${entries[0].aiSummary.substring(0, 100)}...` 
+          : 'Sinh viên chưa nộp nhật ký nào.',
+        activeEntryIndex: 0
+      };
+    });
+
+  } catch (error) {
+    console.error('Lỗi khi tải dữ liệu nhật ký:', error);
+  } finally {
+    isLoading.value = false;
   }
-]);
+});
 
 const filteredStudentDiaries = computed(() => {
   return studentDiaries.value.filter(st => {

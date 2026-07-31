@@ -3,8 +3,8 @@
     <!-- Header -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div>
-        <h1 class="text-[32px] font-bold text-slate-900 tracking-tight mb-1">Danh sÃ¡ch lá»›p hÆ°á»›ng dáº«n</h1>
-        <p class="text-sm text-slate-500">Quáº£n lÃ½ vÃ  theo dÃµi cÃ¡c lá»›p thá»±c táº­p do báº¡n phá»¥ trÃ¡ch.</p>
+        <h1 class="text-[32px] font-bold text-slate-900 tracking-tight mb-1">Danh sách lá»›p hư�:ng dẫn</h1>
+        <p class="text-sm text-slate-500">Quản lý và theo dÃµi cÃ¡c lá»›p thực tập do báº¡n phá»¥ trÃ¡ch.</p>
       </div>
       <button
         class="flex items-center gap-2 text-white px-4 py-2.5 rounded-xl font-bold text-sm hover:opacity-90 active:scale-95 transition-all shadow-sm w-fit"
@@ -27,8 +27,8 @@
       class="bg-white rounded-2xl border border-slate-200 p-12 text-center text-slate-500"
     >
       <span class="material-symbols-outlined text-[48px] block mb-2 opacity-40">class</span>
-      <p class="font-semibold text-base text-slate-800">Báº¡n chÆ°a cÃ³ lá»›p hÆ°á»›ng dáº«n nÃ o</p>
-      <p class="text-xs text-slate-500 mt-1">Nháº¥n "Táº¡o lá»›p má»›i" Ä‘á»ƒ báº¯t Ä‘áº§u khá»Ÿi táº¡o lá»›p há»c pháº§n thá»±c táº­p.</p>
+      <p class="font-semibold text-base text-slate-800">Báº¡n chưa có lá»›p hư�:ng dẫn nào</p>
+      <p class="text-xs text-slate-500 mt-1">Nháº¥n "Táº¡o lá»›p má»›i" Ä‘á»ƒ báº¯t �ầu khá»Ÿi táº¡o lá»›p há»c pháº§n thực tập.</p>
     </div>
 
     <!-- Grouped Class Sections -->
@@ -76,7 +76,7 @@
               <div class="flex items-center gap-2">
                 <span class="material-symbols-outlined text-blue-600 text-[18px]">groups</span>
                 <span class="text-xs font-bold text-slate-800">
-                  {{ c.soSinhVien }} <span class="font-normal text-slate-500">Sinh viÃªn</span>
+                  {{ c.soSinhVien }} <span class="font-normal text-slate-500">Sinh viên</span>
                 </span>
               </div>
               <div class="flex items-center gap-1 text-xs font-bold text-blue-600 group-hover:translate-x-1 transition-transform">
@@ -94,7 +94,7 @@
       {{ toast }}
     </div>
 
-    <!-- Modal Táº¡o Lá»›p Má»›i -->
+    <!-- Modal Táº¡o L�:p Má»›i -->
     <div
       v-if="showCreate"
       class="fixed inset-0 z-[80] flex items-center justify-center bg-black/40 backdrop-blur-xs px-4"
@@ -105,7 +105,7 @@
         <div class="px-6 py-4 border-b border-slate-200 flex justify-between items-center bg-slate-50">
           <div>
             <h3 class="font-bold text-lg text-blue-900">Táº¡o lá»›p má»›i</h3>
-            <p class="text-xs text-slate-500">Cáº¥u hÃ¬nh thÃ´ng tin cÆ¡ báº£n cho lá»›p hÆ°á»›ng dáº«n</p>
+            <p class="text-xs text-slate-500">Cáº¥u hÃ¬nh thÃ´ng tin cÆ¡ báº£n cho lá»›p hư�:ng dẫn</p>
           </div>
           <button class="material-symbols-outlined text-slate-400 hover:text-slate-700 transition-colors" @click="showCreate = false">
             close
@@ -149,7 +149,7 @@
 
           <div class="bg-blue-50/70 border border-blue-100 rounded-xl p-4">
             <p class="text-[11px] font-bold text-blue-800 uppercase tracking-wider mb-1 flex items-center gap-1">
-              <span class="material-symbols-outlined text-[16px]">visibility</span> Preview tÃªn lá»›p
+              <span class="material-symbols-outlined text-[16px]">visibility</span> Preview tên lá»›p
             </p>
             <p class="font-extrabold text-base text-blue-900 font-mono">
               {{ previewName || 'VD: MIS2012_2026_1' }}
@@ -261,7 +261,7 @@
         goStudents(res.data.maLop);
       }
     } catch (e) {
-      formError.value = e.response?.data?.message || 'Táº¡o lá»›p tháº¥t báº¡i';
+      formError.value = e.response?.data?.message || 'Táº¡o lá»›p thất bại';
     }
   }
 
