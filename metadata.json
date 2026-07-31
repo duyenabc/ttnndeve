@@ -1,8 +1,0 @@
-{
-  "name": "Hệ thống Quản lý Thực tập",
-  "description": "Hệ thống Quản lý Thực tập (IMS) cho Giảng viên và Sinh viên",
-  "requestFramePermissions": [],
-  "majorCapabilities": [
-    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
-  ]
-}

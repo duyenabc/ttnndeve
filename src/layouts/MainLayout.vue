@@ -421,7 +421,7 @@
     await toggleNotificationReadInDb(item.id, !newReadState);
   }
 
-  // Real-time Firebase Notification Listener
+  // Poll notifications from .NET API
   function initRealtimeNotifications() {
     if (unsubscribeNotifications) {
       unsubscribeNotifications();

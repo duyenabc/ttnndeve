@@ -1,20 +1,63 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+# IMS — Hệ thống Quản lý Thực tập
 
-# Run and deploy your AI Studio app
+Stack: **Vue 3** (frontend) + **ASP.NET Core** (API) + **PostgreSQL** (database).
 
-This contains everything you need to run your app locally.
+## Cấu trúc
 
-View your app in AI Studio: https://ai.studio/apps/2ed013dd-8587-4876-857f-f62063bfbb41
+```
+├── src/                  # Vue 3 + Vite + Pinia + Tailwind
+├── Backend/IMSBackend/   # ASP.NET Core Web API + EF Core (Npgsql)
+└── .env.example          # VITE_API_BASE_URL
+```
 
-## Run Locally
+## Yêu cầu
 
-**Prerequisites:**  Node.js
+- Node.js 22+
+- .NET 10 SDK
+- PostgreSQL 14+ (tạo database `ims_db`)
 
+## Cấu hình PostgreSQL
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+Trong `Backend/IMSBackend/appsettings.json`:
+
+```json
+"ConnectionStrings": {
+  "DefaultConnection": "Host=localhost;Port=5432;Database=ims_db;Username=postgres;Password=postgres"
+}
+```
+
+## Chạy local
+
+### 1. API (.NET)
+
+```bash
+cd Backend/IMSBackend
+dotnet restore
+dotnet run
+```
+
+API mặc định: `http://localhost:5071`
+
+### 2. Client (Vue)
+
+```bash
+npm install
+cp .env.example .env   # Windows: copy .env.example .env
+npm run dev
+```
+
+Client mặc định: `http://localhost:3000`
+
+## Tài khoản seed (dev)
+
+| Vai trò     | Mã định danh | Mật khẩu   |
+|-------------|--------------|------------|
+| Admin       | admin        | Admin@123  |
+| Giảng viên  | GV001        | Gv@12345   |
+| Sinh viên   | SV001        | Sv@12345   |
+
+## Ghi chú kiến trúc
+
+- Frontend gọi REST API qua Axios (`VITE_API_BASE_URL`).
+- Thông báo dùng API `/api/notifications` (poll), không dùng Firebase.
+- JWT Bearer cho các endpoint `[Authorize]`.
