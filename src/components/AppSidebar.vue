@@ -187,34 +187,14 @@
           path: '/student/progress'
         },
         {
-          id: 'student-classes',
-          label: 'Lớp thực tập của tôi',
-          icon: 'school',
-          path: '/student/classes'
-        },
-        {
           id: 'student-tasks',
-          label: 'Nhiệm vụ & Bài nộp',
+          label: 'Nhiệm vụ',
           icon: 'task',
-          path: '/student/tasks',
-          badge: '3 Mới',
-          badgeClass: 'bg-rose-100 text-rose-800'
-        },
-        {
-          id: 'calendar',
-          label: 'Lịch cá nhân',
-          icon: 'calendar_month',
-          path: '/student/calendar'
-        },
-        {
-          id: 'diaries',
-          label: 'Nhật ký thực tập',
-          icon: 'menu_book',
-          path: '/diaries'
+          path: '/student/tasks'
         },
         {
           id: 'scores',
-          label: 'Bảng điểm & Đánh giá',
+          label: 'Điểm số',
           icon: 'grade',
           path: '/scores'
         },

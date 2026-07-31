@@ -1,27 +1,21 @@
 <template>
-  <div class="ims-scope max-w-6xl mx-auto font-sans space-y-6 pb-20">
+  <div class="ims-scope max-w-6xl mx-auto font-sans space-y-5 pb-24">
     <!-- Header & Breadcrumb -->
-    <div class="space-y-3">
-      <nav class="flex items-center text-xs text-slate-500 gap-1.5">
-        <router-link to="/student/classes" class="hover:text-[#005EA3] transition font-medium">Lớp của tôi</router-link>
+    <div class="space-y-2">
+      <nav class="flex items-center text-[13px] text-slate-500 gap-1.5">
+        <router-link to="/student/classes" class="hover:text-[#005EA3] transition">Lớp của tôi</router-link>
         <span class="material-symbols-outlined text-[14px]">chevron_right</span>
-        <span class="hover:text-[#005EA3] transition font-medium">Lớp Thực tập K64</span>
+        <span>Lớp Thực tập K64</span>
         <span class="material-symbols-outlined text-[14px]">chevron_right</span>
-        <span class="text-slate-900 font-bold">Thông tin thực tập</span>
+        <span class="text-slate-700">{{ breadcrumbTail }}</span>
       </nav>
 
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-2xs">
-        <div>
-          <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
-            <span class="material-symbols-outlined text-[#005EA3] text-[28px]">trending_up</span>
-            Tiến trình của tôi
-          </h1>
-          <p class="text-xs text-slate-500 mt-1">Theo dõi thông tin doanh nghiệp tiếp nhận, đề tài đăng ký và lộ trình nhật ký thực tập.</p>
-        </div>
-
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <h1 class="text-[28px] font-bold text-slate-900 tracking-tight">Tiến trình của tôi</h1>
         <button
+          v-if="activeTab === 'info'"
           @click="showEditModal = true"
-          class="px-4 py-2.5 bg-blue-50 hover:bg-blue-100 text-[#005EA3] rounded-xl font-bold text-xs transition flex items-center gap-1.5 w-fit border border-blue-200"
+          class="px-4 py-2 bg-blue-50 hover:bg-blue-100 text-[#005EA3] rounded-lg font-bold text-xs transition flex items-center gap-1.5 w-fit border border-blue-200"
         >
           <span class="material-symbols-outlined text-[18px]">edit</span>
           Cập nhật thông tin
@@ -29,42 +23,28 @@
       </div>
     </div>
 
-    <!-- Progress Steps / Tabs Navigation -->
-    <div class="flex border-b border-slate-200 text-xs font-bold bg-white rounded-t-2xl px-4 pt-2">
+    <!-- Tabs — theo mockup: Thông tin | Đề tài | Nhật ký -->
+    <div class="flex items-center gap-8 border-b border-slate-200">
       <button
         @click="activeTab = 'info'"
-        class="px-6 py-3 border-b-2 transition flex items-center gap-2"
-        :class="activeTab === 'info' ? 'border-[#005EA3] text-[#005EA3]' : 'border-transparent text-slate-500 hover:text-slate-900'"
+        class="pb-3 text-[15px] transition"
+        :class="activeTab === 'info' ? 'text-[#005EA3] border-b-[3px] border-[#005EA3] font-bold' : 'text-slate-500 hover:text-[#005EA3] font-semibold'"
       >
-        <span class="material-symbols-outlined text-[18px]">domain</span>
         Thông tin thực tập
       </button>
-
       <button
         @click="activeTab = 'topic'"
-        class="px-6 py-3 border-b-2 transition flex items-center gap-2"
-        :class="activeTab === 'topic' ? 'border-[#005EA3] text-[#005EA3]' : 'border-transparent text-slate-500 hover:text-slate-900'"
+        class="pb-3 text-[15px] transition"
+        :class="activeTab === 'topic' ? 'text-[#005EA3] border-b-[3px] border-[#005EA3] font-bold' : 'text-slate-500 hover:text-[#005EA3] font-semibold'"
       >
-        <span class="material-symbols-outlined text-[18px]">assignment</span>
-        Đề tài thực tập
+        Đề tài
       </button>
-
       <button
         @click="activeTab = 'diaries'"
-        class="px-6 py-3 border-b-2 transition flex items-center gap-2"
-        :class="activeTab === 'diaries' ? 'border-[#005EA3] text-[#005EA3]' : 'border-transparent text-slate-500 hover:text-slate-900'"
+        class="pb-3 text-[15px] transition"
+        :class="activeTab === 'diaries' ? 'text-[#005EA3] border-b-[3px] border-[#005EA3] font-bold' : 'text-slate-500 hover:text-[#005EA3] font-semibold'"
       >
-        <span class="material-symbols-outlined text-[18px]">menu_book</span>
         Nhật ký
-      </button>
-
-      <button
-        @click="activeTab = 'schedule'"
-        class="px-6 py-3 border-b-2 transition flex items-center gap-2"
-        :class="activeTab === 'schedule' ? 'border-[#005EA3] text-[#005EA3]' : 'border-transparent text-slate-500 hover:text-slate-900'"
-      >
-        <span class="material-symbols-outlined text-[18px]">calendar_month</span>
-        Lịch trình & Mốc quan trọng
       </button>
     </div>
 
@@ -689,11 +669,11 @@
 
     <!-- TAB 3: NHẬT KÝ -->
     <div v-else-if="activeTab === 'diaries'">
-      <StudentDiaryTab classId="101" />
+      <StudentDiaryTab classId="101" @writing-change="onDiaryWritingChange" />
     </div>
 
-    <!-- TAB 4: LỊCH TRÌNH & MỐC THỜI GIAN -->
-    <div v-else class="space-y-6">
+    <!-- Legacy schedule tab (hidden from nav; kept for data) -->
+    <div v-else-if="activeTab === 'schedule'" class="space-y-6">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <!-- Card 1: Hạn nộp Đề tài -->
         <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs space-y-3">
@@ -984,9 +964,21 @@
     return localStorage.getItem(`ims_student_group_${studentId}`) || 'Chưa có nhóm';
   });
 
-  const activeTab = ref('topic'); // Default to topic tab or info tab
-  const topicStatus = ref('new'); // Initialized to 'new' to avoid flashing 'approved' state while loading
+  const activeTab = ref('diaries');
+  const isDiaryWriting = ref(false);
+  const topicStatus = ref('new');
   const showEditModal = ref(false);
+
+  const breadcrumbTail = computed(() => {
+    if (activeTab.value === 'diaries' && isDiaryWriting.value) return 'Viết nhật ký mới';
+    if (activeTab.value === 'diaries') return 'Thông tin thực tập';
+    if (activeTab.value === 'topic') return 'Đề tài';
+    return 'Thông tin thực tập';
+  });
+
+  function onDiaryWritingChange(writing) {
+    isDiaryWriting.value = writing;
+  }
   const showRequestEditModal = ref(false);
   const requestEditReason = ref('');
   const toastMsg = ref('');
