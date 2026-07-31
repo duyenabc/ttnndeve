@@ -17,10 +17,12 @@ namespace IMSBackend.Controllers
     public class AuthController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly IConfiguration _config;
 
-        public AuthController(AppDbContext context)
+        public AuthController(AppDbContext context, IConfiguration config)
         {
             _context = context;
+            _config = config;
         }
 
         [HttpPost("login")]
@@ -48,7 +50,13 @@ namespace IMSBackend.Controllers
                 return Unauthorized(new { message = "Mã định danh hoặc mật khẩu không đúng" });
 
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes("SuperSecretKey_For_Development_IMS_12345");
+            var jwtKey = _config["Jwt:Key"]
+                ?? Environment.GetEnvironmentVariable("Jwt__Key")
+                ?? "SuperSecretKey_For_Development_IMS_12345";
+            var keyBytes = Encoding.UTF8.GetBytes(jwtKey);
+            if (keyBytes.Length < 32)
+                keyBytes = Encoding.UTF8.GetBytes(jwtKey.PadRight(32, '0'));
+
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[] 
@@ -57,7 +65,7 @@ namespace IMSBackend.Controllers
                     new Claim(ClaimTypes.Role, user.VaiTro)
                 }),
                 Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(keyBytes), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var accessToken = tokenHandler.WriteToken(token);
