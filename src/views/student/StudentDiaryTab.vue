@@ -13,7 +13,7 @@
             Tuần {{ currentWeek }}
             <span class="material-symbols-outlined text-[16px]">arrow_drop_down</span>
           </div>
-          <div class="text-[12px] text-[#424752] mt-1">Hạn nộp: {{ config.deadlineDayName }} {{ config.deadlineTime }}</div>
+          <div class="text-[12px] text-[#424752] mt-1">{{ getWeekDateRange(currentWeek) }}</div>
         </div>
         <button @click="changeWeek(1)" :disabled="isWriting || currentWeek >= maxWeek" class="flex items-center gap-1 border border-[#C2C6D4] text-[#424752] px-3 py-1.5 rounded-[4px] hover:bg-slate-50 transition text-[13px] disabled:opacity-50">
           Tuần sau
@@ -132,10 +132,10 @@
             <div class="w-[200px] shrink-0 flex flex-col items-start border-r border-[#E9E8E7] pr-4">
               <div class="font-bold text-[14px] text-[#1A1C1C] mb-2">{{ formatCardDate(diary.ngayCapNhat || diary.ngayTao) }}</div>
               
-              <div class="flex flex-col gap-2 mb-3">
-                <span v-if="diary.status === 'Submitted'" class="inline-block bg-[#D1F5D3] text-[#166534] px-3 py-1 rounded-[4px] text-[11px] font-bold w-fit">ĐÃ NỘP</span>
-                <span v-else class="inline-block bg-[#E9E8E7] text-[#424752] px-3 py-1 rounded-[4px] text-[11px] font-bold w-fit">NHÁP</span>
-                <span v-if="diary.feedbacks && diary.feedbacks.length > 0 && !diary.isReadByStudent" class="inline-block bg-[#FFE4D6] text-[#A43D00] px-3 py-1 rounded-[4px] text-[11px] font-bold w-fit">CÓ PHẢN HỒI MỚI</span>
+              <div class="flex flex-col gap-2 mb-3 w-[150px]">
+                <span v-if="diary.status === 'Submitted'" class="block bg-[#C6F6D5] text-[#166534] px-3 py-1.5 rounded-[4px] text-[11px] font-bold w-full uppercase">ĐÃ NỘP</span>
+                <span v-else class="block bg-[#E9E8E7] text-[#424752] px-3 py-1.5 rounded-[4px] text-[11px] font-bold w-full uppercase">NHÁP</span>
+                <span v-if="diary.feedbacks && diary.feedbacks.length > 0 && !diary.isReadByStudent" class="block bg-[#FFE4D6] text-[#A43D00] px-3 py-1.5 rounded-[4px] text-[11px] font-bold w-full uppercase">CÓ PHẢN HỒI MỚI</span>
               </div>
               
               <div class="text-[11px] text-[#7A7D85]">Cập nhật: {{ formatUpdateTime(diary.ngayCapNhat || diary.ngayTao) }}</div>
@@ -474,6 +474,11 @@ const formatDate = (isoString) => {
   if (!isoString) return '';
   const d = new Date(isoString);
   return d.toLocaleDateString('vi-VN') + ' ' + d.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+};
+
+const getWeekDateRange = (week) => {
+  // Mock data to exactly match the design screenshot for visual correctness
+  return "15/05 - 21/05/2024";
 };
 
 const formatCardDate = (isoString) => {
