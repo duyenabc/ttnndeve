@@ -184,6 +184,26 @@ const INITIAL_USERS = [
   }
 ];
 
+const defaultDiaryConfig = {
+  isEnabled: true,
+  minPerWeek: 2,
+  deadlineDay: 0, // 0 = Sunday
+  deadlineTime: '23:59',
+  fields: [
+    { id: 'taskDescription', label: 'Mô tả nhiệm vụ đã thực hiện', isEnabled: true, isRequired: true },
+    { id: 'newKnowledge', label: 'Kiến thức/kỹ năng mới', isEnabled: true, isRequired: false },
+    { id: 'completionLevel', label: 'Mức độ hoàn thành (thang 1-10)', isEnabled: true, isRequired: true },
+    { id: 'issues', label: 'Khó khăn/vướng mắc', isEnabled: true, isRequired: false },
+    { id: 'solutions', label: 'Cách xử lý/hướng giải quyết', isEnabled: true, isRequired: false },
+    { id: 'feedback', label: 'Phản hồi từ người hướng dẫn (nếu có)', isEnabled: true, isRequired: false },
+    { id: 'supportNeeded', label: 'Cần GVHD hỗ trợ gì không', isEnabled: true, isRequired: false },
+    { id: 'feeling', label: 'Cảm nhận chung (thang 1-5)', isEnabled: true, isRequired: true },
+    { id: 'nextPlan', label: 'Kế hoạch làm việc tiếp theo', isEnabled: true, isRequired: true },
+    { id: 'proofFile', label: 'Minh chứng công việc', isEnabled: true, isRequired: false },
+    { id: 'proofDescription', label: 'Mô tả minh chứng', isEnabled: true, isRequired: false }
+  ]
+};
+
 const INITIAL_CLASSES = [
   {
     maLop: 101,
@@ -196,7 +216,8 @@ const INITIAL_CLASSES = [
     hanGhiDanh: '2026-03-15T23:59',
     maThamGia: 'ABC123X',
     soSinhVien: 3,
-    trangThaiDangKyDeTai: 'DangMo'
+    trangThaiDangKyDeTai: 'DangMo',
+    diaryConfig: defaultDiaryConfig
   },
   {
     maLop: 102,
@@ -209,7 +230,8 @@ const INITIAL_CLASSES = [
     hanGhiDanh: '2026-03-15T23:59',
     maThamGia: 'XYZ789A',
     soSinhVien: 3,
-    trangThaiDangKyDeTai: 'DangMo'
+    trangThaiDangKyDeTai: 'DangMo',
+    diaryConfig: defaultDiaryConfig
   }
 ];
 

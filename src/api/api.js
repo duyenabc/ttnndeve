@@ -150,10 +150,14 @@ const api = {
       }
     }
 
-    if (url === '/diary/my-diaries') {
+    if (url === '/diaries') {
       try {
         const snap = await getDocs(collection(db, 'diaries'));
-        return { data: snap.docs.map(d => ({ id: d.id, ...d.data() })) };
+        let list = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        if (params.userId) list = list.filter(d => String(d.userId) === String(params.userId));
+        if (params.classId) list = list.filter(d => String(d.classId) === String(params.classId));
+        if (params.week) list = list.filter(d => String(d.week) === String(params.week));
+        return { data: list };
       } catch (e) {
         return { data: [] };
       }
@@ -169,13 +173,21 @@ const api = {
     }
 
     if (url.startsWith('/giangvien/classes/')) {
-      const maLop = url.split('/')[3];
+      const parts = url.split('/');
+      const maLop = parts[3];
+      const isDiaryConfig = parts[4] === 'diary-config';
+
       try {
         const docSnap = await getDoc(doc(db, 'classes', String(maLop)));
         if (docSnap.exists()) {
-          return { data: { id: docSnap.id, ...docSnap.data() } };
+          const classData = { id: docSnap.id, ...docSnap.data() };
+          if (isDiaryConfig) {
+            return { data: classData.diaryConfig || null };
+          }
+          return { data: classData };
         }
       } catch (e) {}
+      if (isDiaryConfig) return { data: null };
       return { data: { maLop, tenLop: `Lớp ${maLop}`, soSinhVien: 0 } };
     }
 
@@ -435,6 +447,17 @@ const api = {
       return { data: { answer } };
     }
 
+    if (url === '/diaries') {
+      const id = Date.now();
+      const newDiary = {
+        id: String(id),
+        ...data,
+        ngayTao: new Date().toISOString()
+      };
+      await setDoc(doc(db, 'diaries', String(id)), newDiary);
+      return { data: { message: 'Đã lưu nhật ký', diary: newDiary } };
+    }
+
     return { data: { message: 'Thao tác thành công' } };
   },
 
@@ -460,6 +483,40 @@ const api = {
         });
       } catch (e) {}
       return { data: { message: 'Cập nhật quyền thành công' } };
+    }
+
+    if (url.startsWith('/diaries/') && url.endsWith('/feedback')) {
+      const id = url.split('/')[2];
+      try {
+        const docSnap = await getDoc(doc(db, 'diaries', String(id)));
+        if (docSnap.exists()) {
+          const currentData = docSnap.data();
+          const feedbacks = currentData.feedbacks || [];
+          feedbacks.push({
+            teacherName: data.teacherName,
+            content: data.content,
+            timestamp: new Date().toISOString()
+          });
+          await updateDoc(doc(db, 'diaries', String(id)), { feedbacks, isReadByTeacher: true });
+        }
+      } catch (e) {}
+      return { data: { message: 'Đã gửi phản hồi' } };
+    }
+
+    if (url.startsWith('/diaries/') && url.endsWith('/read')) {
+      const id = url.split('/')[2];
+      try {
+        await updateDoc(doc(db, 'diaries', String(id)), { isReadByTeacher: true });
+      } catch (e) {}
+      return { data: { message: 'Đã đánh dấu đọc' } };
+    }
+
+    if (url.startsWith('/giangvien/classes/') && url.endsWith('/diary-config')) {
+      const maLop = url.split('/')[3];
+      try {
+        await updateDoc(doc(db, 'classes', String(maLop)), { diaryConfig: data });
+      } catch (e) {}
+      return { data: { message: 'Lưu cấu hình nhật ký thành công' } };
     }
 
     return { data: { message: 'Cập nhật thành công' } };

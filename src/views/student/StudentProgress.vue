@@ -688,116 +688,8 @@
     </div>
 
     <!-- TAB 3: NHẬT KÝ -->
-    <div v-else-if="activeTab === 'diaries'" class="space-y-4">
-      <!-- Header bar -->
-      <div class="border border-slate-200 rounded-[12px] bg-white p-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <!-- Week navigation -->
-        <div class="flex items-center gap-4">
-          <button @click="changeWeek(-1)" class="flex items-center gap-1 border border-slate-300 text-slate-500 px-3 py-1.5 rounded-[8px] hover:bg-slate-50 transition text-[13px]">
-            <span class="material-symbols-outlined text-[16px]">arrow_back</span>
-            Tuần trước
-          </button>
-          <div class="text-center">
-            <div class="font-bold text-slate-900 text-[16px] flex items-center justify-center gap-1 cursor-pointer">
-              Tuần {{ currentWeek }}
-              <span class="material-symbols-outlined text-[18px]">arrow_drop_down</span>
-            </div>
-            <div class="text-[12px] text-slate-500">{{ weekDateRange }}</div>
-          </div>
-          <button @click="changeWeek(1)" class="flex items-center gap-1 border border-slate-300 text-slate-700 px-3 py-1.5 rounded-[8px] hover:bg-slate-50 transition text-[13px]">
-            Tuần sau
-            <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
-          </button>
-        </div>
-        
-        <!-- Progress and write button -->
-        <div class="flex items-center gap-6">
-          <div class="w-[240px]">
-            <div class="flex justify-between items-center text-[12px] font-bold mb-1">
-              <span class="text-slate-500 font-normal text-[11px]">Tiến độ tuần này</span>
-              <span class="text-[#005EA3]">{{ weekSubmittedCount }}/{{ weekRequiredCount }} nhật ký đã nộp</span>
-            </div>
-            <div class="w-full bg-slate-200 rounded-full h-[6px] flex overflow-hidden">
-              <div class="bg-[#005EA3] h-full transition-all duration-500" :style="{ width: weekProgressPercent + '%' }"></div>
-            </div>
-          </div>
-          <router-link to="/student/diaries" class="bg-[#005EA3] hover:bg-blue-800 text-white font-bold px-4 py-2 rounded-[8px] transition text-[13px] flex items-center gap-1">
-            <span class="material-symbols-outlined text-[16px]">add</span>
-            Viết nhật ký
-          </router-link>
-        </div>
-      </div>
-
-      <!-- Diary List -->
-      <div class="space-y-4">
-        <template v-if="currentWeekDiaries.length > 0">
-          <div v-for="diary in currentWeekDiaries" :key="diary.id" class="border border-slate-200 bg-white rounded-[12px] p-5 flex flex-col md:flex-row gap-6 hover:shadow-md transition">
-            <div class="w-[200px] shrink-0 border-r border-slate-100 pr-4">
-              <div class="font-bold text-[14px] text-slate-900 mb-2">{{ formatShortDate(diary.createdAt) }} — Thứ {{ getDayOfWeek(diary.createdAt) }}</div>
-              <div class="flex flex-wrap gap-2 mb-2">
-                <span v-if="diary.status === 'Submitted' || diary.status === 'Graded'" class="inline-block bg-[#E6F4EA] text-[#137333] px-2 py-0.5 rounded text-[10px] font-bold">ĐÃ NỘP</span>
-                <span v-else class="inline-block bg-slate-200 text-slate-600 px-2 py-0.5 rounded text-[10px] font-bold">NHÁP</span>
-                <span v-if="diary.teacherFeedback" class="inline-block bg-[#FCE8E6] text-[#C5221F] px-2 py-0.5 rounded text-[10px] font-bold">CÓ PHẢN HỒI MỚI</span>
-              </div>
-              <div class="text-[11px] text-slate-400">Cập nhật: {{ formatDateTime(diary.createdAt || diary.updatedAt) }}</div>
-            </div>
-            <div class="flex-1 flex flex-col">
-              <p v-if="diary.content" class="text-[13px] text-slate-700 leading-relaxed mb-3 flex-1 line-clamp-3">
-                {{ diary.content.replace(/<[^>]+>/g, '') }}
-              </p>
-              <p v-else class="text-[13px] text-slate-400 leading-relaxed mb-3 italic flex-1">
-                Chưa có nội dung trích đoạn nhật ký cho ngày hôm nay. Hãy cập nhật tiến độ công việc của bạn...
-              </p>
-              
-              <div v-if="diary.teacherFeedback" class="mb-3">
-                <div class="text-[#D93025] font-bold text-[12px] flex items-start gap-1">
-                  <span class="material-symbols-outlined text-[16px] mt-0.5">chat_bubble_outline</span>
-                  "{{ diary.teacherFeedback }}"
-                </div>
-              </div>
-
-              <div class="flex items-center justify-between mt-auto">
-                <div class="text-[12px] text-slate-500">
-                  <span v-if="diary.grade">Điểm: <span class="font-bold text-slate-700">{{ diary.grade }}/10</span></span>
-                  <span v-else>Điểm: <span class="font-bold text-slate-700">--</span></span>
-                </div>
-                <router-link to="/student/diaries" class="text-[#005EA3] font-bold text-[13px] flex items-center gap-1 hover:underline">
-                  <template v-if="diary.status === 'Draft'">
-                    <span class="material-symbols-outlined text-[16px]">edit_note</span>
-                    Tiếp tục viết
-                  </template>
-                  <template v-else>
-                    Xem chi tiết
-                    <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
-                  </template>
-                </router-link>
-              </div>
-            </div>
-          </div>
-        </template>
-        <template v-else>
-          <div class="border border-slate-200 bg-white rounded-[12px] p-8 text-center text-slate-500">
-            <span class="material-symbols-outlined text-4xl mb-2 text-slate-300">menu_book</span>
-            <p class="text-sm">Chưa có nhật ký nào trong tuần này.</p>
-          </div>
-        </template>
-      </div>
-
-      <!-- Footer progress -->
-      <div class="mt-8 pt-6 border-t border-slate-200 flex items-center justify-between">
-        <div class="text-[13px] font-bold text-slate-800">
-          Tổng cả kỳ: <span class="text-[#005EA3]">{{ totalSubmittedCount }}/{{ totalRequiredCount }} nhật ký đã nộp</span>
-        </div>
-        <div class="w-[240px]">
-          <div class="flex justify-between items-center text-[12px] mb-1">
-            <span class="text-slate-500 font-normal text-[11px]">Tiến độ hoàn thành</span>
-            <span class="text-[#005EA3] font-bold">{{ totalProgressPercent }}%</span>
-          </div>
-          <div class="w-full bg-slate-200 rounded-full h-[4px] flex overflow-hidden">
-            <div class="bg-[#005EA3] h-full transition-all duration-500" :style="{ width: totalProgressPercent + '%' }"></div>
-          </div>
-        </div>
-      </div>
+    <div v-else-if="activeTab === 'diaries'">
+      <StudentDiaryTab classId="101" />
     </div>
 
     <!-- TAB 4: LỊCH TRÌNH & MỐC THỜI GIAN -->
@@ -1006,6 +898,7 @@
   import { sendRealtimeNotification } from '@/services/notificationService';
   import { listenStudentTopic, saveTopicProposalToDb } from '@/services/topicService';
   import { getStudentDiariesFromDb } from '@/services/diaryService';
+  import StudentDiaryTab from './StudentDiaryTab.vue';
 
   const authStore = useAuthStore();
   const currentStudentName = computed(() => authStore.user?.hoTen || 'Sinh viên');
