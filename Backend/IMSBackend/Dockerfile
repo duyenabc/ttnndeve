@@ -1,9 +1,10 @@
+# Build context = repository root (Render default when Dockerfile path is Backend/IMSBackend/Dockerfile)
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
-COPY IMSBackend.csproj .
-RUN dotnet restore
-COPY . .
-RUN dotnet publish -c Release -o /app/publish /p:UseAppHost=false
+COPY Backend/IMSBackend/IMSBackend.csproj Backend/IMSBackend/
+RUN dotnet restore Backend/IMSBackend/IMSBackend.csproj
+COPY Backend/IMSBackend/ Backend/IMSBackend/
+RUN dotnet publish Backend/IMSBackend/IMSBackend.csproj -c Release -o /app/publish /p:UseAppHost=false
 
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
 WORKDIR /app

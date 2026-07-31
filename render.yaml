@@ -13,7 +13,8 @@ services:
     name: ims-api
     runtime: docker
     dockerfilePath: ./Backend/IMSBackend/Dockerfile
-    dockerContext: ./Backend/IMSBackend
+    # Repo root — must match COPY paths in Dockerfile (Backend/IMSBackend/...)
+    dockerContext: .
     plan: free
     healthCheckPath: /
     envVars:
