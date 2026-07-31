@@ -278,6 +278,22 @@
         </div>
       </div>
     </div>
+
+    <!-- Confirm Cancel Modal -->
+    <div v-if="showConfirmCancel" class="fixed inset-0 z-[200] bg-slate-900/40 backdrop-blur-sm flex items-center justify-center animate-fade-in" @click.self="showConfirmCancel = false">
+      <div class="bg-white rounded-[12px] shadow-2xl p-[32px] w-[400px] flex flex-col text-left">
+        <h3 class="text-[20px] font-bold text-[#1A1C1C] mb-3">Hủy bỏ soạn thảo</h3>
+        <p class="text-[15px] text-[#1A1C1C] leading-relaxed mb-6">Mọi thông tin bạn đã nhập sẽ bị mất nếu không lưu nháp. Bạn có chắc chắn muốn hủy?</p>
+        <div class="flex flex-col gap-3 w-full">
+          <button @click="showConfirmCancel = false" class="w-full py-[10px] bg-[#D3D7DC] rounded-[4px] text-[15px] font-bold text-[#1A1C1C] hover:bg-[#C2C6D4] transition">
+            Tiếp tục viết
+          </button>
+          <button @click="confirmCancel" class="w-full py-[10px] bg-[#B91C1C] rounded-[4px] text-[15px] font-bold text-white hover:bg-[#991B1B] transition">
+            Hủy bỏ
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -308,6 +324,7 @@ const form = ref({});
 const isDrawerOpen = ref(false);
 const viewingDiary = ref({});
 const showConfirmSubmit = ref(false);
+const showConfirmCancel = ref(false);
 const showToast = ref(false);
 const toastMessage = ref('');
 
@@ -394,6 +411,11 @@ const startWriting = () => {
 };
 
 const cancelWriting = () => {
+  showConfirmCancel.value = true;
+};
+
+const confirmCancel = () => {
+  showConfirmCancel.value = false;
   isWriting.value = false;
   form.value = {};
 };
