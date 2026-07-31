@@ -2,16 +2,16 @@
   <div class="ims-scope max-w-6xl mx-auto font-sans space-y-5 pb-24">
     <!-- Header & Breadcrumb -->
     <div class="space-y-2">
-      <nav class="flex items-center text-[13px] text-slate-500 gap-1.5">
+      <nav class="flex items-center text-[13px] text-slate-500 gap-1.5 flex-wrap">
         <router-link to="/student/classes" class="hover:text-[#005EA3] transition">Lớp của tôi</router-link>
         <span class="material-symbols-outlined text-[14px]">chevron_right</span>
         <span>Lớp Thực tập K64</span>
         <span class="material-symbols-outlined text-[14px]">chevron_right</span>
-        <span class="text-slate-700">{{ breadcrumbTail }}</span>
+        <span class="text-[#005EA3] font-medium">{{ breadcrumbTail }}</span>
       </nav>
 
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <h1 class="text-[28px] font-bold text-slate-900 tracking-tight">Tiến trình của tôi</h1>
+        <h1 class="text-[28px] font-bold text-slate-900 tracking-tight leading-tight">Tiến trình của tôi</h1>
         <button
           v-if="activeTab === 'info'"
           @click="showEditModal = true"
@@ -26,23 +26,26 @@
     <!-- Tabs — theo mockup: Thông tin | Đề tài | Nhật ký -->
     <div class="flex items-center gap-8 border-b border-slate-200">
       <button
+        type="button"
         @click="activeTab = 'info'"
-        class="pb-3 text-[15px] transition"
-        :class="activeTab === 'info' ? 'text-[#005EA3] border-b-[3px] border-[#005EA3] font-bold' : 'text-slate-500 hover:text-[#005EA3] font-semibold'"
+        class="relative -mb-px pb-3 text-[15px] transition"
+        :class="activeTab === 'info' ? 'text-[#005EA3] border-b-[3px] border-[#005EA3] font-bold' : 'text-slate-500 hover:text-[#005EA3] font-semibold border-b-[3px] border-transparent'"
       >
         Thông tin thực tập
       </button>
       <button
+        type="button"
         @click="activeTab = 'topic'"
-        class="pb-3 text-[15px] transition"
-        :class="activeTab === 'topic' ? 'text-[#005EA3] border-b-[3px] border-[#005EA3] font-bold' : 'text-slate-500 hover:text-[#005EA3] font-semibold'"
+        class="relative -mb-px pb-3 text-[15px] transition"
+        :class="activeTab === 'topic' ? 'text-[#005EA3] border-b-[3px] border-[#005EA3] font-bold' : 'text-slate-500 hover:text-[#005EA3] font-semibold border-b-[3px] border-transparent'"
       >
         Đề tài
       </button>
       <button
+        type="button"
         @click="activeTab = 'diaries'"
-        class="pb-3 text-[15px] transition"
-        :class="activeTab === 'diaries' ? 'text-[#005EA3] border-b-[3px] border-[#005EA3] font-bold' : 'text-slate-500 hover:text-[#005EA3] font-semibold'"
+        class="relative -mb-px pb-3 text-[15px] transition"
+        :class="activeTab === 'diaries' ? 'text-[#005EA3] border-b-[3px] border-[#005EA3] font-bold' : 'text-slate-500 hover:text-[#005EA3] font-semibold border-b-[3px] border-transparent'"
       >
         Nhật ký
       </button>
@@ -971,7 +974,7 @@
 
   const breadcrumbTail = computed(() => {
     if (activeTab.value === 'diaries' && isDiaryWriting.value) return 'Viết nhật ký mới';
-    if (activeTab.value === 'diaries') return 'Thông tin thực tập';
+    if (activeTab.value === 'diaries') return 'Nhật ký';
     if (activeTab.value === 'topic') return 'Đề tài';
     return 'Thông tin thực tập';
   });
