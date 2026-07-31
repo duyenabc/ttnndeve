@@ -32,6 +32,7 @@ services:
       - key: Cors__Origins
         value: https://ttnndeve.onrender.com
 
+  # Frontend = Static Site (KHÔNG dùng Web Service Node + yarn start)
   - type: web
     name: ttnndeve
     runtime: static

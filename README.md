@@ -76,7 +76,18 @@ Repo có `render.yaml` (PostgreSQL + API Docker + Static Vue). Cần đủ **3**
 5. **ims-api** → Environment → `Cors__Origins` = `https://<ttnndeve-url>` (không `/` cuối) → restart/redeploy.
 6. API và DB phải cùng region (**Oregon**). `DATABASE_URL` = Internal URL của `ims-db` (Blueprint tự gắn).
 
-### Docker (nếu tạo Web Service tay)
+### Tránh lỗi `yarn start` / `Command "start" not found`
+
+Frontend **không** phải Web Service Node mặc định. Nếu tạo tay:
+
+| Service | Loại đúng | Build | Start / Publish |
+|---------|-----------|-------|-----------------|
+| Frontend `ttnndeve` | **Static Site** | `npm ci && npm run build` | Publish dir: `dist` (không cần Start) |
+| API `ims-api` | **Web Service → Docker** | (Dockerfile) | không dùng `yarn start` |
+
+Nếu lỡ tạo frontend kiểu Web Service (Node): Build = `npm ci && npm run build`, Start = `npm start` (đã có script phục vụ `dist`).
+
+### Docker (nếu tạo API Web Service tay)
 
 | Mục | Giá trị |
 |-----|---------|
