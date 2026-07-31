@@ -255,11 +255,9 @@
     </div>
     
     <!-- Toast Notification -->
-    <div v-if="showToast" class="fixed top-24 right-8 z-[200] flex items-center p-4 mb-4 text-gray-500 bg-white rounded-lg shadow-lg border border-gray-100" role="alert">
-      <div class="inline-flex items-center justify-center shrink-0 w-8 h-8 rounded-lg text-green-500 bg-green-100">
-        <span class="material-symbols-outlined text-[20px]">check_circle</span>
-      </div>
-      <div class="ml-3 text-sm font-normal text-gray-800">{{ toastMessage }}</div>
+    <div v-if="showToast" class="fixed top-24 right-8 z-[200] flex items-center px-6 py-4 bg-white border border-[#C2C6D4] shadow-sm animate-fade-in" role="alert">
+      <span class="material-symbols-outlined text-[28px] text-[#059669]">check_circle</span>
+      <div class="ml-3 text-[16px] font-semibold text-[#1A1C1C] tracking-wide">{{ toastMessage }}</div>
     </div>
     
     <!-- Confirm Submit Modal -->
@@ -454,7 +452,7 @@ const saveDiary = async (status) => {
       await api.post('/diaries', payload);
     }
     
-    displayToast(status === 'Submitted' ? 'Đã nộp nhật ký thành công' : 'Đã lưu nháp');
+    displayToast(status === 'Submitted' ? 'Đã nộp nhật ký thành công' : 'Đã lưu nháp nhật ký thành công');
     isWriting.value = false;
     await loadDiaries();
   } catch (e) {
