@@ -365,9 +365,9 @@ onMounted(async () => {
 
 const validateConfig = () => {
   if (diaryConfig.value.isEnabled) {
-    if (!diaryConfig.value.minPerWeek || diaryConfig.value.minPerWeek < 1) {
-      diaryConfig.value.minPerWeek = 1;
-      displayToast('Đã tự động điều chỉnh: Tối thiểu 1 nhật ký/tuần', 'error');
+    const min = Number(diaryConfig.value.minPerWeek);
+    if (!min || min < 1 || min > 7) {
+      displayToast('Tối thiểu 1 nhật ký/tuần', 'error');
       return false;
     }
     if (!diaryConfig.value.fields.some((f) => f.isEnabled)) {
@@ -382,10 +382,14 @@ const saveConfig = async () => {
   if (!validateConfig()) return;
   isSaving.value = true;
   try {
-    await api.put(`/giangvien/classes/${classId}/diary-config`, diaryConfig.value);
-    displayToast('Lưu cấu hình lớp thực tập thành công', 'success');
-  } catch {
-    displayToast('Lưu cấu hình lớp thực tập thất bại, vui lòng thử lại sau!', 'error');
+    const res = await api.put(`/giangvien/classes/${classId}/diary-config`, diaryConfig.value);
+    if (res.data?.config) diaryConfig.value = { ...res.data.config };
+    displayToast(res.data?.message || 'Lưu cấu hình lớp thực tập thành công', 'success');
+  } catch (err) {
+    displayToast(
+      err.response?.data?.message || 'Lưu cấu hình lớp thực tập thất bại, vui lòng thử lại sau!',
+      'error'
+    );
   } finally {
     isSaving.value = false;
   }
