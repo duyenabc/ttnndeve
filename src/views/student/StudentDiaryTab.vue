@@ -61,15 +61,23 @@
           </div>
         </div>
 
-        <button
-          type="button"
-          @click="startWriting"
-          :disabled="!canWrite"
-          class="bg-[#005EA3] hover:bg-[#003362] text-white px-4 py-2.5 rounded-md transition text-[14px] font-medium flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
-        >
-          <span>+</span>
-          Viết nhật ký
-        </button>
+        <div class="flex flex-col items-stretch sm:items-end gap-1.5 shrink-0">
+          <button
+            type="button"
+            @click="startWriting"
+            :disabled="!canWrite"
+            class="bg-[#005EA3] hover:bg-[#003362] text-white px-4 py-2.5 rounded-md transition text-[14px] font-medium flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <span>+</span>
+            Viết nhật ký
+          </button>
+          <p v-if="isCurrentWeekOverdue" class="text-[12px] text-rose-600 font-medium">
+            Tuần này đã quá hạn — không thể ghi nhật ký
+          </p>
+          <p v-else-if="!config.isEnabled" class="text-[12px] text-slate-500 font-medium">
+            Nhật ký đang bị tắt bởi giảng viên
+          </p>
+        </div>
       </div>
     </div>
 
@@ -146,11 +154,37 @@
                 :placeholder="placeholderFor(field.id, field.label)"
                 @input="clearFieldError(field.id)"
               ></textarea>
-              <input
-                v-else-if="field.id === 'proofFile'"
-                type="file"
-                class="w-full text-[13px]"
-              />
+              <div v-else-if="field.id === 'proofFile'" class="space-y-2">
+                <label
+                  class="flex flex-col sm:flex-row sm:items-center gap-3 w-full rounded-lg border border-dashed border-slate-300 bg-slate-50 px-4 py-4 cursor-pointer hover:border-[#005EA3] hover:bg-blue-50/40 transition"
+                >
+                  <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white border border-slate-200 text-[#005EA3] shrink-0">
+                    <span class="material-symbols-outlined text-[22px]">upload_file</span>
+                  </span>
+                  <span class="min-w-0 flex-1">
+                    <span class="block text-[13px] font-semibold text-slate-800">
+                      {{ form.proofFileName || 'Chọn file minh chứng' }}
+                    </span>
+                    <span class="block text-[12px] text-slate-500 mt-0.5">
+                      PDF, ảnh, Word… · tối đa 100MB
+                    </span>
+                  </span>
+                  <input
+                    type="file"
+                    class="sr-only"
+                    accept=".pdf,.png,.jpg,.jpeg,.doc,.docx,.xls,.xlsx,.zip"
+                    @change="onProofFileChange"
+                  />
+                </label>
+                <button
+                  v-if="form.proofFileName"
+                  type="button"
+                  class="text-[12px] text-rose-600 font-medium hover:underline"
+                  @click="clearProofFile"
+                >
+                  Xóa file đã chọn
+                </button>
+              </div>
               <input
                 v-else
                 v-model="form[field.id]"
@@ -376,7 +410,38 @@
           >
             <template v-if="!['completionLevel', 'feeling'].includes(field.id)">
               <h4 class="font-bold text-[12px] text-slate-500">{{ field.label }}</h4>
-              <p class="text-[14px] text-slate-800 whitespace-pre-wrap">
+
+              <div v-if="field.id === 'proofFile'" class="text-[14px] text-slate-800">
+                <template v-if="viewingEvidence.fileName">
+                  <a
+                    v-if="viewingEvidence.dataUrl"
+                    :href="viewingEvidence.dataUrl"
+                    :download="viewingEvidence.fileName"
+                    class="inline-flex items-center gap-2 text-[#005EA3] font-semibold hover:underline break-all"
+                  >
+                    <span class="material-symbols-outlined text-[18px] shrink-0">attach_file</span>
+                    {{ viewingEvidence.fileName }}
+                  </a>
+                  <span v-else class="inline-flex items-center gap-2 font-medium break-all">
+                    <span class="material-symbols-outlined text-[18px] text-slate-500 shrink-0">attach_file</span>
+                    {{ viewingEvidence.fileName }}
+                    <span
+                      v-if="viewingEvidence.size"
+                      class="text-[12px] text-slate-400 font-normal shrink-0"
+                    >
+                      ({{ formatFileSize(viewingEvidence.size) }})
+                    </span>
+                  </span>
+                </template>
+                <span v-else class="text-slate-400">---</span>
+              </div>
+              <p
+                v-else-if="field.id === 'proofDescription'"
+                class="text-[14px] text-slate-800 whitespace-pre-wrap"
+              >
+                {{ viewingEvidence.description || '---' }}
+              </p>
+              <p v-else class="text-[14px] text-slate-800 whitespace-pre-wrap">
                 {{ viewingDiary[field.id] || '---' }}
               </p>
             </template>
@@ -502,12 +567,19 @@ const textAreaFields = [
 ];
 
 const isLoading = ref(true);
-const currentWeek = ref(5);
+const currentWeek = ref(2);
 const maxWeek = ref(15);
+/**
+ * Monday of internship week 1.
+ * Default: today falls in week 2 (week 1 = previous Mon–Sun).
+ * Override via diary-config.internshipStart when available.
+ */
+const internshipStart = ref(addDays(alignToMonday(new Date()), -7));
 const diaries = ref([]);
 const config = ref({
   isEnabled: true,
-  minPerWeek: 3,
+  minPerWeek: 2,
+  deadlineDay: 0,
   deadlineDayName: 'Chủ nhật',
   deadlineTime: '23:59',
   fields: [],
@@ -521,7 +593,11 @@ const defaultFields = [
   { id: 'issues', label: 'Khó khăn/vướng mắc', isEnabled: true, isRequired: false },
   { id: 'solutions', label: 'Cách xử lý/hướng giải quyết', isEnabled: true, isRequired: false },
   { id: 'nextPlan', label: 'Kế hoạch làm việc tiếp theo', isEnabled: true, isRequired: true },
+  { id: 'proofFile', label: 'Minh chứng công việc (file, tối đa 100MB)', isEnabled: true, isRequired: false },
+  { id: 'proofDescription', label: 'Mô tả minh chứng', isEnabled: true, isRequired: false },
 ];
+
+const MAX_PROOF_BYTES = 100 * 1024 * 1024;
 
 const isWriting = ref(false);
 const form = ref({});
@@ -538,6 +614,8 @@ watch(isWriting, (v) => emit('writing-change', v));
 onMounted(async () => {
   await loadConfig();
   await loadDiaries();
+  // Keep progress on the internship "current" week (default calendar → tuần 2)
+  currentWeek.value = weekNumberForDate(new Date());
   isLoading.value = false;
 });
 
@@ -547,11 +625,15 @@ const loadConfig = async () => {
     if (res.data) {
       config.value = {
         isEnabled: res.data.isEnabled !== false,
-        minPerWeek: res.data.minPerWeek || 3,
+        minPerWeek: res.data.minPerWeek || 2,
+        deadlineDay: res.data.deadlineDay ?? 0,
         deadlineDayName: getDayName(res.data.deadlineDay),
         deadlineTime: res.data.deadlineTime || '23:59',
         fields: res.data.fields?.length ? res.data.fields : defaultFields,
       };
+      if (res.data.internshipStart) {
+        internshipStart.value = alignToMonday(new Date(res.data.internshipStart));
+      }
     } else {
       config.value.fields = defaultFields;
     }
@@ -562,8 +644,9 @@ const loadConfig = async () => {
 
 const loadDiaries = async () => {
   try {
+    const uid = authStore.user?.maNguoiDung || authStore.user?.id;
     const res = await api.get('/diaries', {
-      params: { classId: props.classId, userId: authStore.user?.id },
+      params: { classId: props.classId, userId: uid },
     });
     diaries.value = res.data || [];
   } catch (e) {
@@ -596,12 +679,77 @@ const weekProgressPercent = computed(() => {
 const totalSubmitted = computed(() => diaries.value.filter((d) => d.status === 'Submitted').length);
 const totalRequired = computed(() => config.value.minPerWeek * maxWeek.value);
 
-const canWrite = computed(() => config.value.isEnabled);
+const isCurrentWeekOverdue = computed(() => isWeekOverdue(currentWeek.value));
+const canWrite = computed(() => config.value.isEnabled && !isCurrentWeekOverdue.value);
 
 const todayLabel = computed(() => {
   const d = new Date();
   return d.toLocaleDateString('vi-VN', { day: 'numeric', month: 'numeric', year: 'numeric' });
 });
+
+function startOfDay(date) {
+  const d = new Date(date);
+  d.setHours(0, 0, 0, 0);
+  return d;
+}
+
+function addDays(date, days) {
+  const d = new Date(date);
+  d.setDate(d.getDate() + days);
+  return d;
+}
+
+function alignToMonday(date) {
+  const d = startOfDay(date);
+  const day = d.getDay();
+  const diff = day === 0 ? -6 : 1 - day;
+  return addDays(d, diff);
+}
+
+function pad2(n) {
+  return String(n).padStart(2, '0');
+}
+
+function formatDM(date) {
+  return `${pad2(date.getDate())}/${pad2(date.getMonth() + 1)}`;
+}
+
+function formatDMY(date) {
+  return `${formatDM(date)}/${date.getFullYear()}`;
+}
+
+function getWeekBounds(week) {
+  const start = addDays(internshipStart.value, (Number(week) - 1) * 7);
+  const end = addDays(start, 6);
+  return { start, end };
+}
+
+function getWeekDeadline(week) {
+  const { start } = getWeekBounds(week);
+  const targetDow = Number(config.value.deadlineDay ?? 0);
+  let deadlineDate = addDays(start, 6);
+  for (let i = 0; i < 7; i++) {
+    const d = addDays(start, i);
+    if (d.getDay() === targetDow) {
+      deadlineDate = d;
+      break;
+    }
+  }
+  const [hh, mm] = String(config.value.deadlineTime || '23:59').split(':');
+  deadlineDate.setHours(Number(hh) || 23, Number(mm) || 59, 59, 999);
+  return deadlineDate;
+}
+
+function isWeekOverdue(week) {
+  return Date.now() > getWeekDeadline(week).getTime();
+}
+
+function weekNumberForDate(date) {
+  const start = internshipStart.value;
+  const diffDays = Math.floor((startOfDay(date) - start) / 86400000);
+  const week = Math.floor(diffDays / 7) + 1;
+  return Math.max(1, Math.min(maxWeek.value, week));
+}
 
 function placeholderFor(id, label) {
   const map = {
@@ -641,10 +789,57 @@ const changeWeek = (delta) => {
 };
 
 const startWriting = () => {
+  if (!canWrite.value) {
+    displayToast(
+      isCurrentWeekOverdue.value
+        ? 'Tuần này đã quá hạn — không thể ghi nhật ký'
+        : 'Chức năng nhật ký đang tắt'
+    );
+    return;
+  }
   isWriting.value = true;
-  form.value = { completionLevel: 0, feeling: 0 };
+  form.value = {
+    completionLevel: 0,
+    feeling: 0,
+    proofFileName: '',
+    evidence: '',
+  };
   fieldErrors.value = {};
 };
+
+function clearProofFile() {
+  form.value.proofFileName = '';
+  form.value.evidence = '';
+  clearFieldError('proofFile');
+}
+
+async function onProofFileChange(event) {
+  const file = event.target.files?.[0];
+  event.target.value = '';
+  if (!file) return;
+
+  if (file.size > MAX_PROOF_BYTES) {
+    displayToast('File vượt quá 100MB. Vui lòng chọn file nhỏ hơn.');
+    return;
+  }
+
+  form.value.proofFileName = file.name;
+  clearFieldError('proofFile');
+
+  // Store metadata (+ small files as data URL) in Evidence string for API
+  const meta = { fileName: file.name, size: file.size, type: file.type || 'application/octet-stream' };
+  if (file.size <= 2 * 1024 * 1024) {
+    const dataUrl = await new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+    form.value.evidence = JSON.stringify({ ...meta, dataUrl });
+  } else {
+    form.value.evidence = JSON.stringify(meta);
+  }
+}
 
 const cancelWriting = () => {
   showConfirmCancel.value = true;
@@ -673,16 +868,49 @@ const saveDraft = async () => {
 };
 
 const saveDiary = async (status) => {
+  if (isWeekOverdue(currentWeek.value)) {
+    displayToast('Tuần này đã quá hạn — không thể ghi nhật ký');
+    return;
+  }
   try {
-    let payload = {
-      ...form.value,
+    const {
+      proofFileName,
+      proofFile,
+      feedbacks,
+      feedback,
+      proofDescription,
+      ...fields
+    } = form.value;
+
+    const payload = {
+      id: fields.id || undefined,
       classId: props.classId,
       userId: authStore.user?.maNguoiDung || authStore.user?.id,
-      week: currentWeek.value,
+      week: String(currentWeek.value),
       status,
+      completionLevel: fields.completionLevel ?? null,
+      feeling: fields.feeling ?? null,
+      taskDescription: fields.taskDescription || null,
+      newKnowledge: fields.newKnowledge || null,
+      issues: fields.issues || null,
+      solutions: fields.solutions || null,
+      nextPlan: fields.nextPlan || null,
+      supportNeeded: fields.supportNeeded || feedback || null,
+      evidence: fields.evidence || null,
     };
-    if (!payload.feedbacks) payload.feedbacks = [];
-    payload = JSON.parse(JSON.stringify(payload));
+
+    // Attach proof description into evidence JSON when present
+    if (proofDescription) {
+      try {
+        const ev = payload.evidence ? JSON.parse(payload.evidence) : {};
+        payload.evidence = JSON.stringify({ ...ev, description: proofDescription });
+      } catch {
+        payload.evidence = JSON.stringify({
+          fileName: proofFileName || null,
+          description: proofDescription,
+        });
+      }
+    }
 
     if (payload.id) {
       await api.put(`/diaries/${payload.id}`, payload);
@@ -708,15 +936,13 @@ const getPreviewText = (diary) => {
   return diary[anyKey] || 'Nội dung nhật ký...';
 };
 
-const weekRanges = {
-  4: '08/05 - 14/05/2024',
-  5: '15/05 - 21/05/2024',
-  6: '22/05 - 28/05/2024',
-  7: '29/05 - 04/06/2024',
-  8: '05/06 - 11/06/2024',
+const getWeekDateRange = (week) => {
+  const { start, end } = getWeekBounds(week);
+  if (start.getFullYear() === end.getFullYear()) {
+    return `${formatDM(start)} - ${formatDMY(end)}`;
+  }
+  return `${formatDMY(start)} - ${formatDMY(end)}`;
 };
-
-const getWeekDateRange = (week) => weekRanges[week] || `Tuần ${week}`;
 
 const formatCardDate = (isoString) => {
   if (!isoString) return '';
@@ -753,14 +979,72 @@ const formatDrawerDate = (diary) => {
   return `${dateStr} (${dayNames[d.getDay()]})`;
 };
 
+function parsedEvidence(diary) {
+  const raw = diary?.evidence ?? diary?.Evidence ?? null;
+  if (!raw) {
+    return {
+      fileName: diary?.proofFileName || diary?.proofFile || '',
+      description: diary?.proofDescription || '',
+    };
+  }
+  if (typeof raw === 'object') {
+    return {
+      fileName: raw.fileName || raw.FileName || '',
+      description: raw.description || raw.Description || '',
+      size: raw.size || raw.Size,
+      type: raw.type || raw.Type,
+      dataUrl: raw.dataUrl || raw.DataUrl,
+    };
+  }
+  try {
+    const parsed = JSON.parse(raw) || {};
+    return {
+      fileName: parsed.fileName || parsed.FileName || '',
+      description: parsed.description || parsed.Description || '',
+      size: parsed.size || parsed.Size,
+      type: parsed.type || parsed.Type,
+      dataUrl: parsed.dataUrl || parsed.DataUrl,
+    };
+  } catch {
+    return { fileName: String(raw), description: diary?.proofDescription || '' };
+  }
+}
+
+const viewingEvidence = computed(() => parsedEvidence(viewingDiary.value));
+
+function formatFileSize(bytes) {
+  const n = Number(bytes) || 0;
+  if (n < 1024) return `${n} B`;
+  if (n < 1024 * 1024) return `${(n / 1024).toFixed(1)} KB`;
+  return `${(n / (1024 * 1024)).toFixed(1)} MB`;
+}
+
 const openDrawer = (diary) => {
+  const ev = parsedEvidence(diary);
+
   if (diary.status === 'Draft') {
+    if (isWeekOverdue(diary.week ?? currentWeek.value)) {
+      displayToast('Tuần này đã quá hạn — không thể ghi nhật ký');
+      return;
+    }
     isWriting.value = true;
-    form.value = { ...diary };
+    form.value = {
+      ...diary,
+      proofFileName: ev.fileName || '',
+      proofDescription: ev.description || '',
+      evidence: typeof diary.evidence === 'string' ? diary.evidence : JSON.stringify(ev || {}),
+    };
     fieldErrors.value = {};
   } else {
-    viewingDiary.value = diary;
+    // Denormalize evidence so detail fields always have values to show
+    viewingDiary.value = {
+      ...diary,
+      proofFile: ev.fileName || '',
+      proofFileName: ev.fileName || '',
+      proofDescription: ev.description || '',
+    };
     isDrawerOpen.value = true;
+
     if (!diary.isReadByStudent && diary.feedbacks?.length) {
       diary.isReadByStudent = true;
     }

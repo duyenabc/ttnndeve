@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace IMSBackend.Models
@@ -11,6 +12,9 @@ namespace IMSBackend.Models
         public string Id { get; set; } = Guid.NewGuid().ToString();
         public string UserId { get; set; }
         public string ClassId { get; set; }
+
+        /// <summary>Accepts JSON string or number from the Vue client.</summary>
+        [JsonConverter(typeof(FlexibleStringConverter))]
         public string Week { get; set; }
         public int? CompletionLevel { get; set; }
         public int? Feeling { get; set; }
@@ -41,5 +45,26 @@ namespace IMSBackend.Models
         
         [JsonIgnore]
         public Diary Diary { get; set; }
+    }
+
+    public class FlexibleStringConverter : JsonConverter<string>
+    {
+        public override string Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            return reader.TokenType switch
+            {
+                JsonTokenType.String => reader.GetString(),
+                JsonTokenType.Number => reader.TryGetInt64(out var l) ? l.ToString() : reader.GetDouble().ToString(),
+                JsonTokenType.True => "true",
+                JsonTokenType.False => "false",
+                JsonTokenType.Null => null,
+                _ => throw new JsonException($"Unexpected token {reader.TokenType} for string field.")
+            };
+        }
+
+        public override void Write(Utf8JsonWriter writer, string value, JsonSerializerOptions options)
+        {
+            writer.WriteStringValue(value);
+        }
     }
 }

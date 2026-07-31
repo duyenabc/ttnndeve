@@ -12,6 +12,10 @@ export default defineConfig({
   server: {
     host: '0.0.0.0',
     port: 3000,
-    cors: true
+    cors: true,
+    // Avoid EBUSY when .NET locks apphost.exe under Backend/
+    watch: {
+      ignored: ['**/Backend/**', '**/Backend\\**']
+    }
   }
 });
