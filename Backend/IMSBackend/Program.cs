@@ -84,6 +84,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 var app = builder.Build();
+var dbReady = false;
+string? dbError = null;
 
 if (app.Environment.IsDevelopment())
 {
@@ -92,11 +94,51 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("AllowVueApp");
 
+app.Use(async (ctx, next) =>
+{
+    try
+    {
+        await next();
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"[IMS] Unhandled: {ex.GetType().Name}: {ex.Message}");
+        if (ex.InnerException != null)
+            Console.WriteLine($"[IMS] Inner: {ex.InnerException.Message}");
+        if (ctx.Response.HasStarted) throw;
+        ctx.Response.StatusCode = 500;
+        ctx.Response.ContentType = "application/json";
+        await ctx.Response.WriteAsJsonAsync(new
+        {
+            message = "Lỗi máy chủ khi xử lý yêu cầu.",
+            detail = app.Environment.IsDevelopment() ? ex.Message : ex.GetType().Name
+        });
+    }
+});
+
 // TLS is terminated by Render — skip HTTPS redirect in containers
 if (!app.Environment.IsDevelopment() && string.IsNullOrWhiteSpace(port))
 {
     app.UseHttpsRedirection();
 }
+
+app.Use(async (ctx, next) =>
+{
+    var path = ctx.Request.Path.Value ?? "";
+    var needsDb = path.StartsWith("/api", StringComparison.OrdinalIgnoreCase);
+    if (needsDb && !dbReady)
+    {
+        ctx.Response.StatusCode = StatusCodes.Status503ServiceUnavailable;
+        ctx.Response.ContentType = "application/json";
+        await ctx.Response.WriteAsJsonAsync(new
+        {
+            message = "Database đang khởi tạo hoặc chưa kết nối được. Thử lại sau vài giây.",
+            detail = dbError
+        });
+        return;
+    }
+    await next();
+});
 
 app.UseAuthentication();
 app.UseAuthorization();
@@ -106,19 +148,37 @@ app.MapGet("/", () => Results.Ok(new
 {
     service = "IMS API",
     status = "ok",
-    docs = "/openapi/v1.json"
+    docs = "/openapi/v1.json",
+    database = dbReady ? "ready" : "starting"
 }));
+
+app.MapGet("/api/health/db", async (AppDbContext db) =>
+{
+    var users = await db.Users.CountAsync();
+    return Results.Ok(new { status = "ok", users, database = "ready" });
+});
 
 // Listen first so Render healthCheckPath:/ succeeds, then init DB
 await app.StartAsync();
 Console.WriteLine("[IMS] HTTP server listening; initializing database...");
-await EnsureDatabaseReadyAsync(app.Services);
+try
+{
+    await EnsureDatabaseReadyAsync(app.Services);
+    dbReady = true;
+    Console.WriteLine("[IMS] Database ready flag set.");
+}
+catch (Exception ex)
+{
+    dbError = ex.Message;
+    Console.WriteLine($"[IMS] Database init FAILED: {ex}");
+    // Keep serving / so health checks work; /api returns 503 until fixed + restart
+}
 await app.WaitForShutdownAsync();
 
 static async Task EnsureDatabaseReadyAsync(IServiceProvider services)
 {
     const int maxAttempts = 10;
-    Exception last = null;
+    Exception? last = null;
 
     for (var attempt = 1; attempt <= maxAttempts; attempt++)
     {
@@ -129,6 +189,7 @@ static async Task EnsureDatabaseReadyAsync(IServiceProvider services)
             await db.Database.OpenConnectionAsync();
             await db.Database.CloseConnectionAsync();
             await db.Database.EnsureCreatedAsync();
+            await SeedDefaultsIfEmptyAsync(db);
             Console.WriteLine($"[IMS] Database ready (attempt {attempt}).");
             return;
         }
@@ -145,8 +206,60 @@ static async Task EnsureDatabaseReadyAsync(IServiceProvider services)
     throw new InvalidOperationException(
         "Could not connect to PostgreSQL after retries. " +
         "Check DATABASE_URL is the Internal Database URL from ims-db, " +
-        "and that ims-api is in the same region as ims-db (Oregon).",
+        "and that the API service is in the same region as ims-db (Oregon).",
         last);
+}
+
+static async Task SeedDefaultsIfEmptyAsync(AppDbContext db)
+{
+    if (await db.Users.AnyAsync())
+    {
+        Console.WriteLine("[IMS] Users already present; skip seed.");
+        return;
+    }
+
+    var created = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+    db.Users.AddRange(
+        new IMSBackend.Models.User
+        {
+            MaNguoiDung = "admin_001",
+            MaDinhDanh = "admin",
+            HoTen = "Quản trị viên",
+            Email = "admin@example.com",
+            VaiTro = "Admin",
+            TrangThaiTaiKhoan = "DangHoatDong",
+            MatKhau = "Admin@123",
+            BuocDoiMatKhau = false,
+            QuyenQuanLyNguoiDung = true,
+            NgayTao = created
+        },
+        new IMSBackend.Models.User
+        {
+            MaNguoiDung = "gv_001",
+            MaDinhDanh = "GV001",
+            HoTen = "ThS. Lê Hoàng Nam",
+            Email = "namlh@example.com",
+            VaiTro = "GiangVien",
+            TrangThaiTaiKhoan = "DangHoatDong",
+            MatKhau = "Gv@12345",
+            BuocDoiMatKhau = false,
+            NgayTao = created
+        },
+        new IMSBackend.Models.User
+        {
+            MaNguoiDung = "sv_001",
+            MaDinhDanh = "SV001",
+            HoTen = "Nguyễn Văn A",
+            Email = "sv001@example.com",
+            VaiTro = "SinhVien",
+            TrangThaiTaiKhoan = "DangHoatDong",
+            MatKhau = "Sv@12345",
+            BuocDoiMatKhau = false,
+            NgayTao = created,
+            LopSinhHoat = "K64-CNTT"
+        });
+    await db.SaveChangesAsync();
+    Console.WriteLine("[IMS] Seeded default users (admin, GV001, SV001).");
 }
 
 static string DescribeConnectionTarget(string cs)
