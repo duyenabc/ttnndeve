@@ -50,48 +50,74 @@
 
     <template v-else>
       <!-- Writing Form -->
-      <div v-if="isWriting" class="border border-[#005EA3] bg-blue-50/20 rounded-[12px] p-6 shadow-sm">
-        <h3 class="font-bold text-[16px] text-[#005EA3] mb-4 border-b border-blue-100 pb-2">Viết nhật ký - Tuần {{ currentWeek }}</h3>
-        
-        <div class="space-y-4">
-          <div v-for="field in activeFields" :key="field.id">
-            <label class="block text-[13px] font-bold text-slate-700 mb-1">
-              {{ field.label }} <span v-if="field.isRequired" class="text-red-500">*</span>
-            </label>
-            <textarea
-              v-if="['taskDescription', 'newKnowledge', 'issues', 'solutions', 'nextPlan', 'supportNeeded'].includes(field.id)"
-              v-model="form[field.id]"
-              rows="3"
-              class="w-full border border-slate-300 rounded-[8px] px-3 py-2 text-[13px] outline-none focus:border-[#005EA3] bg-white"
-              :placeholder="`Nhập ${field.label.toLowerCase()}...`"
-            ></textarea>
-            <input
-              v-else-if="['completionLevel', 'feeling'].includes(field.id)"
-              v-model.number="form[field.id]"
-              type="number"
-              :min="1"
-              :max="field.id === 'feeling' ? 5 : 10"
-              class="w-full border border-slate-300 rounded-[8px] px-3 py-2 text-[13px] outline-none focus:border-[#005EA3] bg-white"
-            />
-            <input
-              v-else-if="field.id === 'proofFile'"
-              type="file"
-              class="w-full text-[13px]"
-            />
-            <input
-              v-else
-              v-model="form[field.id]"
-              type="text"
-              class="w-full border border-slate-300 rounded-[8px] px-3 py-2 text-[13px] outline-none focus:border-[#005EA3] bg-white"
-            />
-          </div>
+      <div v-if="isWriting" class="bg-white rounded-[12px] p-8 shadow-sm border border-slate-200 pb-20">
+        <div class="mb-8">
+          <h2 class="font-bold text-[24px] text-slate-900 mb-2">Viết nhật ký tuần hiện tại</h2>
+          <p class="text-[13px] text-slate-500 font-medium">Tuần thực tập: Tuần {{ currentWeek }} (Hạn nộp: {{ config.deadlineDayName }} {{ config.deadlineTime }})</p>
         </div>
 
-        <div class="mt-6 pt-4 border-t border-slate-200 flex justify-end gap-3">
-          <button @click="saveDraft" class="px-5 py-2 border border-[#005EA3] text-[#005EA3] font-bold rounded-[8px] text-[13px] hover:bg-blue-50 transition">
+        <div class="grid grid-cols-2 gap-8 mb-8">
+          <div v-if="activeFields.find(f => f.id === 'completionLevel')">
+            <label class="block text-[13px] font-bold text-slate-800 mb-3">Mức độ hoàn thành</label>
+            <div class="flex items-center gap-1">
+              <span v-for="i in 10" :key="i" @click="form.completionLevel = i" 
+                    class="material-symbols-outlined cursor-pointer text-[28px] select-none transition" 
+                    :class="(form.completionLevel >= i) ? 'text-amber-400 font-variation-fill' : 'text-slate-300'">star</span>
+            </div>
+          </div>
+          <div v-if="activeFields.find(f => f.id === 'feeling')">
+            <label class="block text-[13px] font-bold text-slate-800 mb-3">Cảm nhận chung</label>
+            <div class="flex items-center gap-1">
+              <span v-for="i in 5" :key="i" @click="form.feeling = i" 
+                    class="material-symbols-outlined cursor-pointer text-[28px] select-none transition" 
+                    :class="(form.feeling >= i) ? 'text-amber-400 font-variation-fill' : 'text-slate-300'">star</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="space-y-6">
+          <template v-for="field in activeFields" :key="field.id">
+            <div v-if="!['completionLevel', 'feeling'].includes(field.id)">
+              <label class="block text-[13px] font-bold text-slate-800 mb-2">
+                {{ field.label }} <span v-if="field.isRequired" class="text-slate-500">(*)</span>
+              </label>
+              
+              <textarea
+                v-if="['taskDescription', 'newKnowledge', 'issues', 'solutions', 'nextPlan', 'supportNeeded'].includes(field.id)"
+                v-model="form[field.id]"
+                rows="4"
+                class="w-full border border-slate-200 rounded-[8px] px-4 py-3 text-[13px] outline-none focus:border-[#005EA3] bg-white placeholder:italic text-slate-700"
+                :placeholder="field.id === 'taskDescription' ? 'Ghi rõ các đầu việc cụ thể bạn đã xử lý trong tuần này...' :
+                             field.id === 'newKnowledge' ? 'Những công nghệ, quy trình hoặc kỹ năng mềm bạn đã tích lũy...' :
+                             field.id === 'issues' ? 'Nêu rõ những khó khăn bạn đang gặp phải...' :
+                             field.id === 'solutions' ? 'Bạn đã hoặc dự định giải quyết những khó khăn đó như thế nào...' :
+                             field.id === 'nextPlan' ? 'Dự kiến công việc cho tuần kế tiếp...' : `Nhập ${field.label.toLowerCase()}...`"
+              ></textarea>
+              <input
+                v-else-if="field.id === 'proofFile'"
+                type="file"
+                class="w-full text-[13px]"
+              />
+              <input
+                v-else
+                v-model="form[field.id]"
+                type="text"
+                class="w-full border border-slate-200 rounded-[8px] px-4 py-3 text-[13px] outline-none focus:border-[#005EA3] bg-white placeholder:italic text-slate-700"
+              />
+            </div>
+          </template>
+        </div>
+
+        <!-- Sticky Footer for Actions -->
+        <div class="fixed bottom-0 left-0 right-0 lg:left-64 bg-white border-t border-slate-200 p-4 px-8 flex justify-end gap-3 z-30 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+          <button @click="cancelWriting" class="px-6 py-2.5 text-slate-600 font-bold text-[13px] hover:text-slate-900 transition">
+            Hủy bỏ
+          </button>
+          <button @click="saveDraft" class="px-6 py-2.5 border border-slate-300 text-slate-700 font-bold rounded-[8px] text-[13px] hover:bg-slate-50 transition">
             Lưu nháp
           </button>
-          <button @click="submitDiary" :disabled="!isValidForm" class="px-5 py-2 bg-[#005EA3] text-white font-bold rounded-[8px] text-[13px] hover:bg-blue-800 transition disabled:opacity-50">
+          <button @click="submitDiary" :disabled="!isValidForm" class="px-6 py-2.5 bg-[#005EA3] text-white font-bold rounded-[8px] text-[13px] hover:bg-blue-800 transition disabled:opacity-50 flex items-center gap-2">
+            <span class="material-symbols-outlined text-[18px]">send</span>
             Nộp nhật ký
           </button>
         </div>
