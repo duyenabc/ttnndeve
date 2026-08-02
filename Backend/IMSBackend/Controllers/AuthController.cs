@@ -39,15 +39,20 @@ namespace IMSBackend.Controllers
                 var input = req.MaDinhDanh.Trim();
                 var password = req.MatKhau.Trim();
 
-                // Escape LIKE wildcards; match mã / email không phân biệt hoa thường
-                var pattern = input
-                    .Replace("\\", "\\\\")
-                    .Replace("%", "\\%")
-                    .Replace("_", "\\_");
-
+                // Exact MaDinhDanh first so GV001 and gv001 stay distinct accounts.
                 var user = await _context.Users.FirstOrDefaultAsync(u =>
-                    (u.MaDinhDanh != null && EF.Functions.ILike(u.MaDinhDanh, pattern, "\\")) ||
-                    (u.Email != null && EF.Functions.ILike(u.Email, pattern, "\\")));
+                    u.MaDinhDanh == input || u.Email == input);
+
+                if (user == null)
+                {
+                    // Email-only fallback, case-insensitive
+                    var pattern = input
+                        .Replace("\\", "\\\\")
+                        .Replace("%", "\\%")
+                        .Replace("_", "\\_");
+                    user = await _context.Users.FirstOrDefaultAsync(u =>
+                        u.Email != null && EF.Functions.ILike(u.Email, pattern, "\\"));
+                }
 
                 if (user == null)
                     return Unauthorized(new { message = "Mã định danh hoặc mật khẩu không đúng" });

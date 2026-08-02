@@ -339,17 +339,19 @@ static async Task EnsureDemoDatasetAsync(AppDbContext db)
     var addedUsers = 0;
     var addedClasses = 0;
 
+    // Exact MaNguoiDung / MaDinhDanh only — never fold case (GV001 ≠ gv001).
     async Task<IMSBackend.Models.User> UpsertUserAsync(
         string maNguoiDung,
         string maDinhDanh,
         string hoTen,
         string vaiTro,
+        string password,
         string? email = null,
-        string? lopSinhHoat = null)
+        string? lopSinhHoat = null,
+        bool quyenAdmin = false)
     {
         var user = await db.Users.FirstOrDefaultAsync(u =>
-            u.MaNguoiDung == maNguoiDung ||
-            (u.MaDinhDanh != null && u.MaDinhDanh.ToLower() == maDinhDanh.ToLower()));
+            u.MaNguoiDung == maNguoiDung || u.MaDinhDanh == maDinhDanh);
 
         if (user == null)
         {
@@ -361,8 +363,9 @@ static async Task EnsureDemoDatasetAsync(AppDbContext db)
                 Email = email ?? $"{maDinhDanh.ToLower()}@due.udn.vn",
                 VaiTro = vaiTro,
                 TrangThaiTaiKhoan = "DangHoatDong",
-                MatKhau = demoPassword,
+                MatKhau = password,
                 BuocDoiMatKhau = false,
+                QuyenQuanLyNguoiDung = quyenAdmin,
                 NgayTao = created,
                 LopSinhHoat = lopSinhHoat
             };
@@ -371,13 +374,13 @@ static async Task EnsureDemoDatasetAsync(AppDbContext db)
         }
         else
         {
-            // Keep login usable for the known demo password set
             user.MaDinhDanh = maDinhDanh;
             user.HoTen = hoTen;
             user.VaiTro = vaiTro;
             user.TrangThaiTaiKhoan = "DangHoatDong";
-            user.MatKhau = demoPassword;
+            user.MatKhau = password;
             user.BuocDoiMatKhau = false;
+            if (quyenAdmin) user.QuyenQuanLyNguoiDung = true;
             if (!string.IsNullOrWhiteSpace(lopSinhHoat))
                 user.LopSinhHoat = lopSinhHoat;
             if (string.IsNullOrWhiteSpace(user.Email))
@@ -387,7 +390,12 @@ static async Task EnsureDemoDatasetAsync(AppDbContext db)
         return user;
     }
 
-    var gv = await UpsertUserAsync("gv_demo_001", "gv001", "ThS. Demo Hướng Dẫn", "GiangVien", "gv001@due.udn.vn");
+    // Repair defaults in case a prior case-insensitive demo upsert overwrote GV001 → gv001
+    await UpsertUserAsync("admin_001", "admin", "Quản trị viên", "Admin", "Admin@123", "admin@example.com", quyenAdmin: true);
+    await UpsertUserAsync("gv_001", "GV001", "ThS. Lê Hoàng Nam", "GiangVien", "Gv@12345", "namlh@example.com");
+    await UpsertUserAsync("sv_001", "SV001", "Nguyễn Văn A", "SinhVien", "Sv@12345", "sv001@example.com", "K64-CNTT");
+
+    var gv = await UpsertUserAsync("gv_demo_001", "gv001", "ThS. Demo Hướng Dẫn", "GiangVien", demoPassword, "gv001@due.udn.vn");
 
     // Class → student MSSV lists (as provided by product owner)
     var classStudents = new Dictionary<string, string[]>
@@ -435,6 +443,7 @@ static async Task EnsureDemoDatasetAsync(AppDbContext db)
                 maDinhDanh: mssv,
                 hoTen: $"Sinh viên {mssv}",
                 vaiTro: "SinhVien",
+                password: demoPassword,
                 email: $"{mssv}@student.due.udn.vn",
                 lopSinhHoat: maLop);
             i++;
