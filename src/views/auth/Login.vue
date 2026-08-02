@@ -179,13 +179,7 @@ async function handleLogin() {
 
   loading.value = true;
   try {
-    // #region agent log
-    fetch('http://127.0.0.1:7500/ingest/7f531694-75ae-41c0-a883-0940871f5a5e',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'19ef33'},body:JSON.stringify({sessionId:'19ef33',runId:'login-attempt',hypothesisId:'H1',location:'Login.vue:handleLogin',message:'login attempt',data:{baseURL:import.meta.env.VITE_API_BASE_URL||'(fallback localhost)',host:typeof window!=='undefined'?window.location.host:null},timestamp:Date.now()})}).catch(()=>{});
-    // #endregion
     const res = await authStore.login(form.value);
-    // #region agent log
-    fetch('http://127.0.0.1:7500/ingest/7f531694-75ae-41c0-a883-0940871f5a5e',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'19ef33'},body:JSON.stringify({sessionId:'19ef33',runId:'login-attempt',hypothesisId:'H3',location:'Login.vue:handleLogin',message:'login success',data:{hasToken:!!res?.accessToken,redirectTo:res?.redirectTo||null},timestamp:Date.now()})}).catch(()=>{});
-    // #endregion
     triggerToast('✓ Đăng nhập thành công! Đang chuyển hướng...');
     setTimeout(() => {
       if (res.redirectTo) {
@@ -195,9 +189,6 @@ async function handleLogin() {
       }
     }, 300);
   } catch (err) {
-    // #region agent log
-    fetch('http://127.0.0.1:7500/ingest/7f531694-75ae-41c0-a883-0940871f5a5e',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'19ef33'},body:JSON.stringify({sessionId:'19ef33',runId:'login-attempt',hypothesisId:'H2',location:'Login.vue:handleLogin',message:'login error',data:{status:err?.response?.status??null,code:err?.code||null,msg:typeof err?.response?.data==='string'?String(err.response.data).slice(0,120):(err?.response?.data?.message||err?.message||null),ct:err?.response?.headers?.['content-type']||null},timestamp:Date.now()})}).catch(()=>{});
-    // #endregion
     const status = err?.response?.status;
     const data = err?.response?.data;
     const looksLikeWrongApi =
@@ -217,7 +208,7 @@ async function handleLogin() {
 </script>
 
 <style scoped>
-/* Hide browser native password reveal (Edge/IE) so only our custom eye shows */
+/* Edge/IE: ẩn nút reveal mật khẩu mặc định */
 #input-password::-ms-reveal,
 #input-password::-ms-clear {
   display: none;

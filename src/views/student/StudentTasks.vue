@@ -1,6 +1,5 @@
 <template>
   <div class="ims-scope max-w-6xl mx-auto font-sans space-y-6 pb-20">
-    <!-- Breadcrumb & Header -->
     <div class="space-y-3">
       <nav class="flex items-center text-xs text-slate-500 gap-1.5">
         <router-link to="/student/classes" class="hover:text-[#005EA3] transition font-medium">Lớp của tôi</router-link>
@@ -28,7 +27,6 @@
       </div>
     </div>
 
-    <!-- Section 1: Cần thực hiện (Pending Tasks) -->
     <div class="bg-white rounded-2xl border border-slate-200 shadow-2xs overflow-hidden space-y-4 p-6">
       <div class="flex items-center justify-between border-b border-slate-100 pb-4">
         <h3 class="font-bold text-sm text-slate-900 flex items-center gap-2">
@@ -39,7 +37,6 @@
       </div>
 
       <div class="divide-y divide-slate-100 text-xs">
-        <!-- Task Row 1: Overdue -->
         <div class="py-4 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-rose-50/40 p-3 rounded-xl transition">
           <div class="flex items-start gap-3 md:w-1/2">
             <span class="px-2.5 py-1 bg-rose-100 text-rose-800 font-black rounded-lg text-[10px] uppercase shrink-0 mt-0.5">
@@ -70,7 +67,6 @@
           </div>
         </div>
 
-        <!-- Task Row 2: Due Today -->
         <div class="py-4 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-amber-50/40 p-3 rounded-xl transition">
           <div class="flex items-start gap-3 md:w-1/2">
             <span class="px-2.5 py-1 bg-amber-100 text-amber-900 font-black rounded-lg text-[10px] uppercase shrink-0 mt-0.5">
@@ -99,7 +95,6 @@
           </div>
         </div>
 
-        <!-- Task Row 3: Upcoming -->
         <div class="py-4 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-slate-50 p-3 rounded-xl transition">
           <div class="flex items-start gap-3 md:w-1/2">
             <span class="px-2.5 py-1 bg-emerald-100 text-emerald-800 font-black rounded-lg text-[10px] uppercase shrink-0 mt-0.5">
@@ -130,7 +125,6 @@
       </div>
     </div>
 
-    <!-- Section 2: Đã hoàn thành (Completed Tasks) -->
     <div class="bg-white rounded-2xl border border-slate-200 shadow-2xs overflow-hidden space-y-4 p-6">
       <div class="flex items-center justify-between border-b border-slate-100 pb-4">
         <h3 class="font-bold text-sm text-slate-900 flex items-center gap-2">
@@ -141,7 +135,6 @@
       </div>
 
       <div class="divide-y divide-slate-100 text-xs">
-        <!-- Completed Row 1 -->
         <div class="py-3.5 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-slate-50 p-2 rounded-xl transition">
           <div class="flex items-start gap-3 md:w-1/2">
             <span class="px-2.5 py-1 bg-emerald-100 text-emerald-800 font-black rounded-lg text-[10px] uppercase shrink-0 mt-0.5">
@@ -170,7 +163,6 @@
           </div>
         </div>
 
-        <!-- Completed Row 2 -->
         <div class="py-3.5 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-slate-50 p-2 rounded-xl transition">
           <div class="flex items-start gap-3 md:w-1/2">
             <span class="px-2.5 py-1 bg-amber-100 text-amber-800 font-black rounded-lg text-[10px] uppercase shrink-0 mt-0.5">
@@ -201,7 +193,6 @@
       </div>
     </div>
 
-    <!-- Submission Modal -->
     <div
       v-if="showSubmitModal"
       class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs font-sans"
@@ -248,7 +239,6 @@
       </div>
     </div>
 
-    <!-- Toast Notification -->
     <div
       v-if="toastMsg"
       class="fixed bottom-6 right-6 z-[130] bg-slate-900 text-white px-4 py-3 rounded-xl shadow-xl text-xs font-bold flex items-center gap-2"

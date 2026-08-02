@@ -40,7 +40,6 @@
     </div>
 
     <template v-else>
-      <!-- Filter Bar -->
       <div class="bg-[#f1f3f5] rounded-xl border border-slate-200/80 p-5 space-y-4">
         <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div class="flex flex-wrap items-center gap-3">
@@ -110,7 +109,6 @@
       </div>
 
       <template v-else>
-        <!-- Weekly student blocks -->
         <div v-if="timeTab !== 'term'" class="space-y-3">
           <div
             v-for="student in filteredStudentDiaries"
@@ -198,7 +196,6 @@
                     <span class="ml-1">{{ planBanner(student).text }}</span>
                   </div>
 
-                  <!-- UC-18.2: short view = 3 fields; full = all enabled fields -->
                   <div class="space-y-2">
                     <div v-for="field in fieldsForEntry(student)" :key="field.id">
                       <h4 class="font-bold text-[11px] text-slate-500 uppercase mb-1">{{ field.label }}</h4>
@@ -225,7 +222,6 @@
                     </button>
                   </div>
 
-                  <!-- UC-18.2: prior teacher comments highlighted under content -->
                   <div
                     v-if="entryFeedbacks(student).length"
                     class="rounded-lg border border-amber-200 bg-amber-50/80 px-3.5 py-3 space-y-2"
@@ -277,7 +273,6 @@
           </div>
         </div>
 
-        <!-- Term heatmap -->
         <div v-else class="bg-white rounded-xl border border-slate-200 overflow-hidden">
           <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse text-[13px]">
@@ -319,7 +314,6 @@
       </template>
     </template>
 
-    <!-- Full detail drawer -->
     <div v-if="isDrawerOpen" class="fixed inset-0 z-[100] bg-slate-900/50 backdrop-blur-sm flex justify-end" @click.self="closeDrawer">
       <div class="bg-white w-[600px] max-w-full h-full shadow-2xl flex flex-col animate-slide-in">
         <div class="p-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
@@ -444,7 +438,7 @@ const config = ref({
 });
 
 const expandedIds = ref(new Set());
-const fullViewIds = ref(new Set()); // studentId:entryId keys for UC-18.2 full content
+const fullViewIds = ref(new Set());
 const activeEntryId = reactive({});
 const inlineFeedback = reactive({});
 
@@ -478,27 +472,6 @@ const weekOptions = computed(() => {
 onMounted(async () => {
   await loadData();
   selectedWeek.value = currentInternshipWeek.value;
-  // #region agent log
-  fetch('http://127.0.0.1:7500/ingest/7f531694-75ae-41c0-a883-0940871f5a5e', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'X-Debug-Session-Id': '19ef33' },
-    body: JSON.stringify({
-      sessionId: '19ef33',
-      runId: 'uc18-1',
-      hypothesisId: 'H1',
-      location: 'ClassDiaries.vue:onMounted',
-      message: 'teacher diaries loaded',
-      data: {
-        classId: classId.value,
-        students: allStudents.value.length,
-        diaries: allDiaries.value.length,
-        week: selectedWeek.value,
-        enabled: config.value.isEnabled,
-      },
-      timestamp: Date.now(),
-    }),
-  }).catch(() => {});
-  // #endregion
 });
 
 async function loadData() {
@@ -590,7 +563,6 @@ const studentDiaries = computed(() => {
         isRead: !!d.isReadByTeacher,
       };
     });
-    // UC-18.2: newest first in the week list
     const entriesNewestFirst = [...entries].reverse();
 
     const submittedCount = entries.length;
@@ -679,7 +651,6 @@ function toggleStudent(id) {
   else {
     next.add(id);
     const st = studentDiaries.value.find((s) => s.id === id);
-    // Open newest diary by default (UC-18.2)
     if (st?.entriesNewestFirst?.length) {
       selectEntry(st, st.entriesNewestFirst[0]);
     }
@@ -720,21 +691,6 @@ function toggleFullView(student) {
   fullViewIds.value = next;
   const entry = currentEntry(student);
   if (entry) selectEntry(student, entry);
-  // #region agent log
-  fetch('http://127.0.0.1:7500/ingest/7f531694-75ae-41c0-a883-0940871f5a5e', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'X-Debug-Session-Id': '19ef33' },
-    body: JSON.stringify({
-      sessionId: '19ef33',
-      runId: 'uc18-2',
-      hypothesisId: 'H1',
-      location: 'ClassDiaries.vue:toggleFullView',
-      message: 'toggle full diary view',
-      data: { key, full: next.has(key), fields: next.has(key) ? activeFields.value.length : 3 },
-      timestamp: Date.now(),
-    }),
-  }).catch(() => {});
-  // #endregion
 }
 
 function entryFeedbacks(student) {
@@ -771,21 +727,6 @@ async function selectEntry(student, entry) {
       /* ignore */
     }
   }
-  // #region agent log
-  fetch('http://127.0.0.1:7500/ingest/7f531694-75ae-41c0-a883-0940871f5a5e', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'X-Debug-Session-Id': '19ef33' },
-    body: JSON.stringify({
-      sessionId: '19ef33',
-      runId: 'uc18-1',
-      hypothesisId: 'H2',
-      location: 'ClassDiaries.vue:selectEntry',
-      message: 'entry selected / mark read',
-      data: { diaryId: entry.id, studentId: student.id, week: selectedWeek.value },
-      timestamp: Date.now(),
-    }),
-  }).catch(() => {});
-  // #endregion
 }
 
 function getAiSummary(student) {
@@ -904,21 +845,6 @@ async function submitInlineFeedback(student) {
     setTimeout(() => {
       showToast.value = false;
     }, 3000);
-    // #region agent log
-    fetch('http://127.0.0.1:7500/ingest/7f531694-75ae-41c0-a883-0940871f5a5e', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'X-Debug-Session-Id': '19ef33' },
-      body: JSON.stringify({
-        sessionId: '19ef33',
-        runId: 'uc18-3',
-        hypothesisId: 'H1',
-        location: 'ClassDiaries.vue:submitInlineFeedback',
-        message: 'feedback sent',
-        data: { diaryId: entry.id, notified: !!res.data?.notification },
-        timestamp: Date.now(),
-      }),
-    }).catch(() => {});
-    // #endregion
     await loadData();
   } catch (err) {
     toastMessage.value = err.response?.data?.message || 'Gửi nhận xét thất bại';

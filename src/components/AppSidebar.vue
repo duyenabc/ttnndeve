@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- Mobile Backdrop Overlay -->
     <Transition name="fade">
       <div
         v-if="isMobileOpen"
@@ -9,7 +8,6 @@
       />
     </Transition>
 
-    <!-- Sidebar Container -->
     <aside
       class="fixed top-16 left-0 h-[calc(100vh-64px)] z-40 bg-white border-r border-slate-200 flex flex-col transition-all duration-300 ease-in-out shadow-xs font-sans select-none"
       :class="[
@@ -19,7 +17,6 @@
         isCollapsed ? 'lg:w-20' : 'lg:w-64'
       ]"
     >
-      <!-- Class Context / Header Section -->
       <div
         class="p-4 border-b border-slate-100 flex items-center justify-between transition-all"
         :class="isCollapsed ? 'lg:justify-center lg:px-2' : 'px-5'"
@@ -38,7 +35,6 @@
           </div>
         </div>
 
-        <!-- Toggle Collapse Button (Desktop) -->
         <button
           class="hidden lg:flex w-7 h-7 rounded-lg text-slate-400 hover:text-blue-700 hover:bg-slate-100 transition-colors items-center justify-center shrink-0 ml-1"
           :title="isCollapsed ? 'Mở rộng menu' : 'Thu gọn menu'"
@@ -50,10 +46,8 @@
         </button>
       </div>
 
-      <!-- Navigation Links -->
       <nav class="flex-1 px-3 py-4 space-y-1.5 overflow-y-auto custom-scrollbar">
         <div v-for="item in navItems" :key="item.id" class="space-y-1">
-          <!-- Main Nav Item -->
           <router-link
             :to="item.path"
             class="w-full group relative flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 text-left"
@@ -65,7 +59,6 @@
             ]"
             @click="closeMobile"
           >
-            <!-- Icon -->
             <span
               class="material-symbols-outlined text-[22px] transition-transform group-hover:scale-110 shrink-0"
               :class="isItemActive(item) ? 'text-white' : 'text-slate-500 group-hover:text-slate-700'"
@@ -74,7 +67,6 @@
               {{ item.icon }}
             </span>
 
-            <!-- Label -->
             <span
               v-if="!isCollapsed || isMobileOpen"
               class="truncate flex-1 text-[14px]"
@@ -82,7 +74,6 @@
               {{ item.label }}
             </span>
 
-            <!-- Badge / Counter -->
             <span
               v-if="item.badge && (!isCollapsed || isMobileOpen)"
               class="ml-auto px-2 py-0.5 rounded-full text-[11px] font-bold transition-all"
@@ -91,7 +82,6 @@
               {{ item.badge }}
             </span>
 
-            <!-- Tooltip for collapsed mode -->
             <div
               v-if="isCollapsed && !isMobileOpen"
               class="absolute left-full ml-3 px-3 py-1.5 bg-slate-800 text-white text-xs font-semibold rounded-lg shadow-xl whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50"
@@ -102,7 +92,6 @@
         </div>
       </nav>
 
-      <!-- Footer Quick Status -->
       <div class="p-3 border-t border-slate-200 bg-slate-50/50 space-y-2">
         <div v-if="!isCollapsed || isMobileOpen" class="flex items-center justify-between px-2 py-1 text-xs text-slate-500">
           <span class="flex items-center gap-1.5">
@@ -121,7 +110,6 @@
       </div>
     </aside>
 
-    <!-- Mobile Floating Toggle Button -->
     <button
       class="lg:hidden fixed bottom-6 left-5 z-50 w-12 h-12 rounded-full bg-[#005EA3] text-white shadow-xl flex items-center justify-center hover:bg-blue-800 transition-transform active:scale-95"
       aria-label="Toggle Navigation"

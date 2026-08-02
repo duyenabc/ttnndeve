@@ -1,13 +1,11 @@
 <template>
   <div class="ims-scope max-w-2xl mx-auto font-sans space-y-6 pb-20">
-    <!-- Breadcrumb -->
     <nav class="flex items-center text-xs text-slate-500 gap-1.5">
       <router-link to="/dashboard" class="hover:text-[#005EA3] transition font-medium">Bảng tin</router-link>
       <span class="material-symbols-outlined text-[14px]">chevron_right</span>
       <span class="text-slate-900 font-bold">Mật khẩu & Bảo mật</span>
     </nav>
 
-    <!-- Main Card Container -->
     <div class="bg-white rounded-2xl border border-slate-200 shadow-2xs p-8 sm:p-10 space-y-8">
       <div>
         <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
@@ -18,7 +16,6 @@
       </div>
 
       <form @submit.prevent="handleSubmit" class="space-y-6 text-xs">
-        <!-- Current Password Field -->
         <div class="space-y-1.5">
           <label class="block font-bold text-slate-700 uppercase tracking-wider">Mật khẩu hiện tại <span class="text-rose-600">*</span></label>
           <div class="relative">
@@ -40,7 +37,6 @@
           </div>
         </div>
 
-        <!-- New Password Field -->
         <div class="space-y-1.5">
           <label class="block font-bold text-slate-700 uppercase tracking-wider">Mật khẩu mới <span class="text-rose-600">*</span></label>
           <div class="relative">
@@ -61,7 +57,6 @@
             </button>
           </div>
 
-          <!-- Password Strength Visual Bar -->
           <div class="pt-2 space-y-1.5">
             <div class="flex justify-between items-center text-[10px] font-bold">
               <span class="text-slate-400 uppercase tracking-wider">ĐỘ MẠNH MẬT KHẨU</span>
@@ -78,7 +73,6 @@
           </div>
         </div>
 
-        <!-- Confirm New Password Field -->
         <div class="space-y-1.5">
           <label class="block font-bold text-slate-700 uppercase tracking-wider">Xác nhận mật khẩu mới <span class="text-rose-600">*</span></label>
           <div class="relative">
@@ -100,7 +94,6 @@
           </div>
         </div>
 
-        <!-- Validation Checklist Box -->
         <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 space-y-3">
           <h3 class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">TIÊU CHUẨN MẬT KHẨU AN TOÀN</h3>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
@@ -127,7 +120,6 @@
           </div>
         </div>
 
-        <!-- Actions -->
         <div class="pt-4 flex items-center justify-end gap-3 border-t border-slate-100">
           <button
             type="button"

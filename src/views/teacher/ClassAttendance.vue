@@ -1,6 +1,5 @@
 ﻿<template>
   <div class="ims-scope w-full mx-auto space-y-6 font-sans pb-20">
-    <!-- Breadcrumb & Header -->
     <div>
       <nav class="flex items-center gap-2 text-xs text-slate-500 mb-2">
         <router-link to="/teacher/classes" class="hover:text-blue-700 transition-colors">L�:p của tôi</router-link>
@@ -14,7 +13,6 @@
       </div>
     </div>
 
-    <!-- Sub Navigation Tabs -->
     <div class="flex items-center gap-8 border-b border-slate-200">
       <router-link
         :to="`/teacher/classes/${classId}/grading`"
@@ -37,7 +35,6 @@
       </router-link>
     </div>
 
-    <!-- Session Select Bar -->
     <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-2xs flex flex-col md:flex-row justify-between items-stretch md:items-center gap-4">
       <div class="flex items-center gap-3">
         <label class="text-xs font-bold text-slate-700 whitespace-nowrap">Chá»n buá»•i há»p:</label>
@@ -58,7 +55,6 @@
       </button>
     </div>
 
-    <!-- Student Attendance Table -->
     <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-2xs">
       <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse text-xs">
@@ -157,7 +153,6 @@
       </div>
     </div>
 
-    <!-- Floating Footer Bar -->
     <div class="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-slate-200 p-4 shadow-lg flex justify-between items-center px-8">
       <span class="text-xs text-slate-500 italic">Tá»± Ä‘á»™ng lÆ°u nhÃ¡p: 10:45:22</span>
       <button
@@ -168,7 +163,6 @@
       </button>
     </div>
 
-    <!-- Modal Táº¡o buá»•i há»p Ä‘á»™t xuáº¥t -->
     <div
       v-if="showCreateMeetingModal"
       class="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/50 backdrop-blur-xs p-4"
@@ -207,7 +201,6 @@
       </div>
     </div>
 
-    <!-- Toast Notification -->
     <div
       v-if="toastMsg"
       class="fixed bottom-20 right-6 z-[120] bg-slate-900 text-white px-4 py-3 rounded-xl shadow-xl text-xs font-bold flex items-center gap-2"

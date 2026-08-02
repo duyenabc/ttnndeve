@@ -72,7 +72,6 @@
 
     <div v-if="toast" class="fixed bottom-6 right-6 z-[90] bg-on-surface text-white px-4 py-3 rounded-lg shadow-lg text-body-md">{{ toast }}</div>
 
-    <!-- Reject reason modal -->
     <div v-if="rejectTarget" class="fixed inset-0 z-[80] flex items-center justify-center bg-black/40 px-4" @click.self="rejectTarget = null">
       <div class="w-full max-w-[440px] bg-white rounded-2xl shadow-xl p-6">
         <h3 class="font-title-lg text-title-lg font-semibold text-on-surface mb-4">Từ chối yêu cầu</h3>

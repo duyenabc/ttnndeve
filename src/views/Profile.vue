@@ -1,13 +1,11 @@
 <template>
   <div class="ims-scope max-w-5xl mx-auto font-sans space-y-6 pb-20">
-    <!-- Breadcrumb -->
     <nav class="flex items-center text-xs text-slate-500 gap-1.5">
       <router-link to="/dashboard" class="hover:text-[#005EA3] transition font-medium">Bảng tin</router-link>
       <span class="material-symbols-outlined text-[14px]">chevron_right</span>
       <span class="text-slate-900 font-bold">Hồ sơ cá nhân</span>
     </nav>
 
-    <!-- Page Header Title -->
     <div>
       <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
         <span class="material-symbols-outlined text-[#005EA3] text-[28px]">badge</span>
@@ -16,9 +14,7 @@
       <p class="text-xs text-slate-500 mt-1">Quản lý thông tin tài khoản định danh và cập nhật ảnh đại diện sinh viên/giảng viên.</p>
     </div>
 
-    <!-- Profile Canvas Card -->
     <div class="bg-white rounded-2xl border border-slate-200 shadow-2xs overflow-hidden">
-      <!-- Hero Header Gradient -->
       <div class="relative h-40 bg-gradient-to-r from-[#003362] to-[#005EA3]">
         <div class="absolute -bottom-12 left-8 sm:left-12">
           <div class="relative group">
@@ -41,7 +37,6 @@
         </div>
       </div>
 
-      <!-- Info Grid Area -->
       <div class="pt-16 p-8 sm:p-12 space-y-8">
         <div>
           <h3 class="text-lg font-extrabold text-slate-900">Thông tin cơ bản</h3>
@@ -49,7 +44,6 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
-          <!-- Field: Họ và tên -->
           <div class="space-y-1.5">
             <label class="block font-bold text-slate-400 uppercase tracking-wider text-[10px]">Họ và tên</label>
             <div class="px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-extrabold text-sm uppercase">
@@ -57,7 +51,6 @@
             </div>
           </div>
 
-          <!-- Field: Mã định danh -->
           <div class="space-y-1.5">
             <label class="block font-bold text-slate-400 uppercase tracking-wider text-[10px]">Mã sinh viên / Mã định danh</label>
             <div class="px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-bold font-mono text-sm">
@@ -65,7 +58,6 @@
             </div>
           </div>
 
-          <!-- Field: Email công vụ -->
           <div class="space-y-1.5">
             <label class="block font-bold text-slate-400 uppercase tracking-wider text-[10px]">Email công vụ (@due.edu.vn)</label>
             <div class="px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-medium text-sm">
@@ -73,7 +65,6 @@
             </div>
           </div>
 
-          <!-- Field: Bộ môn / Lớp sinh hoạt -->
           <div class="space-y-1.5">
             <label class="block font-bold text-slate-400 uppercase tracking-wider text-[10px]">Lớp sinh hoạt / Chuyên ngành</label>
             <div class="px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-medium text-sm">
@@ -81,7 +72,6 @@
             </div>
           </div>
 
-          <!-- Field: Khoa -->
           <div class="space-y-1.5">
             <label class="block font-bold text-slate-400 uppercase tracking-wider text-[10px]">Khoa trực thuộc</label>
             <div class="px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-medium text-sm">
@@ -89,7 +79,6 @@
             </div>
           </div>
 
-          <!-- Field: Số điện thoại -->
           <div class="space-y-1.5">
             <label class="block font-bold text-slate-400 uppercase tracking-wider text-[10px]">Số điện thoại liên hệ</label>
             <div class="px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-medium text-sm">
@@ -98,7 +87,6 @@
           </div>
         </div>
 
-        <!-- Footer Note Banner -->
         <div class="p-4 bg-blue-50/70 border border-blue-200 rounded-xl flex items-start gap-3 text-xs">
           <span class="material-symbols-outlined text-[#005EA3] shrink-0 text-[20px]">info</span>
           <p class="text-slate-700 leading-relaxed font-medium">

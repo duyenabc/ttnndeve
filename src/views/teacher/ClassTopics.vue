@@ -1,6 +1,5 @@
 ﻿<template>
   <div class="ims-scope w-full mx-auto space-y-6 font-sans pb-20">
-    <!-- Breadcrumbs & Header -->
     <div>
       <nav class="flex items-center gap-2 text-[13px] text-slate-500 mb-3">
         <router-link to="/teacher/classes" class="hover:text-blue-700 transition-colors">Lớp của tôi</router-link>
@@ -10,7 +9,6 @@
       <h1 class="text-[32px] font-bold text-slate-900 tracking-tight">Công việc</h1>
     </div>
 
-    <!-- Sub Navigation Tabs -->
     <div class="flex items-center gap-8 border-b border-slate-200 mt-2">
       <router-link
         :to="`/teacher/classes/${classId}/diaries`"
@@ -35,7 +33,6 @@
       </router-link>
     </div>
 
-    <!-- Search & Lock Registration Bar -->
     <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-2xs space-y-4">
       <div class="flex flex-col md:flex-row justify-between items-stretch md:items-center gap-4">
         <div class="relative flex-1">
@@ -60,7 +57,6 @@
         </button>
       </div>
 
-      <!-- Filter Pills -->
       <div class="flex flex-wrap items-center gap-2">
         <button
           v-for="status in statusOptions"
@@ -79,7 +75,6 @@
       </div>
     </div>
 
-    <!-- Topics Table -->
     <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-2xs">
       <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse text-xs">
@@ -185,7 +180,6 @@
       </div>
     </div>
 
-    <!-- Detail Slide-over Panel (E05.3) -->
     <div
       v-if="selectedTopic"
       class="fixed inset-0 z-[110] flex justify-end bg-slate-900/50 backdrop-blur-xs"
@@ -206,7 +200,6 @@
             <button @click="selectedTopic = null" class="text-slate-400 hover:text-slate-600">âœ•</button>
           </div>
 
-          <!-- Student & Intern Info Grid -->
           <div class="grid grid-cols-2 gap-2.5 p-3.5 bg-slate-50 rounded-2xl text-xs text-slate-700 border border-slate-200">
             <div>
               <span class="text-[10px] text-slate-400 font-bold uppercase block">Nhóm / HÃ¬nh thá»©c</span>
@@ -229,7 +222,6 @@
             </div>
           </div>
 
-          <!-- Group Members Section -->
           <div v-if="selectedTopic.members && selectedTopic.members.length > 0" class="p-3 bg-blue-50/50 rounded-2xl border border-blue-100 space-y-2">
             <div class="flex items-center justify-between text-xs">
               <span class="font-bold text-slate-900 flex items-center gap-1.5">
@@ -260,7 +252,6 @@
             </div>
           </div>
 
-          <!-- Visual Approval History (Revision Timeline) -->
           <div v-if="topicHistoryList && topicHistoryList.length > 0" class="space-y-3">
             <h4 class="font-bold text-slate-900 text-xs uppercase tracking-wider flex items-center gap-1.5">
               <span class="material-symbols-outlined text-[#005EA3] text-[18px]">history</span>
@@ -268,7 +259,6 @@
             </h4>
             <div class="border-l-2 border-slate-200 pl-4 ml-2 space-y-4">
               <div v-for="(hist, idx) in topicHistoryList" :key="idx" class="relative">
-                <!-- Timeline Dot -->
                 <div class="absolute -left-[22px] top-1 w-2.5 h-2.5 rounded-full border-2 border-white" :class="hist.status === 'ÄÃ£ duyá»‡t' ? 'bg-emerald-500 ring-2 ring-emerald-100' : (hist.status === 'Tá»« chá»‘i' ? 'bg-rose-500 ring-2 ring-rose-100' : 'bg-amber-500 ring-2 ring-amber-100')"></div>
                 
                 <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs space-y-1.5">
@@ -290,7 +280,6 @@
             </div>
           </div>
 
-          <!-- Description -->
           <div class="space-y-1 text-xs">
             <h4 class="font-bold text-slate-900">MÃ´ táº£ Ä‘á» tÃ i</h4>
             <p class="text-slate-600 leading-relaxed bg-slate-50 p-3 rounded-xl border border-slate-200">
@@ -298,7 +287,6 @@
             </p>
           </div>
 
-          <!-- Proposal File Attachment -->
           <div v-if="selectedTopic.file || selectedTopic.fileUrl" class="p-3 border border-slate-200 rounded-xl bg-slate-50 flex items-center justify-between hover:bg-slate-100 transition cursor-pointer">
             <div class="flex items-center gap-2">
               <span class="material-symbols-outlined text-rose-600">
@@ -315,7 +303,6 @@
             </button>
           </div>
 
-          <!-- Feedback / Reason Input -->
           <div class="space-y-1 text-xs">
             <label class="font-bold text-slate-900 block">Ã kiáº¿n pháº£n há»“i / LÃ½ do tá»« chá»‘i, chỉnh sửa *</label>
             <textarea
@@ -331,7 +318,6 @@
           </div>
         </div>
 
-        <!-- Action Footer -->
         <div class="pt-4 border-t border-slate-100 grid grid-cols-3 gap-2">
           <button
             @click="handleStatusUpdate('ÄÃ£ duyá»‡t')"
@@ -355,7 +341,6 @@
       </div>
     </div>
 
-    <!-- Unlock Edit Drawer Modal -->
     <div
       v-if="unlockDrawerTopic"
       class="fixed inset-0 z-[120] flex justify-end bg-slate-900/50 backdrop-blur-xs"
@@ -399,7 +384,6 @@
       </div>
     </div>
 
-    <!-- Confirmation Lock Modal -->
     <div
       v-if="showLockConfirmModal"
       class="fixed inset-0 z-[120] bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4"
@@ -426,7 +410,6 @@
       </div>
     </div>
 
-    <!-- Toast Notification -->
     <div
       v-if="toastMsg"
       class="fixed bottom-6 right-6 z-[130] bg-slate-900 text-white px-4 py-3 rounded-xl shadow-xl text-xs font-bold flex items-center gap-2"
@@ -465,14 +448,12 @@
   const topicHistoryList = computed(() => {
     if (!selectedTopic.value) return [];
     
-    // If the topic already has a structured list, use it
     if (selectedTopic.value.historyList) {
       return selectedTopic.value.historyList;
     }
     
     const list = [];
     
-    // For demo/aesthetic completeness, provide structured logs
     if (selectedTopic.value.mssv === '20241001') {
       list.push({
         round: 'VÃ²ng 2',
@@ -493,7 +474,6 @@
         feedback: 'TÃªn Ä‘á» tÃ i quÃ¡ rá»™ng, cáº§n thu háº¹p pháº¡m vi Ã¡p dá»¥ng vào má»™t dá»± Ã¡n thá»±c táº¿ cá»¥ thá»ƒ.'
       });
     } else {
-      // General fallback based on current status
       if (selectedTopic.value.status === 'ÄÃ£ duyá»‡t') {
         list.push({
           round: 'VÃ²ng 1',
@@ -598,7 +578,6 @@
         };
       });
 
-      // 1. Load from localStorage fallbacks for these students
       topics.value.forEach(t => {
         const mssv = t.mssv;
         if (!mssv) return;
@@ -628,7 +607,6 @@
     } catch (err) {
       console.error('Error loading class roster for topics:', err);
     } finally {
-      // 2. Real-time Firebase topic sync
       unsubscribeTopics = listenAllTopics((firestoreTopics) => {
         firestoreTopics.forEach(ft => {
           const mssv = ft.mssv || ft.userId;
@@ -700,7 +678,6 @@
       return matchStatus && matchSearch;
     });
 
-    // Prioritize 'Chá» duyá»‡t' (Pending) status
     return list.sort((a, b) => {
       if (a.status === 'Chá» duyá»‡t' && b.status !== 'Chá» duyá»‡t') return -1;
       if (b.status === 'Chá» duyá»‡t' && a.status !== 'Chá» duyá»‡t') return 1;
@@ -762,14 +739,12 @@
       localStorage.setItem('ims_student_topic_status', 'rejected');
       localStorage.setItem(`ims_student_topic_feedback_${mssv}`, unlockReason.value);
       
-      // Update in Firestore
       updateTopicStatusInDb(mssv, {
         status: 'rejected',
         feedback: unlockReason.value,
         isUnlockedEdit: true
       });
 
-      // Dispatch real-time notification to student via Firebase
       sendRealtimeNotification({
         role: 'SinhVien',
         userId: mssv,
@@ -808,7 +783,6 @@
       selectedTopic.value.status = newStatus;
       const mssv = selectedTopic.value.mssv || '20241001';
 
-      // Map teacher's status back to student's status key
       let mappedStatus = 'new';
       if (newStatus === 'ÄÃ£ duyá»‡t') mappedStatus = 'approved';
       else if (newStatus === 'Chá» duyá»‡t') mappedStatus = 'pending';
@@ -824,14 +798,12 @@
         localStorage.removeItem(`ims_student_topic_feedback_${mssv}`);
       }
 
-      // Update in Firestore
       updateTopicStatusInDb(mssv, {
         status: mappedStatus,
         feedback: feedbackText.value || '',
         isUnlockedEdit: false
       });
 
-      // Dispatch real-time Firebase notification to student
       sendRealtimeNotification({
         role: 'SinhVien',
         userId: mssv,

@@ -1,6 +1,5 @@
 ﻿<template>
   <div class="ims-scope w-full mx-auto space-y-6 font-sans pb-24">
-    <!-- Breadcrumb & Top Header -->
     <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div>
         <nav class="flex items-center gap-2 text-xs text-slate-500 mb-2">
@@ -23,10 +22,8 @@
       </button>
     </div>
 
-    <!-- Filter & Search Bar -->
     <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-2xs space-y-4">
       <div class="flex flex-col md:flex-row justify-between items-stretch md:items-center gap-4">
-        <!-- Source Toggle -->
         <div class="flex bg-slate-100 p-1 rounded-xl border border-slate-200 w-fit text-xs font-bold">
           <button
             @click="sourceFilter = 'ALL'"
@@ -52,7 +49,6 @@
         </div>
 
         <div class="flex items-center gap-3">
-          <!-- Search Input -->
           <div class="relative min-w-[260px]">
             <span class="material-symbols-outlined absolute left-3 top-2.5 text-slate-400 text-[18px]">search</span>
             <input
@@ -63,7 +59,6 @@
             />
           </div>
 
-          <!-- Status Dropdown -->
           <select
             v-model="statusFilter"
             class="px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold text-slate-700 outline-none focus:ring-2 focus:ring-blue-600"
@@ -76,7 +71,6 @@
       </div>
     </div>
 
-    <!-- Document Cards Grid -->
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
       <div
         v-for="doc in filteredDocuments"
@@ -84,7 +78,6 @@
         class="bg-white rounded-2xl border border-slate-200 p-5 shadow-2xs hover:shadow-md transition-all flex flex-col justify-between relative group overflow-hidden h-[260px]"
         :class="doc.status === 'Ngá»«ng sá»­ dá»¥ng' ? 'opacity-75 bg-slate-50' : ''"
       >
-        <!-- Top Badges -->
         <div class="flex justify-between items-center z-10">
           <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold" :class="getSourceBadgeClass(doc.source)">
             {{ doc.source }}
@@ -94,7 +87,6 @@
           </span>
         </div>
 
-        <!-- File Icon & Title -->
         <div class="flex-1 flex flex-col items-center justify-center text-center my-2">
           <div class="w-14 h-14 rounded-2xl flex items-center justify-center font-black text-sm mb-3 shadow-2xs" :class="getFileIconClass(doc.type)">
             <span class="material-symbols-outlined text-[32px]">{{ getFileIconSymbol(doc.type) }}</span>
@@ -105,7 +97,6 @@
           <p class="text-[11px] text-slate-500 mt-1 font-medium">{{ doc.size }} â€¢ {{ doc.date }}</p>
         </div>
 
-        <!-- Hover Action Slide Footer -->
         <div class="absolute bottom-0 left-0 right-0 h-12 bg-white/95 backdrop-blur-xs border-t border-slate-200 flex items-center justify-around translate-y-full group-hover:translate-y-0 transition-transform duration-200 z-20">
           <button
             @click="downloadDoc(doc)"
@@ -134,7 +125,6 @@
       </div>
     </div>
 
-    <!-- Upload Drawer (E04.1) -->
     <div
       v-if="showUploadDrawer"
       class="fixed inset-0 z-[110] flex justify-end bg-slate-900/50 backdrop-blur-xs"
@@ -162,7 +152,6 @@
 
             <div>
               <label class="block font-bold text-slate-700 mb-1">Chá»n táº­p tin Ä‘Ã­nh kÃ¨m (Báº®T BUá»˜C)</label>
-              <!-- Dropzone Area -->
               <div
                 @click="triggerFileInput"
                 class="border-2 border-dashed border-slate-300 hover:border-blue-600 bg-slate-50 hover:bg-blue-50/30 rounded-2xl p-6 text-center transition cursor-pointer space-y-2"
@@ -177,7 +166,6 @@
                 <input ref="fileInputRef" type="file" class="hidden" accept=".pdf,.doc,.docx,.xls,.xlsx" @change="onFileSelected" />
               </div>
 
-              <!-- File Preview & Validation Message -->
               <div v-if="selectedFile" class="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-xl flex items-center justify-between">
                 <div class="flex items-center gap-2 truncate">
                   <span class="material-symbols-outlined text-blue-600">description</span>
@@ -203,7 +191,6 @@
       </div>
     </div>
 
-    <!-- Confirm Delete Modal -->
     <div
       v-if="docToDelete"
       class="fixed inset-0 z-[120] bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4"
@@ -231,7 +218,6 @@
       </div>
     </div>
 
-    <!-- Toast Notification -->
     <div
       v-if="toastMsg"
       class="fixed bottom-6 right-6 z-[130] bg-slate-900 text-white px-4 py-3 rounded-xl shadow-xl text-xs font-bold flex items-center gap-2"

@@ -1,9 +1,6 @@
 import api from '@/api/api';
 
-/**
- * Poll .NET notifications API (replaces Firestore realtime).
- * Returns an unsubscribe function compatible with MainLayout.
- */
+/** Poll notifications; returns unsubscribe for MainLayout. */
 export function subscribeNotifications(role, userId, onData, onError) {
   let stopped = false;
 

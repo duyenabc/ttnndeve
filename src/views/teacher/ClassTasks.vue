@@ -1,8 +1,6 @@
 <template>
   <div class="ims-scope w-full mx-auto space-y-6 font-sans pb-24">
-    <!-- Main Task & Event Management View -->
     <div v-if="!activeSubmissionEvent" class="space-y-6">
-      <!-- Breadcrumbs & Header -->
       <div>
         <nav class="flex items-center gap-2 text-[13px] text-slate-500 mb-3">
           <router-link to="/teacher/classes" class="hover:text-blue-700 transition-colors">Lớp của tôi</router-link>
@@ -12,7 +10,6 @@
         <h1 class="text-[32px] font-bold text-slate-900 tracking-tight">Công việc</h1>
       </div>
 
-      <!-- Sub Navigation Tabs -->
       <div class="flex items-center gap-8 border-b border-slate-200 mt-2">
         <router-link
           :to="`/teacher/classes/${classId}/diaries`"
@@ -37,7 +34,6 @@
         </router-link>
       </div>
 
-      <!-- Filter Bar & Create Event Button -->
       <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-2xs flex flex-col md:flex-row justify-between items-stretch md:items-center gap-4">
         <div class="flex items-center gap-2 bg-slate-100 p-1 rounded-xl border border-slate-200 w-fit text-xs font-bold">
           <button
@@ -67,7 +63,6 @@
         </div>
       </div>
 
-      <!-- Event List Table -->
       <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-2xs">
         <div class="overflow-x-auto">
           <table class="w-full text-left border-collapse">
@@ -149,9 +144,7 @@
       </div>
     </div>
 
-    <!-- Submission Tracking Detail View (E06.3) -->
     <div v-else-if="activeSubmissionEvent" class="space-y-6">
-      <!-- Breadcrumb Navigation -->
       <nav class="flex items-center gap-2 text-xs text-slate-500">
         <button @click="activeSubmissionEvent = null" class="hover:text-blue-700 font-medium">Công việc</button>
         <span class="material-symbols-outlined text-[14px]">chevron_right</span>
@@ -160,7 +153,6 @@
         <span class="font-bold text-slate-900">{{ activeSubmissionEvent.title }}</span>
       </nav>
 
-      <!-- Event Header Info -->
       <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div class="flex items-center gap-2 mb-1">
@@ -184,7 +176,6 @@
         </button>
       </div>
 
-      <!-- Filters Row -->
       <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-2xs flex flex-col md:flex-row justify-between items-stretch md:items-center gap-4">
         <div class="relative flex-1 max-w-md">
           <span class="material-symbols-outlined absolute left-3 top-2.5 text-slate-400 text-[18px]">search</span>
@@ -212,7 +203,6 @@
         </div>
       </div>
 
-      <!-- Submission Table -->
       <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-2xs">
         <div class="overflow-x-auto">
           <table class="w-full text-left border-collapse text-xs">
@@ -278,12 +268,10 @@
       </div>
     </div>
 
-    <!-- FULL-PAGE / SIDE-BY-SIDE RUBRIC EVALUATION MODAL (E07.5) -->
     <div
       v-if="selectedSubForReview"
       class="fixed inset-0 z-[110] bg-white flex flex-col font-sans"
     >
-      <!-- Top Header -->
       <header class="h-14 bg-[#005EA3] text-white px-6 flex items-center justify-between shrink-0 shadow-md">
         <div class="flex items-center gap-4">
           <button @click="selectedSubForReview = null" class="hover:bg-white/10 p-1.5 rounded-lg transition" title="� óng">
@@ -315,11 +303,8 @@
         </div>
       </header>
 
-      <!-- Main Split View Container -->
       <div class="flex-1 flex overflow-hidden">
-        <!-- Left Side: Document Viewer (58%) -->
         <section class="w-full lg:w-[58%] bg-slate-100 border-r border-slate-300 flex flex-col relative">
-          <!-- Document Viewer Toolbar -->
           <div class="h-11 bg-white border-b border-slate-200 flex items-center justify-between px-4 text-xs shrink-0">
             <div class="flex items-center gap-3">
               <div class="flex items-center bg-slate-100 rounded-lg p-0.5 border border-slate-200">
@@ -340,12 +325,10 @@
             </div>
           </div>
 
-          <!-- Document Canvas Content (Scrollable) -->
           <div
             class="flex-1 overflow-y-auto p-6 flex justify-center bg-slate-200/60 custom-scrollbar relative"
             @mouseup="onTextSelect"
           >
-            <!-- Floating "+ Comment" button on text selection -->
             <div
               v-if="isSupportedFile && floatingBtn.visible"
               class="fixed z-[200] flex items-center gap-1 px-3 py-1.5 bg-slate-900 text-white text-xs font-bold rounded-xl shadow-xl cursor-pointer hover:bg-blue-700 transition"
@@ -398,9 +381,7 @@
           </div>
         </section>
 
-        <!-- Right Side: Review Panel (42%) with Tabs -->
         <section class="w-full lg:w-[42%] bg-white flex flex-col border-l border-slate-200 overflow-hidden">
-          <!-- Tab bar -->
           <div class="flex border-b border-slate-200 bg-slate-50 text-xs font-bold shrink-0">
             <button
               v-if="isSupportedFile"
@@ -423,14 +404,12 @@
           </div>
 
           <div class="flex-1 overflow-y-auto custom-scrollbar">
-            <!-- TAB 1: Inline Highlight Comments -->
             <div v-if="reviewTab === 'comments'" class="p-5 space-y-4">
               <p class="text-xs text-slate-500 bg-amber-50 border border-amber-200 rounded-xl p-3 flex items-start gap-2">
                 <span class="material-symbols-outlined text-amber-500 text-[18px] shrink-0">info</span>
                 B�i ?en m?t ?o?n v?n b?n trong t�i li?u b�n tr�i, sau ?� nh?n n�t <strong class="text-slate-800">"+ Comment"</strong> ?? t?o nh?n x�t g?n v�o ?o?n ?�.
               </p>
 
-              <!-- Pending new comment input -->
               <div v-if="pendingHighlight" class="border-2 border-amber-400 rounded-xl p-4 bg-amber-50 space-y-2 text-xs">
                 <p class="font-bold text-amber-900 flex items-center gap-1">
                   <span class="material-symbols-outlined text-[15px]">format_quote</span>
@@ -450,13 +429,11 @@
                 </div>
               </div>
 
-              <!-- Empty state -->
               <div v-if="highlightComments.length === 0 && !pendingHighlight" class="text-center py-10 text-slate-400">
                 <span class="material-symbols-outlined text-[40px] block mb-2">format_quote</span>
                 <p class="text-xs">Ch?a c� nh?n x�t inline n�o.<br>B�i ?en v?n b?n ?? b?t ??u.</p>
               </div>
 
-              <!-- List of saved highlights -->
               <div
                 v-for="(hc, idx) in highlightComments"
                 :key="hc.id"
@@ -476,9 +453,7 @@
               </div>
             </div>
 
-            <!-- TAB 2: Overall Review + Rubric + Score -->
             <div v-if="reviewTab === 'overall'" class="p-5 space-y-5">
-              <!-- Score Box -->
               <div class="bg-blue-50/60 border border-blue-200 p-4 rounded-2xl flex items-center justify-between">
                 <div>
                   <span class="text-[11px] font-extrabold uppercase text-blue-800 tracking-wider">T?ng ?i?m b�i n?p (Thang 10)</span>
@@ -501,7 +476,6 @@
                 </div>
               </div>
 
-              <!-- Rubric Matrix -->
               <div class="space-y-3">
                 <h3 class="font-bold text-slate-900 text-sm flex items-center gap-1.5">
                   <span class="material-symbols-outlined text-blue-600 text-[18px]">fact_check</span>
@@ -531,7 +505,6 @@
                 </div>
               </div>
 
-              <!-- Overall feedback -->
               <div class="space-y-2">
                 <h3 class="font-bold text-slate-900 text-sm flex items-center gap-1.5">
                   <span class="material-symbols-outlined text-blue-600 text-[18px]">chat_bubble</span>
@@ -553,16 +526,12 @@
       </div>
     </div>
 
-
-
-    <!-- MOODLE-STYLE COMPREHENSIVE EVENT SETUP MODAL / RUBRIC MATRIX EDITOR -->
     <div
       v-if="showCreateModal"
       class="fixed inset-0 z-[120] bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto"
       @click.self="showCreateModal = false"
     >
       <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full my-8 overflow-hidden border border-slate-200 font-sans flex flex-col max-h-[90vh]">
-        <!-- Header -->
         <div class="px-6 py-4 bg-[#005EA3] text-white flex justify-between items-center shrink-0">
           <div>
             <h2 class="font-bold text-base">
@@ -573,9 +542,7 @@
           <button @click="showCreateModal = false" class="text-white/80 hover:text-white text-lg">✕</button>
         </div>
 
-        <!-- Form Body (Scrollable) -->
         <div class="p-6 overflow-y-auto custom-scrollbar space-y-6 text-xs flex-1">
-          <!-- SECTION 1: THÔNG TIN CHUNG -->
           <section class="border border-slate-200 rounded-2xl p-4 bg-white space-y-4">
             <div
               @click="toggleSection('general')"
@@ -601,7 +568,6 @@
                   placeholder="Nhập tên sự kiện nộp tài liệu..."
                   class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 outline-none focus:ring-2 focus:ring-blue-600 font-medium"
                 />
-                <!-- Quick Suggestion Pills -->
                 <div class="flex items-center gap-2 mt-2">
                   <span class="text-[10px] text-slate-400 font-bold">Gợi ý nhanh:</span>
                   <button
@@ -630,7 +596,6 @@
 
               <div>
                 <label class="block font-bold text-slate-700 mb-1">Mô tả & Hướng dẫn cho sinh viên</label>
-                <!-- Editor Toolbar Mockup -->
                 <div class="border border-slate-300 rounded-xl overflow-hidden">
                   <div class="bg-slate-50 border-b border-slate-200 px-3 py-1.5 flex items-center gap-3 text-slate-600">
                     <span class="material-symbols-outlined text-[18px] cursor-pointer hover:text-blue-700">format_bold</span>
@@ -650,7 +615,6 @@
             </div>
           </section>
 
-          <!-- SECTION 2: THÔNG S�  KỸ THUẬT -->
           <section class="border border-slate-200 rounded-2xl p-4 bg-white space-y-4">
             <div
               @click="toggleSection('specs')"
@@ -711,7 +675,6 @@
             </div>
           </section>
 
-          <!-- SECTION 3: THỜI GIAN & THIẾT LẬP -->
           <section class="border border-slate-200 rounded-2xl p-4 bg-white space-y-4">
             <div
               @click="toggleSection('time')"
@@ -762,7 +725,6 @@
             </div>
           </section>
 
-          <!-- SECTION 4: CẤU HÌNH RUBRIC CHẤM � IỂM -->
           <section class="border border-slate-200 rounded-2xl p-4 bg-white space-y-4">
             <div
               @click="toggleSection('grading')"
@@ -783,7 +745,6 @@
                   Sự kiện này có tính điểm
                 </label>
 
-                <!-- Method Switcher -->
                 <div v-if="eventForm.isGraded" class="flex bg-slate-200 p-1 rounded-lg text-xs font-bold">
                   <button
                     type="button"
@@ -804,7 +765,6 @@
                 </div>
               </div>
 
-              <!-- Interactive Rubric Matrix Builder -->
               <div v-if="eventForm.isGraded && eventForm.gradingMethod === 'rubric'" class="space-y-4 border border-blue-200 p-4 bg-blue-50/20 rounded-2xl">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <h4 class="font-bold text-slate-900 text-xs flex items-center gap-1.5">
@@ -821,7 +781,6 @@
                   </div>
                 </div>
 
-                <!-- Rubric Matrix Table -->
                 <div class="border border-slate-300 rounded-xl overflow-hidden bg-white shadow-2xs">
                   <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse text-xs">
@@ -941,7 +900,6 @@
           </section>
         </div>
 
-        <!-- Footer -->
         <div class="px-6 py-4 bg-slate-50 border-t border-slate-200 flex justify-end gap-3 shrink-0">
           <button
             type="button"
@@ -962,7 +920,6 @@
       </div>
     </div>
 
-    <!-- Toast Notification -->
     <div
       v-if="toastMsg"
       class="fixed top-6 left-1/2 -translate-x-1/2 z-[150] bg-slate-900 text-white px-5 py-3 rounded-xl shadow-2xl text-xs font-bold flex items-center gap-2"
@@ -987,7 +944,6 @@
   const isEditing = ref(false);
   const toastMsg = ref('');
 
-  // Section collapse toggles in Event setup form
   const sectionOpen = ref({
     general: true,
     specs: true,
@@ -999,7 +955,6 @@
     sectionOpen.value[sec] = !sectionOpen.value[sec];
   }
 
-  // Submissions state
   const activeSubmissionEvent = ref(null);
   const submissionSearch = ref('');
   const submissionStatusFilter = ref('ALL');
@@ -1013,7 +968,6 @@
     return supportedExtensions.includes(ext.toLowerCase());
   });
 
-  // Rubric Review state
   const zoomLevel = ref(100);
   const currentPage = ref(4);
   const currentDirectScore = ref(8.5);
@@ -1026,7 +980,6 @@
   const pendingHighlight = ref(null);
   const floatingBtn = ref({ visible: false, x: 0, y: 0, text: '' });
 
-  // Document paragraph segments for highlight rendering
   const docSegments = ref([]);
   const rawDocText = 'Trong tu?n qua t?i doanh nghi?p, em ?� ti?p t?c nghi�n c?u c?u tr�c h? th?ng backend, x�y d?ng b? test case ki?m th? t? ??ng cho c�c API giao d?ch ch�nh v� ho�n th�nh b�o c�o gi?a k?.';
 
@@ -1065,7 +1018,6 @@
       comment: draft.trim(),
       timestamp: new Date().toLocaleString('vi-VN')
     });
-    // Mark matched segment as highlighted
     const newSegs = [];
     for (const seg of docSegments.value) {
       if (!seg.highlighted && seg.text.includes(text)) {
@@ -1116,7 +1068,6 @@
     currentSubIndex.value = nextIdx;
     openRubricReview(list[nextIdx]);
   }
-
 
   const rubricCriteria = ref([
     {
@@ -1173,7 +1124,6 @@
 
   const events = ref([]);
 
-  // Submissions
   const submissions = ref([]);
   const pendingTopicsCount = ref(0);
   let unsubscribeTopics = null;
@@ -1185,7 +1135,6 @@
   });
 
   onMounted(async () => {
-    // Listen to all topics to count pending approvals
     unsubscribeTopics = listenAllTopics((firestoreTopics) => {
       const pendingList = firestoreTopics.filter(t => t.status === 'pending');
       pendingTopicsCount.value = pendingList.length;
@@ -1200,7 +1149,6 @@
     }
   });
 
-  // Event Setup Form state
   const eventForm = ref({
     id: null,
     title: '',
@@ -1216,7 +1164,6 @@
     rubricCalcMethod: 'avg'
   });
 
-  // Dynamic Rubric Levels & Criteria state for editor
   const rubricLevels = ref(['Mức 1', 'Mức 2', 'Mức 3']);
   const editableCriteria = ref([
     {

@@ -1,6 +1,5 @@
 <template>
   <div class="ims-scope w-full mx-auto space-y-6">
-    <!-- Top Header -->
     <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div>
         <h1 class="font-bold text-2xl text-slate-900 tracking-tight flex items-center gap-2">
@@ -17,7 +16,6 @@
       </div>
     </div>
 
-    <!-- Stats Bar -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs flex items-center justify-between">
         <div>
@@ -64,7 +62,6 @@
       </div>
     </div>
 
-    <!-- Filters & Table Card -->
     <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs space-y-4">
       <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
         <div class="relative flex-1">
@@ -86,7 +83,6 @@
         </div>
       </div>
 
-      <!-- Students Table -->
       <div class="border border-slate-200 rounded-2xl overflow-x-auto">
         <table class="w-full text-left text-xs border-collapse">
           <thead>
@@ -154,10 +150,8 @@
       </div>
     </div>
 
-    <!-- Drawer Há»“ sÆ¡ Chi tiáº¿t Sinh viên -->
     <div v-if="detail" class="fixed inset-0 z-[85] flex justify-end bg-black/40 backdrop-blur-xs" @click.self="detail = null">
       <div class="w-full max-w-[520px] h-full bg-white shadow-2xl flex flex-col justify-between overflow-hidden">
-        <!-- Drawer Header -->
         <div class="p-6 border-b border-slate-200 flex justify-between items-start bg-slate-50">
           <div>
             <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase bg-blue-100 text-blue-800 mb-2 inline-block">
@@ -171,9 +165,7 @@
           </button>
         </div>
 
-        <!-- Drawer Body -->
         <div class="p-6 overflow-y-auto space-y-6 flex-1 text-xs">
-          <!-- Personal Info -->
           <div class="space-y-3">
             <h4 class="font-bold text-slate-900 uppercase tracking-wider text-[11px] text-blue-900 border-b border-slate-100 pb-1">
               Thông tin Há»c pháº§n & LiÃªn há»‡
@@ -186,7 +178,6 @@
             </div>
           </div>
 
-          <!-- Enterprise Info -->
           <div class="space-y-3">
             <h4 class="font-bold text-slate-900 uppercase tracking-wider text-[11px] text-blue-900 border-b border-slate-100 pb-1">
               Doanh nghi�!p & CÃ¡n bá»™ hư�:ng dẫn
@@ -209,7 +200,6 @@
             </div>
           </div>
 
-          <!-- Project Topic -->
           <div class="space-y-2">
             <h4 class="font-bold text-slate-900 uppercase tracking-wider text-[11px] text-blue-900 border-b border-slate-100 pb-1">
               Äá» tÃ i ÄÄƒng kÃ½
@@ -220,7 +210,6 @@
             </div>
           </div>
 
-          <!-- Grades Breakdown -->
           <div class="space-y-3">
             <h4 class="font-bold text-slate-900 uppercase tracking-wider text-[11px] text-blue-900 border-b border-slate-100 pb-1">
               Bảng �iỒm ÄÃ¡nh giÃ¡ Chi tiáº¿t
@@ -234,7 +223,6 @@
           </div>
         </div>
 
-        <!-- Footer -->
         <div class="p-4 bg-slate-50 border-t border-slate-200 flex justify-end">
           <button class="px-5 py-2 bg-slate-200 hover:bg-slate-300 font-bold text-slate-700 rounded-xl text-xs transition-colors" @click="detail = null">
             ÄÃ³ng

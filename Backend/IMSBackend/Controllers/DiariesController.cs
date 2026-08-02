@@ -73,7 +73,7 @@ namespace IMSBackend.Controllers
             return Ok(new { message = "Đã cập nhật nhật ký" });
         }
 
-        /// <summary>UC-18.3 — teacher feedback on a submitted diary (+ notify student).</summary>
+        /// <summary>UC-18.3</summary>
         [HttpPut("{id}/feedback")]
         public async Task<IActionResult> AddFeedback(string id, [FromBody] FeedbackRequest req)
         {
@@ -123,7 +123,6 @@ namespace IMSBackend.Controllers
             });
 
             await _context.SaveChangesAsync();
-            Console.WriteLine($"[IMS][UC-18.3] Feedback on diary={id} → notify user={diary.UserId}");
 
             return Ok(new
             {
@@ -133,7 +132,7 @@ namespace IMSBackend.Controllers
             });
         }
 
-        /// <summary>UC-18.3 — evaluation history: all feedbacks for a student.</summary>
+        /// <summary>UC-18.3 feedback history</summary>
         [HttpGet("feedback-history")]
         public async Task<IActionResult> GetFeedbackHistory([FromQuery] string userId, [FromQuery] string classId)
         {
@@ -167,7 +166,7 @@ namespace IMSBackend.Controllers
             return Ok(history);
         }
         
-        /// <summary>UC-18.2 — mark diary read by teacher (default) or student.</summary>
+        /// <summary>UC-18.2 mark read</summary>
         [HttpPut("{id}/read")]
         public async Task<IActionResult> MarkRead(string id, [FromQuery] string by = "teacher")
         {

@@ -1,6 +1,5 @@
 <template>
   <div class="ims-scope space-y-6">
-    <!-- Top Greeting & Role Switch Bar -->
     <div class="bg-white rounded-2xl border border-outline-variant p-6 shadow-xs flex flex-wrap items-center justify-between gap-4">
       <div>
         <p class="text-body-sm text-slate-500 font-medium flex items-center gap-2">
@@ -19,7 +18,6 @@
       </div>
 
       <div class="flex items-center gap-3">
-        <!-- Role quick switch indicator (helpful for testing & display) -->
         <div class="bg-slate-50 px-3 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 flex items-center gap-2">
           <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
           Tài khoản: <span class="text-slate-900 font-bold">{{ authStore.user?.maDinhDanh }}</span>
@@ -27,11 +25,7 @@
       </div>
     </div>
 
-    <!-- ========================================================================= -->
-    <!-- 1. ADMIN DASHBOARD (Quản trị hệ thống) -->
-    <!-- ========================================================================= -->
     <div v-if="userRole === 'Admin'" class="space-y-6">
-      <!-- Admin System Health Metrics -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs flex items-center justify-between">
           <div>
@@ -78,7 +72,6 @@
         </div>
       </div>
 
-      <!-- Admin Quick Action & Requests Management -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div class="lg:col-span-2 bg-white rounded-2xl border border-slate-200 p-6 shadow-xs space-y-4">
           <div class="flex items-center justify-between">
@@ -135,11 +128,7 @@
       </div>
     </div>
 
-    <!-- ========================================================================= -->
-    <!-- 2. GIÁO VỤ KHOA DASHBOARD (Quản lý Tiến độ Khoa & Khóa sổ điểm) -->
-    <!-- ========================================================================= -->
     <div v-else-if="userRole === 'GiaoVu'" class="space-y-6">
-      <!-- Recharts Analytics Banner for Giao Vu -->
       <div class="p-5 bg-gradient-to-r from-blue-900 to-[#005EA3] rounded-2xl text-white shadow-md flex flex-wrap items-center justify-between gap-4">
         <div class="flex items-center gap-4">
           <div class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center shrink-0 backdrop-blur-xs">
@@ -159,7 +148,6 @@
         </router-link>
       </div>
 
-      <!-- Alerts Banner for Giao Vu -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div class="p-4 bg-amber-50 border border-amber-200 rounded-2xl flex items-center justify-between">
           <div class="flex items-center gap-3">
@@ -188,17 +176,12 @@
         </div>
       </div>
 
-      <!-- Department Wide Statistics Chart Component (Exclusively for GiaoVu) -->
       <div class="bg-white rounded-2xl border border-slate-200 p-2 shadow-xs">
         <DashboardSummaryChart />
       </div>
     </div>
 
-    <!-- ========================================================================= -->
-    <!-- 3. GIẢNG VIÊN DASHBOARD (Giảng viên hướng dẫn) -->
-    <!-- ========================================================================= -->
     <div v-else-if="userRole === 'GiangVien'" class="space-y-6">
-      <!-- Recharts Analytics Quick Banner for Teacher -->
       <div class="p-5 bg-gradient-to-r from-blue-900 to-[#005EA3] rounded-2xl text-white shadow-md flex flex-wrap items-center justify-between gap-4">
         <div class="flex items-center gap-4">
           <div class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center shrink-0 backdrop-blur-xs">
@@ -218,7 +201,6 @@
         </router-link>
       </div>
 
-      <!-- 1. Setup Checklist (Collapsible) -->
       <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs">
         <details class="group" open>
           <summary class="flex items-center justify-between p-4 cursor-pointer hover:bg-slate-50 transition-colors list-none select-none">
@@ -259,9 +241,7 @@
         </details>
       </div>
 
-      <!-- 2. Bento Layout Grid (Timeline + KPI cards & charts) -->
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <!-- Timeline Side Column -->
         <div class="lg:col-span-3 bg-white p-5 rounded-2xl border border-slate-200 shadow-xs flex flex-col justify-between">
           <h3 class="font-bold text-xs uppercase tracking-wider text-slate-400 mb-6 flex items-center gap-1.5">
             <span class="material-symbols-outlined text-[16px] text-blue-600">timeline</span> Timeline Kỳ Thực Tập
@@ -295,11 +275,8 @@
           </div>
         </div>
 
-        <!-- Main Dashboard KPIs & Charts -->
         <div class="lg:col-span-9 space-y-6">
-          <!-- Row 1: KPI Cards -->
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <!-- Card 1 -->
             <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-3">
               <div class="flex justify-between items-start">
                 <span class="material-symbols-outlined text-blue-700 p-2 bg-blue-50 rounded-xl text-[20px]">history_edu</span>
@@ -314,7 +291,6 @@
               </div>
             </div>
 
-            <!-- Card 2 -->
             <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-3">
               <div class="flex justify-between items-start">
                 <span class="material-symbols-outlined text-rose-600 p-2 bg-rose-50 rounded-xl text-[20px]">error_outline</span>
@@ -327,7 +303,6 @@
               <p class="text-[11px] text-slate-500">Sinh viên quá hạn nộp báo cáo &gt; 2 ngày.</p>
             </div>
 
-            <!-- Card 3 -->
             <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-3">
               <div class="flex justify-between items-start">
                 <span class="material-symbols-outlined text-amber-600 p-2 bg-amber-50 rounded-xl text-[20px]">calendar_month</span>
@@ -343,11 +318,8 @@
             </div>
           </div>
 
-          <!-- Dynamic Charts & Heatmap Conditional Rendering -->
           <div v-if="hasTeacherData" class="space-y-6">
-            <!-- Row 2: Charts -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <!-- Chart 1: Donut breakdown -->
               <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-4">
                 <h4 class="font-bold text-sm text-slate-900">Trạng thái Sinh viên (Lớp mặc định)</h4>
                 <div class="flex items-center gap-6 pt-2">
@@ -380,7 +352,6 @@
                 </div>
               </div>
 
-              <!-- Chart 2: Weekly Progress Line Trend -->
               <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-4">
                 <div class="flex justify-between items-center">
                   <h4 class="font-bold text-sm text-slate-900">Tiến độ nộp nhật ký chung</h4>
@@ -406,7 +377,6 @@
               </div>
             </div>
 
-            <!-- 3. Matrix Heatmap: Tình trạng nộp nhật ký theo tuần -->
             <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs space-y-4">
               <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-3 border-b border-slate-100 pb-4">
                 <div>
@@ -448,7 +418,6 @@
             </div>
           </div>
 
-          <!-- Empty State when there is no activity data yet -->
           <div v-else class="bg-white rounded-2xl border border-slate-200 p-12 text-center flex flex-col items-center justify-center min-h-[300px] shadow-2xs">
             <span class="material-symbols-outlined text-[64px] text-slate-300 mb-4" style="font-variation-settings: 'FILL' 1">analytics</span>
             <h3 class="text-base font-bold text-slate-900">Chưa có dữ liệu thống kê biểu đồ</h3>
@@ -457,7 +426,6 @@
             </p>
           </div>
 
-          <!-- Managed Classes Quick Direct Cards -->
           <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs space-y-4">
             <div class="flex items-center justify-between">
               <div>
@@ -510,15 +478,9 @@
       </div>
     </div>
 
-    <!-- ========================================================================= -->
-    <!-- 4. SINH VIÊN DASHBOARD (Sinh viên thực tập) -->
-    <!-- ========================================================================= -->
     <div v-else class="space-y-6">
-      <!-- Main Grid Layout -->
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <!-- Left Column (Main Tasks, Progress Bento, Recent Feedback) -->
         <div class="lg:col-span-8 space-y-6">
-          <!-- Urgent Task Card -->
           <div v-if="submittedCount < 15" class="bg-rose-50/80 border border-rose-200 p-6 rounded-2xl relative overflow-hidden shadow-xs">
             <div class="absolute -right-4 -top-4 text-rose-500 opacity-10 pointer-events-none">
               <span class="material-symbols-outlined text-[110px]">alarm</span>
@@ -564,14 +526,11 @@
             </router-link>
           </div>
 
-          <!-- Bento Grid: Progress Indicators -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- Progress Metrics Card -->
             <div class="bg-white border border-slate-200 p-6 rounded-2xl shadow-2xs flex flex-col justify-between">
               <div>
                 <h3 class="font-bold text-xs uppercase tracking-wider text-slate-400 mb-4">Chỉ số tiến độ</h3>
                 <div class="space-y-5">
-                  <!-- Main Progress Bar -->
                   <div class="space-y-1.5">
                     <div class="flex justify-between items-end">
                       <span class="text-xs font-bold text-slate-800">Tiến độ thực tập</span>
@@ -582,7 +541,6 @@
                     </div>
                   </div>
 
-                  <!-- Secondary Sub-Metrics -->
                   <div class="space-y-3 pt-2">
                     <div class="space-y-1">
                       <div class="flex justify-between items-center text-xs">
@@ -618,7 +576,6 @@
               </div>
             </div>
 
-            <!-- Current Week Card -->
             <div class="bg-white border border-slate-200 p-6 rounded-2xl shadow-2xs flex flex-col justify-between">
               <h3 class="font-bold text-xs uppercase tracking-wider text-slate-400 mb-2">Tuần này</h3>
               <div class="flex flex-col justify-center h-full my-4">
@@ -635,7 +592,6 @@
             </div>
           </div>
 
-          <!-- Recent Instructor Feedback -->
           <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-2xs">
             <div class="px-6 py-4 bg-slate-50/80 border-b border-slate-200 flex justify-between items-center">
               <h3 class="font-bold text-sm text-slate-900 flex items-center gap-2">
@@ -677,9 +633,7 @@
           </div>
         </div>
 
-        <!-- Right Column (Internship Roadmap Timeline & Upcoming Schedule) -->
         <div class="lg:col-span-4 space-y-6">
-          <!-- Timeline / Roadmap Card -->
           <div class="bg-white border border-slate-200 p-6 rounded-2xl shadow-2xs space-y-6">
             <h3 class="font-bold text-sm text-slate-900 flex items-center gap-2">
               <span class="material-symbols-outlined text-[#005EA3]">route</span>
@@ -687,10 +641,8 @@
             </h3>
 
             <div class="relative pl-6 space-y-8">
-              <!-- Connecting Line -->
               <div class="absolute left-[9px] top-2 bottom-2 w-0.5 bg-slate-200"></div>
 
-              <!-- Step 1: Registration and Declaration -->
               <div class="relative">
                 <div
                   class="absolute -left-[21px] top-0.5 w-3.5 h-3.5 rounded-full border-2 border-white ring-2"
@@ -708,7 +660,6 @@
                 </div>
               </div>
 
-              <!-- Step 2: Active -->
               <div class="relative">
                 <div class="absolute -left-[21px] top-0.5 w-3.5 h-3.5 rounded-full bg-[#005EA3] border-2 border-white ring-4 ring-blue-100 animate-pulse"></div>
                 <div>
@@ -721,7 +672,6 @@
                 </div>
               </div>
 
-              <!-- Step 3: Pending -->
               <div class="relative opacity-60">
                 <div class="absolute -left-[21px] top-0.5 w-3.5 h-3.5 rounded-full bg-slate-300 border-2 border-white"></div>
                 <div>
@@ -732,7 +682,6 @@
             </div>
           </div>
 
-          <!-- Upcoming Schedule Card -->
           <div class="bg-white border border-slate-200 p-6 rounded-2xl shadow-2xs space-y-4">
             <div class="flex items-center justify-between">
               <h3 class="font-bold text-sm text-slate-900 flex items-center gap-2">
@@ -745,7 +694,6 @@
             </div>
 
             <div class="space-y-2.5 text-xs">
-              <!-- Item 1: Lịch họp GVHD -->
               <div class="p-3 bg-emerald-50/70 border border-emerald-200 rounded-xl flex items-start gap-2.5">
                 <span class="material-symbols-outlined text-emerald-700 text-[18px] mt-0.5">groups</span>
                 <div>
@@ -754,7 +702,6 @@
                 </div>
               </div>
 
-              <!-- Item 2: Hạn nộp Báo cáo Tuần -->
               <div class="p-3 bg-rose-50/70 border border-rose-200 rounded-xl flex items-start gap-2.5">
                 <span class="material-symbols-outlined text-rose-700 text-[18px] mt-0.5">alarm</span>
                 <div>
@@ -763,7 +710,6 @@
                 </div>
               </div>
 
-              <!-- Item 3: Hạn nộp Báo cáo Giữa kỳ -->
               <div class="p-3 bg-amber-50/70 border border-amber-200 rounded-xl flex items-start gap-2.5">
                 <span class="material-symbols-outlined text-amber-700 text-[18px] mt-0.5">description</span>
                 <div>
@@ -801,7 +747,6 @@ const teacherClasses = ref([]);
 const loadingClasses = ref(false);
 
 const hasTeacherData = computed(() => {
-  // Show demo dashboard statistics/heatmap only if teacher manages demo class 101 or 103, which have mock students/diaries
   return teacherClasses.value.some(c => c.maLop === 101 || c.maLop === 103);
 });
 

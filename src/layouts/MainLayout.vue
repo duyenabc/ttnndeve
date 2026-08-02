@@ -1,6 +1,5 @@
 <template>
   <div class="ims-scope min-h-screen bg-surface text-on-surface">
-    <!-- Top App Bar -->
     <header class="fixed top-0 left-0 w-full z-[60] flex justify-between items-center px-3 sm:px-6 lg:px-container-padding h-16 bg-[#005EA3] border-b border-white/10 font-body-md">
       <div class="flex items-center gap-3 sm:gap-8">
         <button
@@ -38,7 +37,6 @@
       </div>
 
       <div class="flex items-center gap-4">
-        <!-- Notification Button & Dropdown -->
         <div class="relative">
           <button
             class="material-symbols-outlined text-white p-2 rounded-full hover:bg-white/10 transition-colors relative cursor-pointer select-none flex items-center justify-center"
@@ -55,13 +53,11 @@
             </span>
           </button>
 
-          <!-- Dropdown Panel -->
           <div
             v-if="notificationsOpen"
             class="absolute top-12 -right-12 sm:right-0 w-[320px] sm:w-[390px] bg-white rounded-3xl shadow-2xl border border-slate-200 z-[90] overflow-hidden font-sans text-xs transition-all"
             @click.stop
           >
-            <!-- Header -->
             <div class="px-5 py-3.5 bg-gradient-to-r from-slate-900 to-blue-950 text-white flex items-center justify-between">
               <div class="flex items-center gap-2">
                 <span class="material-symbols-outlined text-amber-400 text-[20px]">notifications_active</span>
@@ -79,7 +75,6 @@
               </button>
             </div>
 
-            <!-- Filter Tabs -->
             <div class="flex items-center border-b border-slate-100 bg-slate-50/80 px-4 py-2 gap-2 text-[11px] font-bold">
               <button
                 type="button"
@@ -105,7 +100,6 @@
               </button>
             </div>
 
-            <!-- List of Notifications -->
             <div class="max-h-[360px] overflow-y-auto divide-y divide-slate-100">
               <div
                 v-for="item in filteredNotificationList"
@@ -114,7 +108,6 @@
                 :class="{ 'bg-blue-50/50 border-l-4 border-l-blue-600': !item.read, 'opacity-75': item.read }"
                 @click="handleNotificationClick(item)"
               >
-                <!-- Icon -->
                 <div
                   class="w-9 h-9 rounded-2xl flex items-center justify-center shrink-0 shadow-2xs font-bold mt-0.5"
                   :class="item.bgClass || 'bg-blue-100 text-blue-700'"
@@ -122,7 +115,6 @@
                   <span class="material-symbols-outlined text-[18px]">{{ item.icon || 'info' }}</span>
                 </div>
 
-                <!-- Content -->
                 <div class="flex-1 space-y-1">
                   <div class="flex items-start justify-between gap-1 pr-2">
                     <p class="font-extrabold text-slate-800 leading-snug" :class="{ 'text-blue-950': !item.read }">
@@ -136,7 +128,6 @@
                       {{ formatTimeAgo(item.createdAt) || item.time }}
                     </p>
 
-                    <!-- Toggle read / unread badge button -->
                     <button
                       type="button"
                       @click="toggleItemRead(item, $event)"
@@ -150,7 +141,6 @@
                 </div>
               </div>
 
-              <!-- Empty State -->
               <div v-if="filteredNotificationList.length === 0" class="py-10 text-center text-slate-400 space-y-2">
                 <span class="material-symbols-outlined text-[36px] text-slate-300">notifications_off</span>
                 <p class="text-xs font-semibold">
@@ -159,7 +149,6 @@
               </div>
             </div>
 
-            <!-- Footer -->
             <div class="px-4 py-2.5 bg-slate-50 border-t border-slate-100 text-center flex items-center justify-between text-[11px] text-slate-500">
               <span>Đang hiển thị thông báo thời gian thực</span>
               <button
@@ -173,7 +162,6 @@
           </div>
         </div>
 
-        <!-- User Context Menu Avatar -->
         <div class="relative">
           <button
             class="flex items-center gap-2 cursor-pointer p-1 pr-2 rounded-full hover:bg-white/10 transition-colors select-none"
@@ -184,7 +172,6 @@
             <span class="material-symbols-outlined text-white text-[18px]">expand_more</span>
           </button>
 
-          <!-- User Context Menu Subitems Dropdown -->
           <div
             v-if="menuOpen"
             class="absolute top-12 right-0 w-[240px] bg-white rounded-2xl shadow-2xl border border-slate-200 z-[90] overflow-hidden py-2 font-sans text-xs"
@@ -245,7 +232,7 @@
       </div>
     </header>
 
-    <!-- E15.2.2 Hộp thoại xác nhận đăng xuất -->
+    <!-- E15.2.2 xác nhận đăng xuất -->
     <div
       v-if="showLogoutConfirm"
       class="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/60 backdrop-blur-xs px-4"
@@ -277,13 +264,12 @@
       </div>
     </div>
 
-    <!-- E15.7 Cảnh báo sắp hết phiên do không hoạt động (Session Timeout Modal) -->
+    <!-- E15.7 sắp hết phiên -->
     <div
       v-if="showTimeoutWarning"
       class="fixed inset-0 z-[120] flex items-center justify-center bg-slate-900/70 backdrop-blur-xs p-4 font-sans"
     >
       <div class="bg-white w-full max-w-[500px] rounded-2xl shadow-2xl overflow-hidden border border-slate-200 text-center">
-        <!-- Header Section with Alert Icon -->
         <div class="p-8 pb-4 flex flex-col items-center">
           <div class="w-20 h-20 bg-rose-100 rounded-full flex items-center justify-center mb-4 text-rose-600">
             <span class="material-symbols-outlined text-5xl">timer</span>
@@ -291,13 +277,11 @@
           <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">Phiên đăng nhập sắp hết hạn</h2>
         </div>
 
-        <!-- Content Body -->
         <div class="p-8 pt-0 space-y-6">
           <p class="text-xs text-slate-600 leading-relaxed font-medium px-4">
             Bạn đã không hoạt động trong một thời gian dài. Phiên làm việc của bạn sẽ kết thúc sau 5 phút nữa. Vui lòng chọn tiếp tục để giữ phiên đăng nhập.
           </p>
 
-          <!-- Countdown Visualizer -->
           <div class="bg-slate-50 rounded-2xl p-5 inline-flex items-center gap-6 border border-slate-200">
             <div class="relative w-16 h-16">
               <svg class="w-full h-full -rotate-90">
@@ -315,7 +299,6 @@
           </div>
         </div>
 
-        <!-- Actions Footer -->
         <div class="p-6 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row gap-3 text-xs font-bold">
           <button
             class="flex-1 px-6 py-3 rounded-xl border border-slate-300 text-slate-700 hover:bg-slate-100 transition flex items-center justify-center gap-2"
@@ -335,20 +318,18 @@
       </div>
     </div>
 
-    <!-- Sidebar Navigation -->
     <AppSidebar @toggle-collapse="isSidebarCollapsed = $event" />
 
-    <!-- Main content -->
     <main :class="['pt-16 min-h-screen flex flex-col justify-between transition-all duration-300 ease-in-out', isSidebarCollapsed ? 'lg:ml-20' : 'lg:ml-sidebar-width']">
       <div class="p-3 sm:p-6 lg:p-container-padding mx-auto w-full flex-1">
         <router-view />
       </div>
 
-      <!-- Application Fat Footer -->
-      <AppFooter />
+      <div class="w-full shrink-0">
+        <AppFooter />
+      </div>
     </main>
 
-    <!-- Real-time Firebase Notification Toast -->
     <div
       v-if="realtimeToast"
       class="fixed bottom-6 right-6 z-[200] max-w-sm bg-slate-900/95 text-white p-4 rounded-2xl shadow-2xl border border-slate-700 backdrop-blur-md flex items-start gap-3.5 font-sans text-xs cursor-pointer hover:bg-slate-900 transition animate-bounce"
@@ -432,7 +413,6 @@
       userRole.value,
       userId,
       (items) => {
-        // Detect new unread items arriving in real-time
         if (previousNotificationIds.size > 0) {
           const newUnread = items.filter((it) => !previousNotificationIds.has(it.id) && !it.read);
           if (newUnread.length > 0) {

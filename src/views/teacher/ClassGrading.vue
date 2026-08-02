@@ -1,6 +1,5 @@
 ﻿<template>
   <div class="ims-scope w-full mx-auto space-y-6 font-sans pb-24">
-    <!-- Breadcrumbs & Header -->
     <div>
       <nav class="flex items-center gap-2 text-xs text-slate-500 mb-2">
         <router-link to="/teacher/classes" class="hover:text-blue-700 transition-colors">L�:p của tôi</router-link>
@@ -47,7 +46,6 @@
       </div>
     </div>
 
-    <!-- Sub Navigation Tabs -->
     <div class="flex items-center gap-4 sm:gap-8 border-b border-slate-200 overflow-x-auto whitespace-nowrap custom-scrollbar">
       <router-link
         :to="`/teacher/classes/${classId}/grading`"
@@ -70,7 +68,6 @@
       </router-link>
     </div>
 
-    <!-- Weight Breakdown Banner -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
       <div
         v-for="cat in categories"
@@ -91,7 +88,6 @@
       </div>
     </div>
 
-    <!-- Controls & Search -->
     <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-2xs flex flex-col md:flex-row justify-between items-stretch md:items-center gap-4">
       <div class="relative flex-1 max-w-md">
         <span class="material-symbols-outlined absolute left-3 top-2.5 text-slate-400 text-[18px]">search</span>
@@ -115,17 +111,14 @@
       </div>
     </div>
 
-    <!-- Main Gradebook Grid Table -->
     <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-2xs">
       <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse text-xs">
           <thead>
-            <!-- Group Header Row -->
             <tr class="bg-slate-100/80 border-b border-slate-200 font-bold uppercase text-[10px] text-slate-600">
               <th class="px-4 py-3 sticky left-0 bg-slate-100 z-10 w-48 border-r border-slate-200">Sinh viên</th>
               <th class="px-3 py-3 font-mono text-slate-500 w-24 border-r border-slate-200">MSSV</th>
 
-              <!-- Dynamic Category Headers -->
               <th
                 v-for="(cat, cIdx) in categories"
                 :key="cat.id || cIdx"
@@ -144,12 +137,10 @@
               <th class="px-4 py-3 text-center w-24">Káº¾T QUáº¢</th>
             </tr>
 
-            <!-- Column Sub-header Row -->
             <tr class="bg-slate-50 border-b border-slate-200 text-[11px] font-bold text-slate-600">
               <th class="px-4 py-2 sticky left-0 bg-slate-50 border-r border-slate-200"></th>
               <th class="px-3 py-2 border-r border-slate-200"></th>
 
-              <!-- Dynamic Sub Items & Category Sub-totals -->
               <template v-for="(cat, cIdx) in categories" :key="'sub_hdr_' + (cat.id || cIdx)">
                 <th
                   v-for="sub in cat.subItems"
@@ -197,7 +188,6 @@
               :key="st.id"
               class="hover:bg-slate-50/80 transition"
             >
-              <!-- Student Info -->
               <td class="px-4 py-3 font-bold text-slate-900 sticky left-0 bg-white border-r border-slate-200">
                 {{ st.name }}
               </td>
@@ -205,7 +195,6 @@
                 {{ st.mssv }}
               </td>
 
-              <!-- Dynamic Category Scores -->
               <template v-for="(cat, cIdx) in categories" :key="'st_cat_' + (cat.id || cIdx)">
                 <td
                   v-for="sub in cat.subItems"
@@ -236,12 +225,10 @@
                 </td>
               </template>
 
-              <!-- Final Calculated Score -->
               <td class="px-4 py-3 text-center bg-slate-100/70 font-black text-slate-900 text-sm">
                 {{ getFinalScore(st) }}
               </td>
 
-              <!-- Status Tag -->
               <td class="px-4 py-3 text-center">
                 <span
                   class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold"
@@ -256,7 +243,6 @@
       </div>
     </div>
 
-    <!-- Modal: Cáº¥u hÃ¬nh nhanh Ä‘iá»ƒm Sub Item tá»« Sá»• Ä‘iá»ƒm -->
     <div
       v-if="editingSubItem"
       class="fixed inset-0 z-[120] bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4"
@@ -311,7 +297,6 @@
       </div>
     </div>
 
-    <!-- Modal Xuất báo cáo Ä‘iá»ƒm (Excel & PDF) -->
     <div
       v-if="showExportModal"
       class="fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4"
@@ -394,7 +379,6 @@
       </div>
     </div>
 
-    <!-- Toast Notification -->
     <div
       v-if="toastMsg"
       class="fixed bottom-6 right-6 z-[120] bg-slate-900 text-white px-4 py-3 rounded-xl shadow-xl text-xs font-bold flex items-center gap-2"
@@ -420,7 +404,6 @@
   const editingSubItem = ref(null);
   const showExportModal = ref(false);
 
-  // 3 Category Configuration aligned with ClassSettings.vue
   const categories = ref([
     {
       id: 'cat_qt',
@@ -587,7 +570,6 @@
     );
   });
 
-  // Calculate score for 1 category (0 - 10)
   function getCategoryScore(student, category) {
     let sum = 0;
     let ratioSum = 0;
@@ -599,12 +581,10 @@
       }
     }
     if (ratioSum === 0) return '-';
-    // Normalize to 10
     const catScore = (sum / (ratioSum / 100));
     return catScore.toFixed(1);
   }
 
-  // Calculate final weighted total grade (0 - 10)
   function getFinalScore(student) {
     let total = 0;
     let weightSum = 0;

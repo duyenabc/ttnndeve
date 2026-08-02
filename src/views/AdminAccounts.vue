@@ -31,7 +31,6 @@
       </div>
     </div>
 
-    <!-- Summary cards -->
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
       <div class="bg-white rounded-2xl border border-outline-variant p-5">
         <p class="text-body-sm text-on-surface-variant">Tổng số</p>
@@ -55,7 +54,6 @@
     </div>
 
     <div class="bg-white rounded-2xl border border-outline-variant overflow-hidden">
-      <!-- Role tabs -->
       <div class="flex border-b border-outline-variant px-4">
         <button
           v-for="t in roleTabs"
@@ -68,7 +66,6 @@
         </button>
       </div>
 
-      <!-- Filters -->
       <div class="flex flex-wrap items-center gap-3 p-4">
         <div class="relative flex-1 min-w-[220px]">
           <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[20px]">search</span>
@@ -105,7 +102,6 @@
         </button>
       </div>
 
-      <!-- Bulk action bar -->
       <div v-if="selected.length" class="flex items-center gap-3 px-4 py-2 bg-primary/5 border-y border-outline-variant">
         <span class="text-body-sm text-on-surface font-medium">Đã chọn {{ selected.length }} tài khoản</span>
         <button class="text-red-600 text-body-sm font-medium flex items-center gap-1 hover:underline" @click="bulkDelete">
@@ -113,7 +109,6 @@
         </button>
       </div>
 
-      <!-- Table -->
       <div class="overflow-x-auto">
         <table class="w-full text-body-md">
           <thead>
@@ -159,7 +154,6 @@
         </table>
       </div>
 
-      <!-- Pagination -->
       <div class="flex items-center justify-between px-4 py-3 border-t border-outline-variant text-body-sm text-on-surface-variant">
         <span>Tổng: {{ total }} tài khoản</span>
         <div class="flex items-center gap-2">
@@ -170,13 +164,11 @@
       </div>
     </div>
 
-    <!-- Toast -->
     <div v-if="toast" class="fixed bottom-6 right-6 z-[90] bg-on-surface text-white px-5 py-3 rounded-xl shadow-2xl text-body-md flex items-center gap-2">
       <span class="material-symbols-outlined text-[20px] text-green-400">check_circle</span>
       {{ toast }}
     </div>
 
-    <!-- Excel Import Dialog Step 1 & Preview Step 2 -->
     <Modal v-if="showImport" title="Import danh sách người dùng" width="max-w-[800px]" @close="showImport = false">
       <div v-if="importStep === 1" class="space-y-4">
         <p class="text-body-md text-on-surface-variant">Chọn tệp Excel (.xlsx, .xls) tối đa 10MB để tải lên hệ thống:</p>
@@ -196,7 +188,6 @@
       </div>
 
       <div v-else-if="importStep === 2" class="space-y-4">
-        <!-- Preview Summary -->
         <div class="flex items-center justify-between p-3 bg-slate-100 rounded-xl text-body-sm">
           <div class="flex gap-4">
             <span class="font-semibold text-slate-800">{{ previewData.validRows.length }} dòng hợp lệ</span>
@@ -218,7 +209,6 @@
               </tr>
             </thead>
             <tbody>
-              <!-- Valid rows (White) -->
               <tr v-for="r in previewData.validRows" :key="'v-'+r.rowNum" class="bg-white border-b border-slate-100">
                 <td class="px-3 py-2 font-mono text-slate-400">{{ r.rowNum }}</td>
                 <td class="px-3 py-2 font-mono">{{ r.maDinhDanh }}</td>
@@ -229,7 +219,6 @@
                 </td>
                 <td class="px-3 py-2 text-green-700 font-medium">Hợp lệ</td>
               </tr>
-              <!-- Duplicate rows (Yellow) -->
               <tr v-for="r in previewData.duplicateRows" :key="'d-'+r.rowNum" class="bg-amber-50 border-b border-amber-100">
                 <td class="px-3 py-2 font-mono text-amber-700">{{ r.rowNum }}</td>
                 <td class="px-3 py-2 font-mono text-amber-900">{{ r.maDinhDanh }}</td>
@@ -240,7 +229,6 @@
                 </td>
                 <td class="px-3 py-2 text-amber-800 italic font-medium">{{ r.reason }}</td>
               </tr>
-              <!-- Error rows (Red) -->
               <tr v-for="r in previewData.errorRows" :key="'e-'+r.rowNum" class="bg-red-50 border-b border-red-100">
                 <td class="px-3 py-2 font-mono text-red-500">{{ r.rowNum }}</td>
                 <td class="px-3 py-2 font-mono text-red-900">{{ r.maDinhDanh || '—' }}</td>
@@ -275,7 +263,6 @@
       </template>
     </Modal>
 
-    <!-- Modal Confirm Grant Account Step 3 -->
     <Modal v-if="showConfirmImport" title="Cấp tài khoản" @close="showConfirmImport = false">
       <p class="text-body-md text-on-surface-variant mb-6">
         {{ isAdmin ? `Cấp ${totalImportCount} tài khoản cho các người dùng được thêm vào hệ thống?` : `Yêu cầu cấp ${totalImportCount} tài khoản cho các người dùng được thêm vào hệ thống?` }}
@@ -288,7 +275,6 @@
       </template>
     </Modal>
 
-    <!-- Details drawer 480px -->
     <div v-if="drawer" class="fixed inset-0 z-[70] flex justify-end bg-black/30" @click.self="drawer = null">
       <div class="w-[480px] max-w-full h-full bg-white shadow-xl overflow-y-auto">
         <div class="flex items-center justify-between px-6 py-4 border-b border-outline-variant">
@@ -344,7 +330,6 @@
       </div>
     </div>
 
-    <!-- Create modal -->
     <Modal v-if="showCreate" title="Thêm tài khoản" @close="showCreate = false">
       <div class="space-y-4">
         <input v-model="form.maDinhDanh" placeholder="Mã định danh (Bắt buộc)" class="modal-input" />
@@ -370,7 +355,6 @@
       </template>
     </Modal>
 
-    <!-- Lock reason modal -->
     <Modal v-if="lockTarget" title="Khóa tài khoản" @close="lockTarget = null">
       <p class="text-body-md text-on-surface-variant mb-3">Nhập lý do khóa tài khoản <b>{{ lockTarget.hoTen }}</b>.</p>
       <textarea v-model="lockReason" maxlength="200" rows="3" placeholder="Lý do khóa (tối đa 200 ký tự)" class="modal-input"></textarea>
@@ -381,7 +365,6 @@
       </template>
     </Modal>
 
-    <!-- Temp password result modal (UC-1.5: Copy button & 1-time view) -->
     <Modal v-if="tempResult" title="Mật khẩu tạm" @close="tempResult = null">
       <p class="text-body-md text-on-surface-variant mb-2">Mật khẩu tạm đã được tạo. Người dùng sẽ phải đổi mật khẩu sau khi đăng nhập.</p>
       <div class="px-4 py-3 bg-slate-100 rounded-lg font-mono text-lg text-center font-bold text-primary select-all mb-4">{{ tempResult }}</div>
@@ -447,7 +430,6 @@
   Modal.props = ['title', 'width'];
   Modal.emits = ['close'];
 
-  // State
   const role = ref('SinhVien');
   const status = ref('');
   const search = ref('');
@@ -511,7 +493,6 @@
   function clearFilters() { status.value = ''; search.value = ''; boMonFilter.value = ''; lopFilter.value = ''; page.value = 1; reload(); }
   function toggleAll(e) { selected.value = e.target.checked ? items.value.map((u) => u.maNguoiDung) : []; }
 
-  // Actions
   async function grant(u) { const r = await api.post(`/account/users/${u.maNguoiDung}/grant`); showToast(r.data.message); reload(); }
   async function resend(u) { const r = await api.post(`/account/users/${u.maNguoiDung}/resend-activation`); showToast(r.data.message); }
   async function unlock(u) { const r = await api.post(`/account/users/${u.maNguoiDung}/unlock`); showToast(r.data.message); reload(); }
@@ -541,7 +522,6 @@
     showToast(`Đã tải xuống ${filename}`);
   }
 
-  // Import Modal & Steps
   const showImport = ref(false);
   const importStep = ref(1);
   const selectedFileName = ref('');
@@ -573,7 +553,6 @@
   }
 
   async function goToPreview() {
-    // Generate sample preview rows based on selected tab
     const mockRows = [
       { maDinhDanh: role.value === 'SinhVien' ? '22120099' : (role.value === 'GiangVien' ? 'gv009' : 'gvu009'), hoTen: 'Nguyễn Văn Mới', email: 'moi.nv@due.udn.vn', soDienThoai: '0901112223' },
       { maDinhDanh: 'sv001', hoTen: 'Trần Thị Lan', email: 'sinhvien@due.udn.vn', soDienThoai: '0905998877' }, // Duplicate
@@ -622,7 +601,6 @@
 
   const tempResult = ref(null);
 
-  // Create Modal
   const showCreate = ref(false);
   const form = ref({});
   const formError = ref('');

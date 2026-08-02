@@ -1,6 +1,5 @@
 ﻿<template>
   <div class="ims-scope w-full mx-auto space-y-8">
-    <!-- Header -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div>
         <h1 class="text-[32px] font-bold text-slate-900 tracking-tight mb-1">Danh sách lá»›p hư�:ng dẫn</h1>
@@ -16,12 +15,10 @@
       </button>
     </div>
 
-    <!-- Loading State -->
     <div v-if="loading" class="bg-white rounded-2xl border border-slate-200 p-12 text-center text-slate-500">
       Äang táº£i danh sÃ¡ch lá»›p...
     </div>
 
-    <!-- Empty State -->
     <div
       v-else-if="!classes.length"
       class="bg-white rounded-2xl border border-slate-200 p-12 text-center text-slate-500"
@@ -31,7 +28,6 @@
       <p class="text-xs text-slate-500 mt-1">Nháº¥n "Táº¡o lá»›p má»›i" Ä‘á»ƒ báº¯t �ầu khá»Ÿi táº¡o lá»›p há»c pháº§n thực tập.</p>
     </div>
 
-    <!-- Grouped Class Sections -->
     <div v-else class="space-y-10">
       <section v-for="(group, idx) in groupedClasses" :key="idx" class="space-y-4">
         <div class="border-b border-slate-200 pb-3 flex items-center justify-between">
@@ -88,20 +84,17 @@
       </section>
     </div>
 
-    <!-- Toast Notification -->
     <div v-if="toast" class="fixed bottom-6 right-6 z-[90] bg-slate-900 text-white px-4 py-3 rounded-xl shadow-xl text-xs font-bold flex items-center gap-2">
       <span class="material-symbols-outlined text-emerald-400 text-[18px]">check_circle</span>
       {{ toast }}
     </div>
 
-    <!-- Modal Táº¡o L�:p Má»›i -->
     <div
       v-if="showCreate"
       class="fixed inset-0 z-[80] flex items-center justify-center bg-black/40 backdrop-blur-xs px-4"
       @click.self="showCreate = false"
     >
       <div class="w-full max-w-[500px] bg-white rounded-2xl shadow-2xl overflow-hidden">
-        <!-- Modal Header -->
         <div class="px-6 py-4 border-b border-slate-200 flex justify-between items-center bg-slate-50">
           <div>
             <h3 class="font-bold text-lg text-blue-900">Táº¡o lá»›p má»›i</h3>
@@ -112,7 +105,6 @@
           </button>
         </div>
 
-        <!-- Modal Body -->
         <div class="p-6 space-y-5">
           <div>
             <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
@@ -162,7 +154,6 @@
           </p>
         </div>
 
-        <!-- Modal Footer -->
         <div class="px-6 py-4 bg-slate-50 border-t border-slate-200 flex justify-end gap-3">
           <button class="px-5 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-200 transition-colors" @click="showCreate = false">
             Há»§y bá»

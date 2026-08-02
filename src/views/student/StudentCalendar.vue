@@ -1,6 +1,5 @@
 <template>
   <div class="ims-scope max-w-6xl mx-auto font-sans space-y-6 pb-20">
-    <!-- Breadcrumb & Top Header -->
     <div class="space-y-3">
       <nav class="flex items-center text-xs text-slate-500 gap-1.5">
         <router-link to="/student/classes" class="hover:text-[#005EA3] transition font-medium">Lớp của tôi</router-link>
@@ -18,7 +17,6 @@
         </div>
 
         <div class="flex flex-wrap items-center gap-2">
-          <!-- Button to Add Custom Meeting / Schedule Note -->
           <button
             @click="openAddModal"
             class="px-4 py-2.5 bg-[#005EA3] hover:bg-blue-800 text-white rounded-xl font-bold text-xs transition flex items-center gap-1.5 shadow-xs cursor-pointer"
@@ -27,7 +25,6 @@
             Thêm lịch họp / Ghi chú
           </button>
 
-          <!-- View Mode Selector -->
           <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl text-xs font-bold border border-slate-200">
             <button
               @click="viewMode = 'timeline'"
@@ -58,9 +55,7 @@
       </div>
     </div>
 
-    <!-- 3 KEY MILESTONE HIGHLIGHT CARDS -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <!-- 1. Hạn nộp đề tài -->
       <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs space-y-3 relative overflow-hidden group hover:border-rose-300 transition">
         <div class="absolute top-0 right-0 w-2 h-full bg-rose-500"></div>
         <div class="flex items-center justify-between">
@@ -85,7 +80,6 @@
         </div>
       </div>
 
-      <!-- 2. Hạn nộp báo cáo -->
       <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs space-y-3 relative overflow-hidden group hover:border-amber-300 transition">
         <div class="absolute top-0 right-0 w-2 h-full bg-amber-500"></div>
         <div class="flex items-center justify-between">
@@ -107,7 +101,6 @@
         </div>
       </div>
 
-      <!-- 3. Lịch họp với GVHD -->
       <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs space-y-3 relative overflow-hidden group hover:border-emerald-300 transition">
         <div class="absolute top-0 right-0 w-2 h-full bg-emerald-500"></div>
         <div class="flex items-center justify-between">
@@ -133,9 +126,7 @@
       </div>
     </div>
 
-    <!-- FILTER TABS & SEARCH BAR -->
     <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-4">
-      <!-- Category Filter Pills -->
       <div class="flex flex-wrap items-center gap-2 text-xs">
         <button
           v-for="cat in categoryTabs"
@@ -150,7 +141,6 @@
         </button>
       </div>
 
-      <!-- Search Input -->
       <div class="relative w-full md:w-64 text-xs">
         <span class="material-symbols-outlined absolute left-3 top-2.5 text-slate-400 text-[18px]">search</span>
         <input
@@ -162,7 +152,6 @@
       </div>
     </div>
 
-    <!-- VIEW 1: TIMELINE LIST VIEW (Mặc định) -->
     <div v-if="viewMode === 'timeline'" class="space-y-4">
       <div v-if="filteredEvents.length === 0" class="bg-white rounded-2xl border border-slate-200 p-12 text-center text-slate-500 space-y-3">
         <span class="material-symbols-outlined text-4xl text-slate-300">event_busy</span>
@@ -179,7 +168,6 @@
         >
           <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3 border-b border-slate-100 pb-3">
             <div class="flex items-start gap-3">
-              <!-- Checkbox to toggle completion -->
               <button
                 @click="toggleComplete(item)"
                 class="mt-1 w-5 h-5 rounded-md border flex items-center justify-center transition cursor-pointer shrink-0"
@@ -198,7 +186,6 @@
                     {{ getCategoryLabel(item.category) }}
                   </span>
 
-                  <!-- Status Badge -->
                   <span
                     v-if="item.completed"
                     class="px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200 flex items-center gap-1"
@@ -230,7 +217,6 @@
               </div>
             </div>
 
-            <!-- Date & Time Tag -->
             <div class="flex items-center gap-2 text-xs font-bold text-slate-700 bg-slate-50 p-2 rounded-xl border border-slate-100 shrink-0 self-start">
               <span class="material-symbols-outlined text-[#005EA3] text-[18px]">event</span>
               <span>{{ item.dateStr }}</span>
@@ -240,12 +226,10 @@
             </div>
           </div>
 
-          <!-- Description & Details -->
           <p class="text-xs text-slate-600 leading-relaxed font-medium">
             {{ item.description }}
           </p>
 
-          <!-- Action Footer -->
           <div class="flex flex-wrap items-center justify-between gap-3 pt-2 text-xs">
             <div class="flex items-center gap-3 text-slate-500 font-medium">
               <span v-if="item.location" class="flex items-center gap-1 text-slate-700">
@@ -299,9 +283,7 @@
       </div>
     </div>
 
-    <!-- VIEW 2: WEEKLY GRID VIEW -->
     <div v-else-if="viewMode === 'week'" class="bg-white rounded-2xl border border-slate-200 shadow-2xs overflow-hidden">
-      <!-- Week Navigation -->
       <div class="p-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
         <div class="flex items-center gap-3">
           <button @click="currentWeekOffset--" class="p-1.5 hover:bg-slate-200 rounded-lg transition text-slate-700">
@@ -317,7 +299,6 @@
         </button>
       </div>
 
-      <!-- Grid Header -->
       <div class="grid grid-cols-8 border-b border-slate-200 text-center text-xs font-bold bg-slate-100/70">
         <div class="p-3 border-r border-slate-200 text-slate-400 flex items-center justify-center">Giờ</div>
         <div v-for="(day, idx) in weekDays" :key="idx" class="p-3 border-r last:border-r-0 border-slate-200" :class="{ 'bg-blue-50 text-[#005EA3]': day.isToday }">
@@ -326,7 +307,6 @@
         </div>
       </div>
 
-      <!-- Grid Body -->
       <div class="max-h-[500px] overflow-y-auto divide-y divide-slate-100 text-xs">
         <div v-for="hour in [8, 9, 10, 11, 13, 14, 15, 16, 17]" :key="hour" class="grid grid-cols-8 min-h-[56px]">
           <div class="p-2 border-r border-slate-200 text-slate-400 font-mono text-[11px] text-center bg-slate-50/50">
@@ -348,7 +328,6 @@
       </div>
     </div>
 
-    <!-- VIEW 3: MONTHLY GRID VIEW -->
     <div v-else class="bg-white rounded-2xl border border-slate-200 p-6 shadow-2xs space-y-4">
       <div class="flex items-center justify-between pb-3 border-b border-slate-100">
         <h3 class="font-extrabold text-sm text-slate-900">Tháng {{ currentMonthStr }} - Năm học {{ schoolYearStr }}</h3>
@@ -376,7 +355,6 @@
       </div>
     </div>
 
-    <!-- MODAL 1: ADD CUSTOM SCHEDULE ITEM / MEETING NOTE -->
     <div
       v-if="showAddModal"
       class="fixed inset-0 z-[120] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs font-sans"
@@ -478,7 +456,6 @@
       </div>
     </div>
 
-    <!-- MODAL 2: EVENT DETAILS MODAL -->
     <div
       v-if="selectedEvent"
       class="fixed inset-0 z-[120] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs font-sans"
@@ -527,7 +504,6 @@
       </div>
     </div>
 
-    <!-- TOAST NOTIFICATION -->
     <div
       v-if="toastMsg"
       class="fixed bottom-6 right-6 z-[200] bg-slate-900 text-white px-5 py-3 rounded-xl shadow-2xl border border-slate-700 flex items-center gap-3 text-xs animate-bounce"
@@ -869,7 +845,6 @@
 
     scheduleItems.value.unshift(createdItem);
 
-    // Save custom items to local storage
     try {
       const customOnly = scheduleItems.value.filter(i => i.isCustom);
       localStorage.setItem('ims_student_custom_schedule', JSON.stringify(customOnly));

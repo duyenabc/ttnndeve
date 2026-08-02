@@ -1,6 +1,5 @@
 <template>
   <div class="ims-scope space-y-6 pb-12 font-sans">
-    <!-- Header & Filter Bar -->
     <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs space-y-4">
       <div class="flex flex-wrap items-center justify-between gap-4">
         <div>
@@ -22,7 +21,6 @@
           </div>
         </div>
 
-        <!-- Role Badge & Action Buttons -->
         <div class="flex items-center gap-3">
           <div class="bg-slate-100 px-3 py-1.5 rounded-xl text-xs font-bold text-slate-700 flex items-center gap-2 border border-slate-200">
             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -39,7 +37,6 @@
         </div>
       </div>
 
-      <!-- Filters Row -->
       <div class="pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 text-xs">
         <div class="flex flex-wrap items-center gap-3">
           <div class="flex items-center gap-2">
@@ -80,7 +77,6 @@
       </div>
     </div>
 
-    <!-- Executive KPI Metric Cards -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-3">
         <div class="flex justify-between items-start">
@@ -133,7 +129,6 @@
       </div>
     </div>
 
-    <!-- Vue CSS charts -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-4">
         <div>
@@ -228,7 +223,6 @@
       </div>
     </div>
 
-    <!-- Detailed Student Topic & Grade Data Table -->
     <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
       <div class="p-5 border-b border-slate-100 flex flex-wrap items-center justify-between gap-4">
         <div>
@@ -240,7 +234,6 @@
         </div>
 
         <div class="flex flex-wrap items-center gap-3">
-          <!-- Search box -->
           <div class="relative w-64">
             <span class="material-symbols-outlined absolute left-3 top-2.5 text-slate-400 text-[18px]">search</span>
             <input
@@ -251,7 +244,6 @@
             />
           </div>
 
-          <!-- Status Filter -->
           <select
             v-model="statusFilter"
             class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-800 focus:bg-white focus:ring-2 focus:ring-[#005EA3] focus:outline-none"
@@ -265,7 +257,6 @@
         </div>
       </div>
 
-      <!-- Table -->
       <div class="overflow-x-auto">
         <table class="w-full text-left text-xs border-collapse">
           <thead>
@@ -316,7 +307,6 @@
         </table>
       </div>
 
-      <!-- Pagination -->
       <div class="p-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600 font-medium">
         <div>Hiển thị {{ (currentPage - 1) * pageSize + 1 }} - {{ Math.min(currentPage * pageSize, filteredStudents.length) }} trong tổng số {{ filteredStudents.length }} sinh viên</div>
         <div class="flex items-center gap-1">
@@ -363,7 +353,6 @@
   const currentPage = ref(1);
   const pageSize = 8;
 
-  // Raw student dataset
   const baseStudents = [
     { mssv: '20241001', student: 'Nguyễn Văn An', classCode: '47K14.1', topic: 'Xây dựng Hệ thống Quản lý Thực tập tại DUE', company: 'Công ty Cổ phần Công nghệ FPT', status: 'Đã duyệt', score: 9.2 },
     { mssv: '20241002', student: 'Trần Thị Bình', classCode: '47K14.1', topic: 'Phân tích dữ liệu hành vi người dùng trên nền tảng e-Commerce', company: 'Tiki Corporation', status: 'Đã duyệt', score: 8.8 },
@@ -390,7 +379,6 @@
     { mssv: '20241023', student: 'Lê Minh Khánh', classCode: '47K14.3', topic: 'Chưa đăng ký đề tài', company: 'Chưa khai báo', status: 'Chưa nộp', score: null }
   ];
 
-  // Active list filtered by class dropdown
   const classStudentsList = computed(() => {
     return baseStudents.filter((st) => {
       if (selectedClass.value === 'mis2012') return st.classCode === '47K14.1';
@@ -400,7 +388,6 @@
     });
   });
 
-  // Topic Approval Data - dynamically calculated
   const topicStatusData = computed(() => {
     const list = classStudentsList.value;
     const counts = {
@@ -428,7 +415,6 @@
     ];
   });
 
-  // Grade Distribution Data - dynamically calculated
   const gradeDistributionData = computed(() => {
     const list = classStudentsList.value;
     const counts = {
@@ -458,7 +444,6 @@
     ];
   });
 
-  // Weekly Trend Data
   const weeklyData = computed(() => {
     return [
       { week: 'Tuần 1', submitRate: 65, reviewRate: 50 },
@@ -474,7 +459,6 @@
     ];
   });
 
-  // Overall Metrics - dynamically calculated
   const filteredMetrics = computed(() => {
     const list = classStudentsList.value;
     const totalStudents = list.length;
@@ -498,7 +482,6 @@
     };
   });
 
-  // Table Filtered Students
   const filteredStudents = computed(() => {
     return classStudentsList.value.filter((st) => {
       const matchSearch =
@@ -551,7 +534,6 @@
   );
 
   function updateChartData() {
-    // Computed charts update reactively with filters
   }
 
   function refreshData() {

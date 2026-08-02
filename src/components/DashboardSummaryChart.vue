@@ -1,6 +1,5 @@
 <template>
   <div class="space-y-6">
-    <!-- Header & Filters Bar -->
     <div class="bg-white rounded-2xl border border-outline-variant p-5 shadow-sm flex flex-wrap items-center justify-between gap-4">
       <div>
         <div class="flex items-center gap-2">
@@ -44,7 +43,6 @@
       </div>
     </div>
 
-    <!-- Top Summary Metric Cards -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <div class="bg-white p-5 rounded-2xl border border-outline-variant shadow-sm flex items-center justify-between">
         <div>
@@ -103,9 +101,7 @@
       </div>
     </div>
 
-    <!-- Main Chart Row 1: Weekly Progress Line/Area Chart & Status Donut Chart -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      <!-- Weekly Progress & Log Submission (Line + Area SVG Chart) -->
       <div class="lg:col-span-2 bg-white rounded-2xl border border-outline-variant p-6 shadow-sm flex flex-col justify-between">
         <div class="flex items-center justify-between mb-4">
           <div>
@@ -116,7 +112,6 @@
             <p class="text-body-xs text-slate-500 mt-0.5">Xu hướng số nhật ký đã nộp và điểm đánh giá trung bình qua từng tuần</p>
           </div>
 
-          <!-- Chart Legend -->
           <div class="flex items-center gap-4 text-xs font-medium">
             <div class="flex items-center gap-1.5">
               <span class="w-3 h-3 rounded-sm bg-primary inline-block"></span>
@@ -129,7 +124,6 @@
           </div>
         </div>
 
-        <!-- SVG Line/Area & Bar Hybrid Chart -->
         <div class="relative w-full h-[280px] my-2 select-none">
           <svg class="w-full h-full overflow-visible" viewBox="0 0 600 240" preserveAspectRatio="none">
             <defs>
@@ -143,19 +137,15 @@
               </linearGradient>
             </defs>
 
-            <!-- Grid Lines -->
             <line v-for="i in 5" :key="i" x1="40" :y1="30 + (i - 1) * 40" x2="580" :y2="30 + (i - 1) * 40" stroke="#E2E8F0" stroke-dasharray="4 4" stroke-width="1" />
 
-            <!-- Y-Axis Labels Left (Submitted logs: 0 - 130) -->
             <text x="32" y="34" text-anchor="end" class="text-[10px] fill-slate-400 font-medium">130</text>
             <text x="32" y="74" text-anchor="end" class="text-[10px] fill-slate-400 font-medium">100</text>
             <text x="32" y="114" text-anchor="end" class="text-[10px] fill-slate-400 font-medium">70</text>
             <text x="32" y="154" text-anchor="end" class="text-[10px] fill-slate-400 font-medium">40</text>
             <text x="32" y="194" text-anchor="end" class="text-[10px] fill-slate-400 font-medium">0</text>
 
-            <!-- Bars for Log Submissions -->
             <g v-for="(item, index) in weeklyData" :key="'bar-' + index">
-              <!-- Bar calculation: height max at y=30 for val 130 -->
               <rect
                 :x="60 + index * 65"
                 :y="190 - (item.logsSubmitted / 130) * 160"
@@ -169,11 +159,9 @@
               />
             </g>
 
-            <!-- Line/Area Path for Average Score (Thang 0-10 -> map 0-10 to y 190->30) -->
             <path :d="scoreAreaPath" fill="url(#lineAreaGradient)" />
             <path :d="scoreLinePath" fill="none" stroke="#10B981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
 
-            <!-- Score Data Points -->
             <g v-for="(item, index) in weeklyData" :key="'pt-' + index">
               <circle
                 :cx="74 + index * 65"
@@ -188,7 +176,6 @@
               />
             </g>
 
-            <!-- X-Axis Labels -->
             <g v-for="(item, index) in weeklyData" :key="'x-' + index">
               <text :x="74 + index * 65" y="215" text-anchor="middle" class="text-[11px] fill-slate-600 font-semibold">
                 {{ item.week }}
@@ -196,7 +183,6 @@
             </g>
           </svg>
 
-          <!-- Interactive Tooltip -->
           <div
             v-if="hoveredWeeklyIndex !== null && weeklyData[hoveredWeeklyIndex]"
             class="absolute pointer-events-none bg-slate-900 text-white rounded-xl p-3 shadow-xl text-xs z-10 transition-all duration-150 transform -translate-x-1/2 -translate-y-full"
@@ -217,7 +203,6 @@
         </div>
       </div>
 
-      <!-- Internship Status Breakdown (Donut Pie Chart) -->
       <div class="bg-white rounded-2xl border border-outline-variant p-6 shadow-sm flex flex-col justify-between">
         <div>
           <h3 class="font-bold text-title-md text-slate-900 flex items-center gap-2">
@@ -227,7 +212,6 @@
           <p class="text-body-xs text-slate-500 mt-0.5">Tỷ lệ sinh viên theo từng giai đoạn tiến độ</p>
         </div>
 
-        <!-- SVG Donut Chart -->
         <div class="relative my-4 flex items-center justify-center">
           <svg class="w-48 h-48 transform -rotate-90 overflow-visible" viewBox="0 0 100 100">
             <circle
@@ -247,7 +231,6 @@
             />
           </svg>
 
-          <!-- Donut Center Text -->
           <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none text-center">
             <span class="text-2xl font-extrabold text-slate-900">
               {{ hoveredDonutIndex !== null ? statusBreakdown[hoveredDonutIndex].count : overview.totalStudents || 128 }}
@@ -258,7 +241,6 @@
           </div>
         </div>
 
-        <!-- Donut Legend -->
         <div class="space-y-2 mt-2">
           <div
             v-for="(item, index) in statusBreakdown"
@@ -280,9 +262,7 @@
       </div>
     </div>
 
-    <!-- Main Chart Row 2: Score Distribution & Evaluation Components Breakdown -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <!-- Grade Distribution Bar Chart (Xuất sắc, Giỏi, Khá, TB, Chưa đạt) -->
       <div class="bg-white rounded-2xl border border-outline-variant p-6 shadow-sm">
         <div class="flex items-center justify-between mb-4">
           <div>
@@ -322,7 +302,6 @@
         </div>
       </div>
 
-      <!-- Evaluation Components Score Average (Chuyên cần, Doanh nghiệp, GV, Báo cáo) -->
       <div class="bg-white rounded-2xl border border-outline-variant p-6 shadow-sm flex flex-col justify-between">
         <div>
           <div class="flex items-center justify-between mb-4">
@@ -356,7 +335,6 @@
           </div>
         </div>
 
-        <!-- Class Comparison Summary -->
         <div class="bg-indigo-50/70 border border-indigo-100 rounded-xl p-4 flex items-center justify-between">
           <div class="flex items-center gap-3">
             <span class="material-symbols-outlined text-indigo-600 text-[24px]">verified</span>
@@ -370,7 +348,6 @@
       </div>
     </div>
 
-    <!-- Row 3: Top Enterprise Internship Host Statistics -->
     <div class="bg-white rounded-2xl border border-outline-variant p-6 shadow-sm">
       <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
         <div>

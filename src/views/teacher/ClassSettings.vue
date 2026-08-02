@@ -1,6 +1,5 @@
 <template>
   <div class="font-sans text-slate-800 max-w-[1100px] w-full relative pb-28 mx-auto">
-    <!-- Breadcrumb -->
     <nav class="flex items-center gap-2 text-[13px] text-slate-500 mb-3">
       <router-link to="/teacher/classes" class="hover:text-[#005EA3] transition-colors">Lớp của tôi</router-link>
       <span class="material-symbols-outlined text-[14px]">chevron_right</span>
@@ -11,7 +10,6 @@
 
     <h1 class="text-[28px] font-bold text-slate-900 mb-8 tracking-tight">Cấu hình lớp học</h1>
 
-    <!-- Accordion 1: Cấu hình giai đoạn -->
     <section class="mb-8">
       <button
         type="button"
@@ -25,7 +23,6 @@
       </button>
 
       <div v-show="isStageOpen" class="border-t border-slate-200 pt-6 space-y-8">
-        <!-- Giai đoạn cứng -->
         <div>
           <h3 class="text-[#005EA3] font-bold text-[14px] flex items-center gap-2 mb-4">
             <span class="material-symbols-outlined text-[18px]">lock</span>
@@ -43,7 +40,6 @@
           </div>
         </div>
 
-        <!-- Giai đoạn linh hoạt -->
         <div>
           <h3 class="text-[#005EA3] font-bold text-[14px] flex items-center gap-2 mb-4">
             <span class="material-symbols-outlined text-[18px]">calendar_today</span>
@@ -70,7 +66,6 @@
           </div>
         </div>
 
-        <!-- Mốc thời gian nội bộ -->
         <div>
           <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
             <h3 class="font-bold text-[14px] text-slate-800">Mốc thời gian nội bộ</h3>
@@ -132,7 +127,6 @@
       </div>
     </section>
 
-    <!-- Accordion 2: Cấu hình Nhật ký thực tập -->
     <section class="mb-6">
       <button
         type="button"
@@ -233,7 +227,6 @@
       </div>
     </section>
 
-    <!-- Toast -->
     <div
       v-if="showToast"
       class="fixed top-24 right-8 z-50 flex items-center p-4 text-slate-500 bg-white rounded-lg shadow-lg border border-slate-100"
@@ -252,7 +245,6 @@
       <div class="ml-3 text-sm font-normal text-slate-800">{{ toastMessage }}</div>
     </div>
 
-    <!-- Footer -->
     <div
       class="fixed bottom-0 left-0 right-0 lg:left-64 bg-white border-t border-slate-200 px-6 py-3.5 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 z-10 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]"
     >

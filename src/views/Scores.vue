@@ -1,6 +1,5 @@
 <template>
   <div class="ims-scope max-w-6xl mx-auto font-sans space-y-6 pb-20">
-    <!-- Breadcrumb -->
     <nav class="flex items-center text-xs text-slate-500 gap-1.5">
       <router-link to="/student/classes" class="hover:text-[#005EA3] transition font-medium">Lớp của tôi</router-link>
       <span class="material-symbols-outlined text-[14px]">chevron_right</span>
@@ -9,7 +8,6 @@
       <span class="text-slate-900 font-bold">Bảng điểm thực tập</span>
     </nav>
 
-    <!-- Page Header & Student Metadata -->
     <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-2xs space-y-4">
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-4">
         <div>
@@ -31,7 +29,6 @@
         </div>
       </div>
 
-      <!-- Student Bio Summary Card -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-200 text-xs font-medium text-slate-700">
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 rounded-full bg-[#005EA3]/10 text-[#005EA3] flex items-center justify-center font-bold text-sm shrink-0 uppercase">
@@ -56,7 +53,6 @@
       </div>
     </div>
 
-    <!-- Matrix Gradebook Table (Flat Design) -->
     <div class="bg-white rounded-2xl border border-slate-200 shadow-2xs overflow-hidden space-y-4 p-4 sm:p-6">
       <div class="flex items-center justify-between border-b border-slate-100 pb-3">
         <h3 class="font-bold text-sm text-slate-900 flex items-center gap-2">
@@ -69,7 +65,6 @@
       <div class="overflow-x-auto border border-slate-200 rounded-xl">
         <table class="w-full text-center border-collapse text-xs">
           <thead>
-            <!-- Header Row 1: Component Weights -->
             <tr class="bg-slate-100 text-slate-800 font-bold border-b border-slate-200">
               <th v-for="cat in categories" :key="cat.code" class="py-3 px-3 border-r border-slate-200 text-[#005EA3]" :colspan="(cat.subItems?.length || 1) + 1">
                 <div class="flex items-center justify-center gap-1.5">
@@ -80,7 +75,6 @@
               <th class="py-3 px-4 text-slate-900 bg-amber-50/80 min-w-[100px]" rowspan="2">Điểm tổng kết</th>
             </tr>
 
-            <!-- Header Row 2: Sub-item Titles & Configuration -->
             <tr class="bg-slate-50 text-slate-700 font-bold border-b border-slate-200 text-[11px]">
               <template v-for="cat in categories" :key="'sub_' + cat.code">
                 <th v-for="sub in cat.subItems" :key="sub.id" class="py-2.5 px-3 border-r border-slate-200 min-w-[110px]">
@@ -115,7 +109,6 @@
                 </td>
               </template>
 
-              <!-- Final Calculated Grade -->
               <td class="py-4 px-4 font-black text-base text-[#005EA3] bg-amber-50/80">
                 {{ finalScoreFormatted }}
               </td>
@@ -124,7 +117,6 @@
         </table>
       </div>
 
-      <!-- Grade Performance Indicator Badges -->
       <div class="pt-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
         <div class="flex items-center gap-2">
           <span class="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-lg font-bold">

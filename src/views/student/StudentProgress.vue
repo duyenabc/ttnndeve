@@ -1,6 +1,5 @@
 <template>
   <div class="ims-scope max-w-6xl mx-auto font-sans space-y-5 pb-24">
-    <!-- Header & Breadcrumb -->
     <div class="space-y-2">
       <nav class="flex items-center text-[13px] text-slate-500 gap-1.5 flex-wrap">
         <router-link to="/student/classes" class="hover:text-[#005EA3] transition">Lớp của tôi</router-link>
@@ -23,7 +22,6 @@
       </div>
     </div>
 
-    <!-- Tabs — theo mockup: Thông tin | Đề tài | Nhật ký -->
     <div class="flex items-center gap-8 border-b border-slate-200">
       <button
         type="button"
@@ -51,10 +49,8 @@
       </button>
     </div>
 
-    <!-- TAB 1: THÔNG TIN THỰC TẬP -->
     <div v-if="activeTab === 'info'" class="space-y-6">
       <div class="bg-white border border-slate-200 rounded-2xl p-8 shadow-2xs relative overflow-hidden space-y-8">
-        <!-- Background Decor -->
         <div class="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-bl-[100px] pointer-events-none opacity-60"></div>
 
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative z-10">
@@ -88,25 +84,21 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-12 text-xs relative z-10">
-          <!-- Info Item 1 -->
           <div class="space-y-1">
             <label class="font-bold text-[11px] text-slate-400 uppercase tracking-wider block">Địa chỉ công ty</label>
             <p class="font-medium text-slate-800 leading-relaxed">{{ enterpriseInfo.diaChi }}</p>
           </div>
 
-          <!-- Info Item 2 -->
           <div class="space-y-1">
             <label class="font-bold text-[11px] text-slate-400 uppercase tracking-wider block">Vị trí thực tập</label>
             <p class="font-semibold text-slate-900">{{ enterpriseInfo.viTri }}</p>
           </div>
 
-          <!-- Info Item 3 -->
           <div class="space-y-1">
             <label class="font-bold text-[11px] text-slate-400 uppercase tracking-wider block">Mentor hướng dẫn</label>
             <p class="font-bold text-slate-900">{{ enterpriseInfo.mentor }}</p>
           </div>
 
-          <!-- Info Item 4 -->
           <div class="space-y-1">
             <label class="font-bold text-[11px] text-slate-400 uppercase tracking-wider block">Giấy xác nhận thực tập</label>
             <div v-if="isEnterpriseDeclared" class="flex items-center justify-between mt-1 p-3 border border-slate-200 rounded-xl bg-slate-50/80">
@@ -133,7 +125,6 @@
           </div>
         </div>
 
-        <!-- Footer Note -->
         <div class="pt-4 border-t border-dashed border-slate-200 flex items-center gap-2 text-slate-500 text-[11px] italic">
           <template v-if="isEnterpriseDeclared">
             <span class="material-symbols-outlined text-blue-600 text-[16px]">verified</span>
@@ -147,9 +138,7 @@
       </div>
     </div>
 
-    <!-- TAB 2: ĐỀ TÀI -->
     <div v-else-if="activeTab === 'topic'" class="space-y-6">
-      <!-- Current Topic Status Header -->
       <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-2xs flex flex-wrap items-center justify-between gap-3 text-xs">
         <div class="flex items-center gap-3">
           <span class="material-symbols-outlined text-[#005EA3] text-[24px]">assignment</span>
@@ -230,11 +219,8 @@
         </div>
       </div>
 
-      <!-- STATE 1: HIỆU CHỈNH HOẶC ĐĂNG KÝ ĐỀ TÀI MỚI (Layout 70% / 30%) -->
       <div v-if="topicStatus === 'rejected' || topicStatus === 'new' || topicStatus === 'draft'" class="grid grid-cols-1 lg:grid-cols-10 gap-8 items-start">
-        <!-- Left Column (70%) -->
         <div class="lg:col-span-7 space-y-6">
-          <!-- Revision Needed Banner (rejected) -->
           <div v-if="topicStatus === 'rejected'" class="rounded-2xl p-6 space-y-3 border border-amber-200 bg-amber-50/80 shadow-2xs">
             <div class="flex items-center gap-2 text-amber-700 font-extrabold text-base">
               <span class="material-symbols-outlined text-[24px]">rate_review</span>
@@ -248,7 +234,6 @@
             </div>
           </div>
 
-          <!-- Denied Banner Notification (denied) -->
           <div v-else-if="topicStatus === 'denied'" class="rounded-2xl p-6 space-y-3 border border-rose-200 bg-rose-50/80 shadow-2xs">
             <div class="flex items-center gap-2 text-rose-700 font-extrabold text-base">
               <span class="material-symbols-outlined text-[24px]">cancel</span>
@@ -262,7 +247,6 @@
             </div>
           </div>
 
-          <!-- Old Denied Topic Details (Read-Only) -->
           <div v-if="topicStatus === 'denied'" class="bg-slate-50 border border-slate-200 rounded-2xl p-5 space-y-3">
             <div class="flex items-center gap-2 text-slate-500 font-extrabold text-xs uppercase tracking-wide">
               <span class="material-symbols-outlined text-[18px]">lock</span>
@@ -284,7 +268,6 @@
             </div>
           </div>
 
-          <!-- Draft Banner Notification -->
           <div v-if="topicStatus === 'draft'" class="rounded-2xl p-6 space-y-3 border border-amber-200 bg-amber-50/50 shadow-2xs">
             <div class="flex items-center gap-2 text-amber-700 font-extrabold text-base">
               <span class="material-symbols-outlined text-[24px]">drafts</span>
@@ -295,7 +278,6 @@
             </p>
           </div>
 
-          <!-- Active Form Section -->
           <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-2xs space-y-6">
             <h2 class="text-base font-extrabold text-[#005EA3] uppercase tracking-wide flex items-center gap-2">
               <span class="material-symbols-outlined text-[20px]">edit_document</span>
@@ -305,7 +287,6 @@
             </h2>
 
             <div class="space-y-4 text-xs">
-              <!-- Topic Title Input -->
               <div class="space-y-1.5">
                 <label class="block font-bold text-slate-700 uppercase tracking-wider text-[11px]">
                   <span v-if="topicStatus === 'rejected'">Tên đề tài</span>
@@ -330,7 +311,6 @@
                 <p v-if="topicNameError" class="text-rose-600 font-bold text-[11px] mt-1">{{ topicNameError }}</p>
               </div>
 
-              <!-- Topic Description Textarea -->
               <div class="space-y-1.5">
                 <div class="flex justify-between items-end">
                   <label class="block font-bold text-slate-700 uppercase tracking-wider text-[11px]">
@@ -355,7 +335,6 @@
                 <p v-if="topicDescError" class="text-rose-600 font-bold text-[11px] mt-1">{{ topicDescError }}</p>
               </div>
 
-              <!-- File Outline Upload Zone -->
               <div class="space-y-1.5">
                 <label class="block font-bold text-slate-700 uppercase tracking-wider text-[11px]">
                   <span v-if="topicStatus === 'rejected'">File đề cương chi tiết</span>
@@ -386,7 +365,6 @@
               </div>
             </div>
 
-            <!-- Form Actions -->
             <div class="pt-4 border-t border-slate-100 flex items-center justify-end gap-3 text-xs">
               <button
                 @click="saveDraftTopic"
@@ -404,9 +382,7 @@
           </div>
         </div>
 
-        <!-- Right Column (30%) -->
         <div class="lg:col-span-3 space-y-6">
-          <!-- Group Info Card -->
           <div class="bg-blue-50/90 p-4 rounded-2xl border border-blue-200 flex items-start gap-3 text-xs">
             <span class="material-symbols-outlined text-[#005EA3] shrink-0 text-[20px]">info</span>
             <p v-if="hasGroup" class="text-blue-900 leading-snug font-medium">
@@ -417,7 +393,6 @@
             </p>
           </div>
 
-          <!-- Version History Card -->
           <div v-if="topicStatus !== 'new'" class="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs space-y-4">
             <h3 class="font-extrabold text-xs text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
               <span class="material-symbols-outlined text-[16px] text-[#005EA3]">history</span>
@@ -451,7 +426,6 @@
         </div>
       </div>
 
-      <!-- STATE 2: CHỜ DUYỆT (PENDING) -->
       <div v-else-if="topicStatus === 'pending'" class="bg-white border border-slate-200 rounded-2xl p-8 shadow-2xs space-y-6">
         <div class="flex flex-wrap items-start justify-between border-b pb-4 gap-4">
           <div>
@@ -462,7 +436,6 @@
               {{ newTopicName || '— Chưa cập nhật tên đề tài —' }}
             </h3>
           </div>
-          <!-- Corner Group Tag -->
           <div v-if="hasGroup" class="px-3.5 py-1.5 bg-[#005EA3]/10 text-[#005EA3] border border-[#005EA3]/20 rounded-xl font-extrabold text-xs flex items-center gap-1.5 shrink-0">
             <span class="material-symbols-outlined text-[18px]">groups</span>
             {{ userGroup }} (Dùng chung đề tài)
@@ -479,7 +452,6 @@
             <p><strong>Giảng viên nhận:</strong> TS. Nguyễn Văn Thành</p>
           </div>
 
-          <!-- Group/Individual Members Shared Info -->
           <div>
             <h4 class="font-bold text-slate-900 mb-2 flex items-center justify-between">
               <span class="flex items-center gap-1.5">
@@ -516,7 +488,6 @@
             </div>
           </div>
 
-          <!-- Description Section for Pending -->
           <div>
             <h4 class="font-bold text-slate-900 mb-1">Mô tả sơ lược đề tài:</h4>
             <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 whitespace-pre-wrap leading-relaxed text-slate-700">
@@ -524,7 +495,6 @@
             </div>
           </div>
 
-          <!-- Attached File outline display for Pending state -->
           <div v-if="outlineFileName" class="p-3 bg-blue-50/50 border border-blue-200 rounded-xl flex items-center justify-between">
             <div class="flex items-center gap-2">
               <span class="material-symbols-outlined text-rose-600">
@@ -547,7 +517,6 @@
         </div>
       </div>
 
-      <!-- STATE 3: ĐÃ ĐƯỢC DUYỆT (APPROVED) / BỊ TỪ CHỐI (DENIED) -->
       <div v-else-if="topicStatus === 'approved' || topicStatus === 'denied'" class="bg-white border border-slate-200 rounded-2xl p-8 shadow-2xs space-y-6">
         <div class="flex flex-wrap items-start justify-between border-b pb-4 gap-4">
           <div>
@@ -567,7 +536,6 @@
               {{ newTopicName || '— Chưa cập nhật tên đề tài —' }}
             </h3>
           </div>
-          <!-- Corner Group Tag -->
           <div v-if="hasGroup" class="px-3.5 py-1.5 bg-[#005EA3]/10 text-[#005EA3] border border-[#005EA3]/20 rounded-xl font-extrabold text-xs flex items-center gap-1.5 shrink-0">
             <span class="material-symbols-outlined text-[18px]">groups</span>
             {{ userGroup }} (Dùng chung đề tài)
@@ -578,7 +546,6 @@
           </div>
         </div>
 
-        <!-- Teacher Feedback/Rejection Reason Banner (Nếu từ chối, ghi rõ lý do giáo viên từ chối, tương tự với thành công) -->
         <div v-if="topicFeedback" :class="topicStatus === 'approved' ? 'bg-emerald-50 border-emerald-200 text-emerald-900' : 'bg-rose-50 border-rose-200 text-rose-900'" class="rounded-2xl p-5 border shadow-2xs space-y-2">
           <div class="flex items-center gap-2 font-bold text-xs">
             <span class="material-symbols-outlined text-[18px]">{{ topicStatus === 'approved' ? 'check_circle' : 'cancel' }}</span>
@@ -590,7 +557,6 @@
         </div>
 
         <div class="space-y-5 text-xs text-slate-700 leading-relaxed">
-          <!-- Shared Group/Individual Members Card -->
           <div class="bg-slate-50/80 p-4 rounded-2xl border border-slate-200 space-y-3">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <h4 class="font-bold text-slate-900 flex items-center gap-1.5">
@@ -640,7 +606,6 @@
             </p>
           </div>
 
-          <!-- Attached File outline display for Approved/Denied state -->
           <div v-if="outlineFileName" class="p-3 bg-blue-50/50 border border-blue-200 rounded-xl flex items-center justify-between">
             <div class="flex items-center gap-2">
               <span class="material-symbols-outlined text-rose-600">
@@ -670,15 +635,12 @@
       </div>
     </div>
 
-    <!-- TAB 3: NHẬT KÝ -->
     <div v-else-if="activeTab === 'diaries'">
       <StudentDiaryTab classId="L001" @writing-change="onDiaryWritingChange" />
     </div>
 
-    <!-- Legacy schedule tab (hidden from nav; kept for data) -->
     <div v-else-if="activeTab === 'schedule'" class="space-y-6">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <!-- Card 1: Hạn nộp Đề tài -->
         <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs space-y-3">
           <span class="px-2.5 py-1 bg-rose-50 text-rose-700 border border-rose-200 rounded-lg text-[10px] font-black uppercase tracking-wider flex items-center gap-1 w-fit">
             <span class="material-symbols-outlined text-[14px]">assignment</span>
@@ -700,7 +662,6 @@
           </span>
         </div>
 
-        <!-- Card 2: Hạn nộp Báo cáo -->
         <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs space-y-3">
           <span class="px-2.5 py-1 bg-amber-50 text-amber-800 border border-amber-200 rounded-lg text-[10px] font-black uppercase tracking-wider flex items-center gap-1 w-fit">
             <span class="material-symbols-outlined text-[14px]">description</span>
@@ -713,7 +674,6 @@
           </span>
         </div>
 
-        <!-- Card 3: Lịch họp GVHD -->
         <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs space-y-3">
           <span class="px-2.5 py-1 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-lg text-[10px] font-black uppercase tracking-wider flex items-center gap-1 w-fit">
             <span class="material-symbols-outlined text-[14px]">groups</span>
@@ -727,7 +687,6 @@
         </div>
       </div>
 
-      <!-- Banner Link to Full Calendar -->
       <div class="bg-gradient-to-r from-blue-900 to-[#005EA3] p-6 rounded-2xl text-white shadow-md flex flex-col sm:flex-row items-center justify-between gap-4">
         <div>
           <h3 class="font-extrabold text-base flex items-center gap-2">
@@ -748,7 +707,6 @@
       </div>
     </div>
 
-    <!-- Request Edit Topic Modal -->
     <div
       v-if="showRequestEditModal"
       class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs font-sans"
@@ -790,7 +748,6 @@
       </div>
     </div>
 
-    <!-- Edit Modal -->
     <div
       v-if="showEditModal"
       class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs font-sans"
@@ -864,7 +821,6 @@
       </div>
     </div>
 
-    <!-- Toast Notification -->
     <div
       v-if="toastMsg"
       class="fixed bottom-6 right-6 z-[200] bg-slate-900 text-white px-5 py-3 rounded-xl shadow-2xl border border-slate-700 flex items-center gap-3 text-xs animate-bounce"
@@ -952,10 +908,8 @@
     const user = authStore.user || {};
     const studentId = user.maDinhDanh || '';
     if (!studentId || studentId === 'default' || studentId === '---') return false;
-    // Default demo account is part of Nhóm 06
     if (studentId === '20241001') return true;
     
-    // Fresh accounts don't belong to any group
     const savedGroup = localStorage.getItem(`ims_student_group_${studentId}`);
     return !!savedGroup;
   });
@@ -1028,7 +982,6 @@
   });
 
   const weekDateRange = computed(() => {
-    // Mock week range based on week number
     if (currentWeek.value === 5) return '15/05 - 21/05/2024';
     if (currentWeek.value === 6) return '22/05 - 28/05/2024';
     if (currentWeek.value === 4) return '08/05 - 14/05/2024';
@@ -1134,7 +1087,6 @@
       const studentId = user?.maDinhDanh || '20241001';
 
       if (studentId && studentId !== 'default' && studentId !== '---') {
-        // Fetch diaries from DB
         const dbDiaries = await getStudentDiariesFromDb(studentId);
         allDiaries.value = dbDiaries;
 
@@ -1152,7 +1104,6 @@
             topicStatus.value = normStatus;
 
             if (normStatus === 'rejected') {
-              // Yêu cầu chỉnh sửa (Requested Changes): Prefill form to allow edit & resubmit, form persistence enabled
               rejectedTopicName.value = '';
               rejectedTopicDesc.value = '';
               newTopicName.value = topicData.title || savedName || '';
@@ -1160,7 +1111,6 @@
               outlineFileName.value = topicData.file || topicData.fileName || savedOutline || '';
               outlineFileData.value = topicData.fileUrl || topicData.fileData || savedOutlineData || '';
             } else if (normStatus === 'denied') {
-              // Bị từ chối (Rejected): Render read-only card with topic details, clear draft form persistence
               rejectedTopicName.value = topicData.title || savedName || '';
               rejectedTopicDesc.value = topicData.description || savedDesc || '';
               newTopicName.value = topicData.title || savedName || '';
@@ -1169,7 +1119,6 @@
               outlineFileData.value = topicData.fileUrl || topicData.fileData || savedOutlineData || '';
               clearFormPersistence(studentId);
             } else if (normStatus === 'pending') {
-              // Chờ duyệt (Pending): Display submitted proposal, clear draft form persistence
               rejectedTopicName.value = '';
               rejectedTopicDesc.value = '';
               newTopicName.value = topicData.title || savedName || '';
@@ -1178,7 +1127,6 @@
               outlineFileData.value = topicData.fileUrl || topicData.fileData || savedOutlineData || '';
               clearFormPersistence(studentId);
             } else if (normStatus === 'draft') {
-              // Nháp (Draft): Form persistence active
               rejectedTopicName.value = '';
               rejectedTopicDesc.value = '';
               newTopicName.value = topicData.title || savedName || '';
@@ -1199,7 +1147,6 @@
             topicFeedback.value = topicData.feedback || savedFeedback || '';
             submissionDate.value = topicData.date || savedDate || '';
           } else {
-            // Fallback if no Firestore entry exists yet
             const normStatus = normalizeTopicStatus(savedStatus || ((studentId === '20241001') ? 'approved' : 'new'));
             topicStatus.value = normStatus;
 
@@ -1255,7 +1202,6 @@
           }
         });
       } else {
-        // Default static/local fallback
         if (studentId === '20241001') {
           topicStatus.value = 'approved';
           newTopicName.value = 'Xây dựng Hệ thống Quản lý Thực tập Doanh nghiệp (IMS) dựa trên Kiến trúc Microservices';
@@ -1265,7 +1211,6 @@
         }
       }
 
-      // Load Enterprise/Internship Info
       if (studentId === '20241001') {
         enterpriseInfo.value = { ...defaultEnterpriseFPT };
       } else {
@@ -1305,7 +1250,6 @@
     localStorage.setItem(`ims_student_topic_desc_${studentId}`, newTopicDesc.value);
     localStorage.setItem(`ims_student_topic_outline_${studentId}`, outlineFileName.value);
 
-    // Save to Firestore
     saveTopicProposalToDb(studentId, {
       title: newTopicName.value,
       description: newTopicDesc.value,
@@ -1319,7 +1263,6 @@
 
     const studentName = user.hoTen || 'Nguyễn Văn An';
 
-    // Dispatch real-time Firebase notification to teacher
     sendRealtimeNotification({
       role: 'GiangVien',
       userId: 'GV001',
@@ -1426,7 +1369,6 @@
     localStorage.setItem(`ims_student_topic_outline_${studentId}`, outlineFileName.value || '');
     localStorage.setItem(`ims_student_topic_outline_data_${studentId}`, outlineFileData.value || '');
 
-    // Save draft to Firestore
     saveTopicProposalToDb(studentId, {
       title: newTopicName.value || '',
       description: newTopicDesc.value || '',
@@ -1486,7 +1428,6 @@
     clearFormPersistence(studentId);
     localStorage.setItem(`ims_student_topic_date_${studentId}`, nowStr);
 
-    // Submit/Save to Firestore
     saveTopicProposalToDb(studentId, {
       title: newTopicName.value,
       description: newTopicDesc.value,
@@ -1501,7 +1442,6 @@
       date: nowStr
     });
 
-    // Dispatch real-time Firebase notification to teacher
     sendRealtimeNotification({
       role: 'GiangVien',
       userId: 'GV001',

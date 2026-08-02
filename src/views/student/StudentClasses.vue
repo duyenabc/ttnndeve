@@ -1,6 +1,5 @@
 ﻿<template>
   <div class="ims-scope w-full mx-auto font-sans space-y-6 pb-20">
-    <!-- VIEW 1: CLASS LIST -->
     <div v-if="currentView === 'list'" class="space-y-8">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-2xs">
         <div>
@@ -20,7 +19,6 @@
         </button>
       </div>
 
-      <!-- SECTION 1: Há»ŒC Ká»² HÃˆ -->
       <div class="space-y-4">
         <h3 class="uppercase font-bold text-xs text-slate-500 tracking-wider flex items-center gap-2">
           <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
@@ -28,7 +26,6 @@
         </h3>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <!-- Active Class Card -->
           <div
             @click="openClassDetail(activeClass)"
             class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-2xs hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer group flex flex-col justify-between"
@@ -70,7 +67,6 @@
         </div>
       </div>
 
-      <!-- SECTION 2: Há»ŒC Ká»² 2 -->
       <div class="space-y-4 pt-2">
         <h3 class="uppercase font-bold text-xs text-slate-500 tracking-wider flex items-center gap-2">
           <span class="w-2 h-2 rounded-full bg-amber-500"></span>
@@ -78,7 +74,6 @@
         </h3>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <!-- Wait Enrollment Card -->
           <div
             @click="openClassDetail(pendingClass)"
             class="bg-white border border-slate-200 border-l-4 border-l-amber-500 rounded-2xl overflow-hidden shadow-2xs hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer group flex flex-col justify-between"
@@ -120,7 +115,6 @@
         </div>
       </div>
 
-      <!-- SECTION 3: Há»ŒC Ká»² 1 -->
       <div class="space-y-4 pt-2">
         <h3 class="uppercase font-bold text-xs text-slate-500 tracking-wider flex items-center gap-2">
           <span class="w-2 h-2 rounded-full bg-slate-400"></span>
@@ -128,7 +122,6 @@
         </h3>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <!-- Finished Class Card -->
           <div
             class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-2xs opacity-80 group flex flex-col justify-between"
           >
@@ -165,7 +158,6 @@
       </div>
     </div>
 
-    <!-- VIEW 2: CLASS DETAIL PAGE -->
     <div v-else-if="currentView === 'detail'" class="space-y-6">
       <button
         @click="currentView = 'list'"
@@ -204,7 +196,6 @@
           </div>
         </div>
 
-        <!-- Class Quick Specs -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 flex items-center gap-3">
             <span class="material-symbols-outlined text-[#005EA3] text-[28px] p-2 bg-blue-100 rounded-xl">person</span>
@@ -239,7 +230,6 @@
           </div>
         </div>
 
-        <!-- Course Roadmap -->
         <div class="space-y-4 pt-4">
           <h3 class="font-bold text-sm text-slate-900 flex items-center gap-2">
             <span class="material-symbols-outlined text-[#005EA3]">timeline</span>
@@ -275,7 +265,6 @@
       </div>
     </div>
 
-    <!-- VIEW 3: ONBOARDING SCREEN AFTER ENROLLMENT -->
     <div v-else-if="currentView === 'onboarding'" class="max-w-2xl mx-auto py-10 space-y-8 text-center font-sans">
       <div class="inline-flex items-center justify-center w-20 h-20 bg-emerald-100 text-emerald-700 rounded-full mb-2 shadow-sm">
         <span class="material-symbols-outlined text-[42px]">celebration</span>
@@ -289,7 +278,6 @@
       </div>
 
       <div class="space-y-4 text-left">
-        <!-- Step 1 -->
         <div class="flex items-center justify-between p-5 bg-white border border-slate-200 rounded-2xl shadow-2xs hover:border-[#005EA3] transition group">
           <div class="flex items-center gap-4">
             <div class="w-10 h-10 rounded-full bg-blue-50 text-[#005EA3] font-bold flex items-center justify-center text-sm shrink-0">1</div>
@@ -303,7 +291,6 @@
           </router-link>
         </div>
 
-        <!-- Step 2 -->
         <div class="flex items-center justify-between p-5 bg-white border border-slate-200 rounded-2xl shadow-2xs hover:border-[#005EA3] transition group">
           <div class="flex items-center gap-4">
             <div class="w-10 h-10 rounded-full bg-blue-50 text-[#005EA3] font-bold flex items-center justify-center text-sm shrink-0">2</div>
@@ -317,7 +304,6 @@
           </router-link>
         </div>
 
-        <!-- Step 3 -->
         <div class="flex items-center justify-between p-5 bg-white border border-slate-200 rounded-2xl shadow-2xs hover:border-[#005EA3] transition group">
           <div class="flex items-center gap-4">
             <div class="w-10 h-10 rounded-full bg-blue-50 text-[#005EA3] font-bold flex items-center justify-center text-sm shrink-0">3</div>
@@ -343,7 +329,6 @@
       </div>
     </div>
 
-    <!-- ENROLLMENT MODAL -->
     <div
       v-if="showEnrollModal"
       class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs font-sans"
@@ -381,7 +366,6 @@
           </button>
         </div>
 
-        <!-- Search Result Area -->
         <div v-if="searchResult" class="space-y-3 pt-2 border-t border-slate-100">
           <div v-if="searchResult.success" class="p-4 bg-blue-50 border border-blue-200 rounded-xl space-y-2">
             <div class="flex items-center gap-2 font-bold text-xs text-blue-950">

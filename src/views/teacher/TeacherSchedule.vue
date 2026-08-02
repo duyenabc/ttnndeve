@@ -1,6 +1,5 @@
 ﻿<template>
   <div class="ims-scope w-full mx-auto space-y-6 font-sans pb-20">
-    <!-- Top Header -->
     <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div>
         <h1 class="font-bold text-2xl text-slate-900 tracking-tight flex items-center gap-2">
@@ -19,9 +18,7 @@
       </button>
     </div>
 
-    <!-- Main Schedule Layout -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-      <!-- Left Control & Filters Sidebar -->
       <div class="lg:col-span-3 bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs space-y-6">
         <div>
           <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">PhÃ¢n loáº¡i lá»‹ch</h3>
@@ -61,9 +58,7 @@
         </div>
       </div>
 
-      <!-- Right Calendar Container -->
       <div class="lg:col-span-9 bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-2xs">
-        <!-- Calendar Header -->
         <div class="p-5 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-50/50">
           <div class="flex items-center gap-4">
             <h2 class="font-bold text-lg text-slate-900">{{ currentViewTitle }}</h2>
@@ -80,7 +75,6 @@
             </div>
           </div>
 
-          <!-- Month / Week Toggle -->
           <div class="flex bg-slate-200/80 p-1 rounded-xl w-fit text-xs font-bold">
             <button
               @click="currentViewMode = 'month'"
@@ -99,7 +93,6 @@
           </div>
         </div>
 
-        <!-- Month View -->
         <div v-if="currentViewMode === 'month'" class="p-4">
           <div class="grid grid-cols-7 text-center font-bold text-[11px] text-slate-400 uppercase tracking-wider mb-2">
             <div>Chá»§ Nháº­t</div>
@@ -142,7 +135,6 @@
           </div>
         </div>
 
-        <!-- Week View -->
         <div v-else class="p-4 overflow-x-auto">
           <div class="grid grid-cols-8 text-center text-xs font-bold border-b border-slate-200 pb-2 mb-2">
             <div class="text-slate-400 text-[10px] uppercase">Giá»</div>
@@ -179,7 +171,6 @@
       </div>
     </div>
 
-    <!-- Create Meeting Drawer -->
     <div
       v-if="showCreateDrawer"
       class="fixed inset-0 z-[120] flex justify-end bg-slate-900/50 backdrop-blur-xs"
@@ -237,7 +228,6 @@
               </div>
             </div>
 
-            <!-- Recurrence Config Block -->
             <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl space-y-3">
               <div>
                 <label class="block font-bold text-slate-800 mb-1">Láº·p láº¡i cuá»™c há»p</label>
@@ -301,7 +291,6 @@
       </div>
     </div>
 
-    <!-- Event Detail Drawer -->
     <div
       v-if="activeEvent"
       class="fixed inset-0 z-[120] flex justify-end bg-slate-900/50 backdrop-blur-xs"
@@ -354,7 +343,6 @@
       </div>
     </div>
 
-    <!-- Toast Notification -->
     <div
       v-if="toastMsg"
       class="fixed bottom-6 right-6 z-[130] bg-slate-900 text-white px-4 py-3 rounded-xl shadow-xl text-xs font-bold flex items-center gap-2"
@@ -442,7 +430,6 @@
     const days = [];
     const todayStr = new Date().toISOString().split('T')[0];
 
-    // Previous month padding
     const prevMonthLastDay = new Date(year, month, 0).getDate();
     for (let i = startDayOfWeek - 1; i >= 0; i--) {
       const pDay = prevMonthLastDay - i;
@@ -450,7 +437,6 @@
       days.push({ dayNumber: pDay, isOtherMonth: true, dateStr });
     }
 
-    // Current month days
     for (let i = 1; i <= totalDays; i++) {
       const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
       days.push({ dayNumber: i, isOtherMonth: false, isToday: dateStr === todayStr, dateStr });
@@ -597,7 +583,6 @@
       }
       studentOptions.value = stList;
     } catch {
-      // Mock fallback
     }
   });
 </script>

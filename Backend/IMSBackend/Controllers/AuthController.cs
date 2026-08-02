@@ -111,8 +111,6 @@ namespace IMSBackend.Controllers
         [HttpGet("me")]
         public async Task<IActionResult> GetMe([FromQuery] string id)
         {
-            // In a real app, extract ID from User.Claims
-            // For now, allow frontend to pass ID or we get from claims
             var claimId = User.Claims.FirstOrDefault(c => c.Type == "id")?.Value;
             var userId = !string.IsNullOrEmpty(claimId) ? claimId : id;
             

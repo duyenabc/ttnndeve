@@ -1,6 +1,5 @@
 ﻿<template>
   <div class="ims-scope w-full mx-auto space-y-8 pb-12 font-sans">
-    <!-- Header Section -->
     <div class="flex justify-between items-end">
       <div>
         <nav class="flex items-center text-xs text-slate-500 mb-1 gap-2 font-medium">
@@ -32,7 +31,6 @@
       </div>
     </div>
 
-    <!-- 1. Setup Checklist (Collapsible) -->
     <section class="border border-slate-200 rounded-2xl bg-white overflow-hidden shadow-xs">
       <details class="group" :open="isChecklistOpen">
         <summary
@@ -51,7 +49,6 @@
         </summary>
 
         <div class="p-6 pt-2 border-t border-slate-100 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <!-- Step 1: Done -->
           <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 flex items-start gap-3 opacity-75">
             <span class="material-symbols-outlined text-emerald-600 text-[22px]" style="font-variation-settings: 'FILL' 1">
               check_circle
@@ -62,7 +59,6 @@
             </div>
           </div>
 
-          <!-- Step 2 -->
           <div class="p-4 bg-white rounded-xl border border-slate-200 flex items-start justify-between gap-3 hover:shadow-xs transition group">
             <div class="flex items-start gap-3">
               <span class="material-symbols-outlined text-slate-300 text-[22px]">circle</span>
@@ -76,7 +72,6 @@
             </router-link>
           </div>
 
-          <!-- Step 3 -->
           <div class="p-4 bg-white rounded-xl border border-slate-200 flex items-start justify-between gap-3 hover:shadow-xs transition group">
             <div class="flex items-start gap-3">
               <span class="material-symbols-outlined text-slate-300 text-[22px]">circle</span>
@@ -90,7 +85,6 @@
             </router-link>
           </div>
 
-          <!-- Step 4 -->
           <div class="p-4 bg-white rounded-xl border border-slate-200 flex items-start justify-between gap-3 hover:shadow-xs transition group">
             <div class="flex items-start gap-3">
               <span class="material-symbols-outlined text-slate-300 text-[22px]">circle</span>
@@ -104,7 +98,6 @@
             </router-link>
           </div>
 
-          <!-- Step 5 -->
           <div class="p-4 bg-white rounded-xl border border-slate-200 flex items-start justify-between gap-3 hover:shadow-xs transition group">
             <div class="flex items-start gap-3">
               <span class="material-symbols-outlined text-slate-300 text-[22px]">circle</span>
@@ -118,7 +111,6 @@
             </router-link>
           </div>
 
-          <!-- Step 6 -->
           <div class="p-4 bg-white rounded-xl border border-slate-200 flex items-start justify-between gap-3 hover:shadow-xs transition group">
             <div class="flex items-start gap-3">
               <span class="material-symbols-outlined text-slate-300 text-[22px]">circle</span>
@@ -135,16 +127,13 @@
       </details>
     </section>
 
-    <!-- Main Content Layout Grid -->
     <div class="grid grid-cols-12 gap-6">
-      <!-- Left Timeline Sidebar (Vertical) -->
       <div class="col-span-12 lg:col-span-2 bg-white rounded-2xl border border-slate-200 p-5 shadow-xs flex flex-col justify-between">
         <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4">Lá»™ trÃ¬nh thực tập</h3>
         <div class="relative flex flex-col items-center h-full min-h-[320px]">
           <div class="absolute top-3 bottom-3 w-0.5 bg-slate-200"></div>
           
           <div class="relative z-10 flex flex-col justify-between h-full py-2 w-full space-y-12">
-            <!-- Step 1 -->
             <div class="relative flex items-center gap-3">
               <div class="w-4 h-4 rounded-full bg-slate-400 border-2 border-white shadow-xs shrink-0"></div>
               <div>
@@ -153,7 +142,6 @@
               </div>
             </div>
 
-            <!-- Step 2 (Active) -->
             <div class="relative flex items-center gap-3">
               <div class="w-5 h-5 rounded-full bg-[#005EA3] border-2 border-white ring-4 ring-blue-100 shadow-sm shrink-0 animate-pulse"></div>
               <div>
@@ -165,7 +153,6 @@
               </div>
             </div>
 
-            <!-- Step 3 -->
             <div class="relative flex items-center gap-3 opacity-60">
               <div class="w-4 h-4 rounded-full bg-emerald-600 border-2 border-white shadow-xs shrink-0"></div>
               <div>
@@ -177,18 +164,14 @@
         </div>
       </div>
 
-      <!-- Right Main Analytics Column -->
       <div class="col-span-12 lg:col-span-10 space-y-6">
-        <!-- Loading Spinner -->
         <div v-if="loading" class="bg-white rounded-2xl border border-slate-200 p-12 text-center flex flex-col items-center justify-center min-h-[350px]">
           <span class="animate-spin text-4xl text-blue-600 material-symbols-outlined">sync</span>
           <p class="text-sm text-slate-500 mt-2">Äang táº£i dữ li�!u tá»•ng quan...</p>
         </div>
 
         <template v-else>
-          <!-- 3. Top KPI Metric Cards -->
           <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <!-- Tá»· lá»‡ ná»™p nháº­t kÃ½ -->
             <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs flex flex-col justify-between">
               <div class="flex justify-between items-start mb-3">
                 <div class="p-2.5 bg-blue-50 text-[#005EA3] rounded-xl">
@@ -210,7 +193,6 @@
               </div>
             </div>
 
-            <!-- Sinh viên chậm tiáº¿n Ä‘á»™ -->
             <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs flex flex-col justify-between">
               <div class="flex justify-between items-start mb-3">
                 <div class="p-2.5 bg-rose-50 text-rose-600 rounded-xl">
@@ -230,7 +212,6 @@
               <p class="text-xs text-slate-500 mt-3 font-medium">Sinh viên chÆ°a ná»™p nháº­t kÃ½ tuáº§n há»c trÆ°á»›c.</p>
             </div>
 
-            <!-- Lá»‹ch háº¹n sáº¯p tá»›i -->
             <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs flex flex-col justify-between">
               <div class="flex justify-between items-start mb-3">
                 <div class="p-2.5 bg-amber-50 text-amber-600 rounded-xl">
@@ -248,7 +229,6 @@
             </div>
           </section>
 
-          <!-- Empty State when there is no activity data yet -->
           <div v-if="!hasRealData" class="bg-white rounded-2xl border border-slate-200 p-12 text-center flex flex-col items-center justify-center min-h-[380px] shadow-2xs">
             <span class="material-symbols-outlined text-[72px] text-slate-300 mb-4" style="font-variation-settings: 'FILL' 1">analytics</span>
             <h3 class="text-lg font-bold text-slate-900">ChÆ°a cÃ³ dữ li�!u thá»‘ng kÃª biá»ƒu Ä‘á»“</h3>
@@ -273,21 +253,15 @@
             </div>
           </div>
 
-          <!-- Real Dynamic Charts and Heatmap if there is actual activity data -->
           <div v-else class="space-y-6">
-            <!-- 4. Charts Section -->
             <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <!-- Chart 1: Trạng thái sinh viên (Pie/Donut) -->
               <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs">
                 <h4 class="font-bold text-base text-slate-900 mb-6">Trạng thái Sinh viên</h4>
                 <div class="flex items-center gap-8 justify-around">
                   <div class="relative w-32 h-32 flex items-center justify-center shrink-0">
                     <svg class="w-full h-full -rotate-90" viewBox="0 0 36 36">
-                      <!-- Segment 1: Äang thực tập (approved topics) -->
                       <circle cx="18" cy="18" fill="transparent" r="15.915" stroke="#005EA3" :stroke-dasharray="`${chartSegments.approved.dash} ${100 - chartSegments.approved.dash}`" :stroke-dashoffset="chartSegments.approved.offset" stroke-width="4"></circle>
-                      <!-- Segment 2: Chá» duyá»‡t Ä‘á» tÃ i (pending topics) -->
                       <circle cx="18" cy="18" fill="transparent" r="15.915" stroke="#f97316" :stroke-dasharray="`${chartSegments.pending.dash} ${100 - chartSegments.pending.dash}`" :stroke-dashoffset="chartSegments.pending.offset" stroke-width="4"></circle>
-                      <!-- Segment 3: ChÆ°a Ä‘Äƒng kÃ½ (unregistered topics) -->
                       <circle cx="18" cy="18" fill="transparent" r="15.915" stroke="#94a3b8" :stroke-dasharray="`${chartSegments.unregistered.dash} ${100 - chartSegments.unregistered.dash}`" :stroke-dashoffset="chartSegments.unregistered.offset" stroke-width="4"></circle>
                     </svg>
                     <div class="absolute inset-0 flex flex-col items-center justify-center">
@@ -312,7 +286,6 @@
                 </div>
               </div>
 
-              <!-- Chart 2: Tiến ��" ná»™p báo cáo (Line/Area) -->
               <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs flex flex-col justify-between">
                 <div class="flex justify-between items-center mb-4">
                   <h4 class="font-bold text-base text-slate-900">Tiến ��" ná»™p nháº­t kÃ½ (Tá»· lá»‡ %)</h4>
@@ -321,15 +294,11 @@
 
                 <div class="h-32 w-full relative mt-2">
                   <svg class="w-full h-full" preserveAspectRatio="none" viewBox="0 0 400 100">
-                    <!-- Area Fill -->
                     <path :d="chartAreaPath" fill="#005EA3" fill-opacity="0.1"></path>
-                    <!-- Line -->
                     <path :d="chartLinePath" fill="none" stroke="#005EA3" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path>
-                    <!-- Data Points -->
                     <circle v-for="(pt, idx) in chartPoints" :key="idx" :cx="pt.x" :cy="pt.y" fill="#005EA3" r="4"></circle>
                   </svg>
 
-                  <!-- X-Axis Labels -->
                   <div class="flex justify-between mt-2 text-[10px] text-slate-500 font-semibold">
                     <span>T1</span>
                     <span>T2</span>
@@ -344,7 +313,6 @@
               </div>
             </section>
 
-            <!-- 5. TÃ¬nh tráº¡ng ná»™p nháº­t kÃ½ theo tuáº§n (Heatmap Table) -->
             <section class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs space-y-6">
               <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
@@ -370,7 +338,6 @@
 
               <div class="overflow-x-auto">
                 <div class="min-w-[650px]">
-                  <!-- Header Row -->
                   <div class="grid grid-cols-[200px_repeat(8,1fr)] mb-3 pb-2 border-b border-slate-100 text-[11px] font-bold text-slate-400 text-center uppercase tracking-wider">
                     <div class="text-left px-2">Há» và tên</div>
                     <div>T1</div>
@@ -383,7 +350,6 @@
                     <div>T8</div>
                   </div>
 
-                  <!-- Data Rows -->
                   <div class="space-y-2.5">
                     <div
                       v-for="s in weeklyStudents"
@@ -434,7 +400,6 @@ const currentWeek = ref(3);
 let unsubscribeTopics = null;
 let unsubscribeDiaries = null;
 
-// Real counts
 const totalStudentsCount = computed(() => students.value.length);
 
 const approvedTopicsCount = computed(() => {
@@ -445,7 +410,6 @@ const approvedTopicsCount = computed(() => {
     if (ft && (ft.status === 'approved' || ft.status === 'ÄÃ£ duyá»‡t')) {
       count++;
     } else {
-      // Check localStorage fallbacks
       const savedStatus = localStorage.getItem(`ims_student_topic_status_${mssv}`);
       if (savedStatus === 'approved') {
         count++;
@@ -476,15 +440,12 @@ const unregisteredCount = computed(() => {
   return Math.max(0, totalStudentsCount.value - approvedTopicsCount.value - pendingTopicsCount.value);
 });
 
-// Calculate diary submission rate
 const submissionRate = computed(() => {
   if (totalStudentsCount.value === 0) return 0;
   const currentW = currentWeek.value;
-  // Expected diaries count for completed past weeks
   const expectedCount = totalStudentsCount.value * (currentW - 1);
   if (expectedCount <= 0) return 0;
 
-  // Number of submitted diaries in completed past weeks
   let submittedCount = 0;
   students.value.forEach(s => {
     const mssv = s.maSoSinhVien;
@@ -495,7 +456,6 @@ const submissionRate = computed(() => {
   return Math.min(100, Math.round((submittedCount / expectedCount) * 100));
 });
 
-// Count delayed students (missed diary of the previous week)
 const delayedCount = computed(() => {
   const prevW = currentWeek.value - 1;
   if (prevW <= 0) return 0;
@@ -510,7 +470,6 @@ const delayedCount = computed(() => {
   return count;
 });
 
-// Setup checklist computed step
 const completedChecklistCount = computed(() => {
   let count = 1; // 1. Táº¡o lá»›p há»c (luÃ´n xong)
   if (classInfo.value) {
@@ -521,12 +480,9 @@ const completedChecklistCount = computed(() => {
   return Math.min(6, count + 1); // add offset for realistic UI
 });
 
-// Detect whether there is actual activity data
 const hasRealData = computed(() => {
-  // If there are no students or no topics have been proposed/approved and no diaries are submitted
   if (totalStudentsCount.value === 0) return false;
   
-  // Check if any student in our class has registered a topic
   const hasTopic = students.value.some(s => {
     const mssv = s.maSoSinhVien;
     const ft = topics.value.find(item => String(item.mssv || item.userId) === String(mssv));
@@ -534,7 +490,6 @@ const hasRealData = computed(() => {
     return ft || savedTitle;
   });
 
-  // Check if any student has submitted a diary
   const hasDiary = students.value.some(s => {
     const mssv = s.maSoSinhVien;
     return diaries.value.some(d => String(d.userId) === String(mssv));
@@ -552,7 +507,6 @@ const weeklyStudents = computed(() => {
     const studentWeeks = [];
     
     for (let w = 1; w <= 8; w++) {
-      // Find diary entry for this week
       const hasDiary = diaries.value.some(d => String(d.userId) === String(mssv) && Number(d.week) === w);
       if (hasDiary) {
         studentWeeks.push('dung_han');
@@ -572,7 +526,6 @@ const weeklyStudents = computed(() => {
   return list;
 });
 
-// Pie/Donut Chart segments
 const chartSegments = computed(() => {
   const tot = Math.max(totalStudentsCount.value, 1);
   const appPercent = (approvedTopicsCount.value / tot) * 100;
@@ -595,12 +548,10 @@ const chartSegments = computed(() => {
   };
 });
 
-// Line/Area Chart path calculations
 const chartPoints = computed(() => {
   const tot = Math.max(totalStudentsCount.value, 1);
   return Array.from({ length: 8 }, (_, i) => {
     const w = i + 1;
-    // Count how many students submitted in week w
     const submittedInWeek = weeklyStudents.value.filter(s => s.weeks[i] === 'dung_han').length;
     const rate = submittedInWeek / tot;
     const x = (i / 7) * 400;
@@ -651,12 +602,10 @@ async function loadDashboardData() {
     students.value = [];
   }
 
-  // Live Firebase Topics sync
   unsubscribeTopics = listenAllTopics((firestoreTopics) => {
     topics.value = firestoreTopics;
   });
 
-  // Live Firebase Diaries sync
   unsubscribeDiaries = listenAllDiaries((firestoreDiaries) => {
     diaries.value = firestoreDiaries;
   });

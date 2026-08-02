@@ -1,6 +1,5 @@
 <template>
   <div class="ims-scope w-full mx-auto space-y-6">
-    <!-- Breadcrumb & Header -->
     <div class="flex flex-col gap-2">
       <nav class="flex items-center gap-2 text-xs text-slate-500 font-medium">
         <router-link to="/teacher/classes" class="hover:text-blue-600 transition-colors">L�:p của tôi</router-link>
@@ -25,7 +24,6 @@
       </div>
     </div>
 
-    <!-- Category Tabs -->
     <div class="flex border-b border-slate-200 gap-8 text-sm">
       <button
         class="pb-3 font-bold transition-all relative flex items-center gap-2"
@@ -52,11 +50,8 @@
       </button>
     </div>
 
-    <!-- TAB 1: DANH SÃCH SINH VIÃŠN -->
     <div v-if="activeTab === 'students'" class="space-y-6">
-      <!-- Cards Ghi danh & MÃ£ lá»›p -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <!-- MÃ£ tham gia lá»›p -->
         <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs flex flex-col justify-between">
           <div class="flex justify-between items-start mb-3">
             <h3 class="text-sm font-bold text-blue-900 flex items-center gap-2">
@@ -92,7 +87,6 @@
           </div>
         </div>
 
-        <!-- Thiáº¿t láº­p ghi danh -->
         <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs flex flex-col justify-between">
           <div class="flex justify-between items-start mb-3">
             <h3 class="text-sm font-bold text-blue-900 flex items-center gap-2">
@@ -132,7 +126,6 @@
         </div>
       </div>
 
-      <!-- Controls & Filter Toolbar -->
       <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-xs space-y-4">
         <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
           <div class="relative flex-1">
@@ -173,7 +166,6 @@
           </div>
         </div>
 
-        <!-- Inline Bulk Actions Bar (Triggered when 2+ items selected) -->
         <div
           v-if="selected.length >= 2"
           class="bg-blue-50 border border-blue-200 rounded-xl p-3 flex items-center justify-between transition-all"
@@ -197,7 +189,6 @@
         </div>
       </div>
 
-      <!-- Student Table -->
       <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs">
         <div class="overflow-x-auto">
           <table class="w-full text-left text-xs border-collapse">
@@ -308,7 +299,6 @@
       </div>
     </div>
 
-    <!-- TAB 2: NHÃ“M SINH VIÃŠN -->
     <div v-if="activeTab === 'groups'" class="space-y-6">
       <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
@@ -385,7 +375,6 @@
 
               <td class="p-4 text-right">
                 <div class="flex items-center justify-end gap-2">
-                  <!-- Button XÃ¡c nháº­n gom nhóm -->
                   <button
                     v-if="g.trangThai === 'ChoXacNhan' || !g.trangThai"
                     class="px-3 py-1.5 rounded-xl text-white font-bold text-xs bg-emerald-600 hover:bg-emerald-700 active:scale-95 transition-all shadow-xs flex items-center gap-1"
@@ -395,7 +384,6 @@
                     XÃ¡c nháº­n gom nhóm
                   </button>
 
-                  <!-- Button Tá»« chá»‘i -->
                   <button
                     v-if="g.trangThai === 'ChoXacNhan' || !g.trangThai"
                     class="px-3 py-1.5 rounded-xl text-rose-700 bg-rose-50 border border-rose-200 font-bold text-xs hover:bg-rose-100 transition-colors flex items-center gap-1"
@@ -405,7 +393,6 @@
                     Tá»« chá»‘i
                   </button>
 
-                  <!-- Button Giáº£i tÃ¡n nhóm -->
                   <button
                     class="p-1.5 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50 font-bold transition-colors"
                     title="Giáº£i tÃ¡n nhóm nÃ y"
@@ -421,13 +408,11 @@
       </div>
     </div>
 
-    <!-- Toast Notification -->
     <div v-if="toast" class="fixed bottom-6 right-6 z-[90] bg-slate-900 text-white px-4 py-3 rounded-xl shadow-xl text-xs font-bold flex items-center gap-2">
       <span class="material-symbols-outlined text-emerald-400 text-[18px]">check_circle</span>
       {{ toast }}
     </div>
 
-    <!-- Reset MÃ£ Modal -->
     <div v-if="showReset" class="fixed inset-0 z-[80] flex items-center justify-center bg-black/40 backdrop-blur-xs px-4" @click.self="showReset = false">
       <div class="w-full max-w-[420px] bg-white rounded-2xl shadow-2xl p-6">
         <h3 class="font-bold text-lg text-slate-900 mb-2">Reset mÃ£ tham gia lá»›p?</h3>
@@ -443,7 +428,6 @@
       </div>
     </div>
 
-    <!-- Modal Thiáº¿t Láº­p Ghi Danh -->
     <div v-if="showEnroll" class="fixed inset-0 z-[80] flex items-center justify-center bg-black/40 backdrop-blur-xs px-4" @click.self="showEnroll = false">
       <div class="w-full max-w-[440px] bg-white rounded-2xl shadow-2xl p-6">
         <h3 class="font-bold text-lg text-slate-900 mb-4">Thiáº¿t láº­p ghi danh</h3>
@@ -467,7 +451,6 @@
       </div>
     </div>
 
-    <!-- Modal Import Sinh ViÃªn -->
     <div v-if="showImport" class="fixed inset-0 z-[80] flex items-center justify-center bg-black/40 backdrop-blur-xs px-4" @click.self="showImport = false">
       <div class="w-full max-w-[520px] bg-white rounded-2xl shadow-2xl overflow-hidden">
         <div class="p-6 border-b border-slate-200 bg-slate-50 flex justify-between items-center">
@@ -507,7 +490,6 @@
       </div>
     </div>
 
-    <!-- Modal Dá»«ng Thá»±c Táº­p -->
     <div v-if="stopTarget" class="fixed inset-0 z-[80] flex items-center justify-center bg-black/40 backdrop-blur-xs px-4" @click.self="stopTarget = null">
       <div class="w-full max-w-[440px] bg-white rounded-2xl shadow-2xl p-6">
         <h3 class="font-bold text-lg text-slate-900 mb-1">Dá»«ng thực tập</h3>
@@ -538,7 +520,6 @@
       </div>
     </div>
 
-    <!-- Modal Chuyá»ƒn L�:p Thá»±c Táº­p -->
     <div v-if="transferTarget" class="fixed inset-0 z-[80] flex items-center justify-center bg-black/40 backdrop-blur-xs px-4" @click.self="transferTarget = null">
       <div class="w-full max-w-[480px] bg-white rounded-2xl shadow-2xl p-6">
         <div class="flex justify-between items-start mb-4">
@@ -584,7 +565,6 @@
       </div>
     </div>
 
-    <!-- Modal XÃ¡c Nháº­n Gom Nhóm -->
     <div v-if="showConfirmGroup" class="fixed inset-0 z-[80] flex items-center justify-center bg-black/40 backdrop-blur-xs px-4" @click.self="showConfirmGroup = false">
       <div class="w-full max-w-[480px] bg-white rounded-2xl shadow-2xl p-6 space-y-4">
         <div class="flex items-center justify-between">
@@ -628,10 +608,8 @@
       </div>
     </div>
 
-    <!-- Drawer Há»“ sÆ¡ Chi tiáº¿t Sinh viên (6 Tabs) -->
     <div v-if="detail" class="fixed inset-0 z-[85] flex justify-end bg-black/40 backdrop-blur-xs" @click.self="detail = null">
       <div class="w-full max-w-[620px] h-full bg-white shadow-2xl flex flex-col justify-between overflow-hidden">
-        <!-- Drawer Header -->
         <div class="p-6 border-b border-slate-200 flex justify-between items-start bg-slate-50">
           <div>
             <div class="flex items-center gap-2 mb-1.5">
@@ -653,7 +631,6 @@
           </button>
         </div>
 
-        <!-- Drawer Navigation Tabs -->
         <div class="px-6 flex border-b border-slate-200 overflow-x-auto bg-white text-xs font-bold gap-4 pt-1">
           <button
             v-for="t in [
@@ -673,9 +650,7 @@
           </button>
         </div>
 
-        <!-- Drawer Content Body -->
         <div class="p-6 overflow-y-auto space-y-6 flex-1 text-xs">
-          <!-- Tab 1: Tá»•ng quan -->
           <div v-if="activeDetailTab === 'overview'" class="space-y-6">
             <div class="space-y-3">
               <h4 class="font-bold text-slate-900 uppercase tracking-wider text-[11px] text-blue-900 border-b border-slate-100 pb-1">
@@ -740,7 +715,6 @@
             </div>
           </div>
 
-          <!-- Tab 2: Nháº­t kÃ½ -->
           <div v-else-if="activeDetailTab === 'logs'" class="space-y-4">
             <div class="flex justify-between items-center bg-slate-50 p-3 rounded-xl border border-slate-200">
               <span class="font-bold text-blue-900 text-xs">Tuáº§n 5 (12/09/2024 - 18/09/2024)</span>
@@ -768,7 +742,6 @@
             </div>
           </div>
 
-          <!-- Tab 3: Bài n�"p -->
           <div v-else-if="activeDetailTab === 'submissions'" class="space-y-3">
             <div v-for="sub in [
               { title: 'Äá» cÆ°Æ¡ng chi tiáº¿t', deadline: '15/08/2024', submitted: '14/08/2024 15:30', status: 'DaNop', cls: 'bg-emerald-100 text-emerald-800' },
@@ -790,7 +763,6 @@
             </div>
           </div>
 
-          <!-- Tab 4: Äiá»ƒm -->
           <div v-else-if="activeDetailTab === 'grades'" class="space-y-3">
             <div v-if="!detail.diem || !detail.diem.length" class="text-slate-400 italic">ChÆ°a cÃ³ cá»™t Ä‘iá»ƒm nào.</div>
             <div v-else class="space-y-2">
@@ -801,7 +773,6 @@
             </div>
           </div>
 
-          <!-- Tab 5: Lá»‹ch sá»­ Ä‘Ã¡nh giÃ¡ -->
           <div v-else-if="activeDetailTab === 'history'" class="space-y-3">
             <div class="relative pl-6 space-y-4 border-l-2 border-slate-200">
               <div class="relative">
@@ -815,7 +786,6 @@
             </div>
           </div>
 
-          <!-- Tab 6: Ghi chÃº -->
           <div v-else-if="activeDetailTab === 'notes'" class="space-y-4">
             <div class="bg-amber-50/70 border border-amber-200 rounded-xl p-3 text-[11px] text-amber-900">
               Ghi chÃº riÃªng tÆ° của giảng viên (Chá»‰ báº¡n má»›i nhÃ¬n tháº¥y ghi chÃº nÃ y).
@@ -829,7 +799,6 @@
           </div>
         </div>
 
-        <!-- Drawer Footer -->
         <div class="p-4 bg-slate-50 border-t border-slate-200 flex justify-end">
           <button class="px-5 py-2 bg-slate-200 hover:bg-slate-300 font-bold text-slate-700 rounded-xl text-xs transition-colors" @click="detail = null">
             ÄÃ³ng
@@ -838,7 +807,6 @@
       </div>
     </div>
 
-    <!-- Modal Xuất BÃ¡o CÃ¡o Danh SÃ¡ch Sinh ViÃªn -->
     <div
       v-if="showExportModal"
       class="fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4"
@@ -983,7 +951,6 @@
     }
   }
 
-  // Reset mÃ£
   const showReset = ref(false);
   async function resetCode() {
     const res = await api.post(`/giangvien/classes/${maLop}/reset-code`);
@@ -992,7 +959,6 @@
     showToast(res.data.message || 'ÄÃ£ táº¡o mÃ£ tham gia má»›i');
   }
 
-  // Ghi danh
   const showEnroll = ref(false);
   const enrollForm = ref({ ghiDanhMo: true, hanGhiDanh: '' });
   function openEnroll() {
@@ -1012,7 +978,6 @@
     showToast(res.data.message || 'Cáº­p nháº­t thiáº¿t láº­p thÃ nh cÃ´ng');
   }
 
-  // Import
   const showImport = ref(false);
   const importText = ref('');
   const importResults = ref([]);
@@ -1066,7 +1031,6 @@
     }
   }
 
-  // Gom nhóm
   const showConfirmGroup = ref(false);
   const selectedStudents = computed(() => students.value.filter(s => selected.value.includes(s.maGhiDanh)));
 

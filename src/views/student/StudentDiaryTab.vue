@@ -1,6 +1,5 @@
 <template>
   <div class="space-y-4 font-sans relative">
-    <!-- Header bar -->
     <div
       v-if="!isWriting"
       class="border border-slate-200 rounded-xl bg-white px-5 py-4 flex flex-col xl:flex-row xl:items-center justify-between gap-4"
@@ -87,7 +86,6 @@
     </div>
 
     <template v-else>
-      <!-- Writing Form -->
       <div v-if="isWriting" class="bg-white rounded-xl p-6 sm:p-8 border border-slate-200 pb-24">
         <div class="mb-7">
           <h2 class="font-bold text-[22px] sm:text-[24px] text-slate-900 mb-1.5">
@@ -208,7 +206,6 @@
           </template>
         </div>
 
-        <!-- Sticky Footer -->
         <div
           class="fixed bottom-0 left-0 right-0 lg:left-64 bg-white border-t border-slate-200 p-4 px-6 flex justify-end gap-3 z-30 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]"
         >
@@ -237,7 +234,6 @@
         </div>
       </div>
 
-      <!-- Diary List -->
       <div v-else class="space-y-3">
         <template v-if="currentWeekDiaries.length > 0">
           <div
@@ -335,7 +331,6 @@
           </div>
         </template>
 
-        <!-- UC-18.3: Lịch sử đánh giá (tất cả nhận xét GV) -->
         <div class="mt-8 border border-slate-200 rounded-xl bg-white overflow-hidden">
           <div class="px-5 py-3.5 border-b border-slate-100 flex items-center justify-between">
             <h3 class="text-[15px] font-bold text-slate-900 flex items-center gap-2">
@@ -364,7 +359,6 @@
           </ul>
         </div>
 
-        <!-- Footer progress -->
         <div class="mt-6 pt-5 border-t border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div class="text-[13px] font-semibold text-slate-800">
             Tổng cả kỳ:
@@ -390,7 +384,6 @@
       </div>
     </template>
 
-    <!-- Drawer -->
     <div
       v-if="isDrawerOpen"
       class="fixed inset-0 z-[100] bg-slate-900/50 backdrop-blur-sm flex justify-end"

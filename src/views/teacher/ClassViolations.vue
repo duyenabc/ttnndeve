@@ -1,6 +1,5 @@
 ﻿<template>
   <div class="ims-scope w-full mx-auto space-y-6 font-sans">
-    <!-- Breadcrumb & Header -->
     <div>
       <nav class="flex items-center gap-2 text-xs text-slate-500 mb-2">
         <router-link to="/teacher/classes" class="hover:text-blue-700 transition-colors">L�:p của tôi</router-link>
@@ -14,7 +13,6 @@
       </div>
     </div>
 
-    <!-- Sub Navigation Tabs -->
     <div class="flex items-center gap-8 border-b border-slate-200">
       <router-link
         :to="`/teacher/classes/${classId}/grading`"
@@ -39,13 +37,11 @@
       </router-link>
     </div>
 
-    <!-- Loading State -->
     <div v-if="loading" class="bg-white rounded-2xl border border-slate-200 p-12 text-center flex flex-col items-center justify-center min-h-[300px]">
       <span class="animate-spin text-4xl text-blue-600 material-symbols-outlined">sync</span>
       <p class="text-xs text-slate-500 mt-2">Äang táº£i danh sÃ¡ch vi phạm...</p>
     </div>
 
-    <!-- Empty State -->
     <div v-else-if="violations.length === 0" class="bg-white rounded-2xl border border-slate-200 p-12 text-center flex flex-col items-center justify-center min-h-[300px] shadow-2xs">
       <span class="material-symbols-outlined text-[64px] text-slate-300 mb-3" style="font-variation-settings: 'FILL' 1">check_circle</span>
       <h3 class="text-base font-bold text-slate-900">KhÃ´ng phÃ¡t hi�!n vi phạm</h3>
@@ -54,7 +50,6 @@
       </p>
     </div>
 
-    <!-- Violations Table Card -->
     <div v-else class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-2xs">
       <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse text-xs">
@@ -117,7 +112,6 @@
       </div>
     </div>
 
-    <!-- Stop Internship Drawer -->
     <div
       v-if="selectedViolation"
       class="fixed inset-0 z-[100] flex justify-end bg-slate-900/50 backdrop-blur-xs"
@@ -172,7 +166,6 @@
       </div>
     </div>
 
-    <!-- Toast Notification -->
     <div
       v-if="toastMsg"
       class="fixed bottom-6 right-6 z-[120] bg-slate-900 text-white px-4 py-3 rounded-xl shadow-xl text-xs font-bold flex items-center gap-2"
@@ -200,14 +193,11 @@
   const students = ref([]);
   const loading = ref(true);
 
-  // Generate dynamic violations from actual class students
   const violations = computed(() => {
     const list = [];
     if (students.value.length === 0) return [];
     if (classId.value !== '101' && classId.value !== '103') return [];
 
-    // Assign realistic violations to actual students in this class
-    // Student 1
     if (students.value.length > 0) {
       const s = students.value[0];
       const isStopped = s.trangThaiThucTap === 'DungThucTap';
@@ -223,7 +213,6 @@
       });
     }
 
-    // Student 2
     if (students.value.length > 1) {
       const s = students.value[1];
       const isStopped = s.trangThaiThucTap === 'DungThucTap';
@@ -239,7 +228,6 @@
       });
     }
 
-    // Student 3
     if (students.value.length > 2) {
       const s = students.value[2];
       const isStopped = s.trangThaiThucTap === 'DungThucTap';
@@ -302,7 +290,6 @@
         });
         showToast(`ÄÃ£ buá»™c dá»«ng thực tập thÃ nh cÃ´ng cho sinh viên ${selectedViolation.value.studentName}`);
         selectedViolation.value = null;
-        // Reload details immediately to refresh statuses dynamically
         await loadData();
       } catch (err) {
         showToast('CÃ³ lá»—i xáº£y ra khi cáº­p nháº­t tráº¡ng thÃ¡i');

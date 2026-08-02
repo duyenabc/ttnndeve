@@ -1,6 +1,5 @@
 <template>
   <div class="ims-scope max-w-6xl mx-auto font-sans space-y-6 pb-20">
-    <!-- Breadcrumb & Header -->
     <div class="space-y-3">
       <nav class="flex items-center text-xs text-slate-500 gap-1.5">
         <router-link to="/student/classes" class="hover:text-[#005EA3] transition font-medium">Lớp của tôi</router-link>
@@ -31,7 +30,6 @@
       </div>
     </div>
 
-    <!-- Weekly Navigation & Progress Card -->
     <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-2xs flex flex-col md:flex-row items-center justify-between gap-6">
       <div class="flex items-center gap-3">
         <button
@@ -70,9 +68,7 @@
       </div>
     </div>
 
-    <!-- Journal Items List -->
     <div class="space-y-4">
-      <!-- Empty State when no journals for current week -->
       <div v-if="!currentJournals.length" class="bg-white border border-slate-200 rounded-2xl p-10 text-center space-y-4 shadow-2xs">
         <div class="w-16 h-16 bg-blue-50 text-[#005EA3] rounded-full flex items-center justify-center mx-auto border border-blue-100">
           <span class="material-symbols-outlined text-[32px]">menu_book</span>
@@ -130,7 +126,6 @@
           {{ item.content }}
         </p>
 
-        <!-- Attached Images Grid in Journal Card -->
         <div v-if="item.images && item.images.length" class="space-y-1.5 pt-1">
           <p class="font-bold text-slate-500 uppercase text-[10px] tracking-wider flex items-center gap-1">
             <span class="material-symbols-outlined text-[14px] text-[#005EA3]">photo_library</span>
@@ -151,7 +146,6 @@
           </div>
         </div>
 
-        <!-- Ratings summary & AI Auto-Summary -->
         <div class="flex flex-wrap items-center justify-between gap-4 text-xs pt-1">
           <div class="flex items-center gap-4 text-slate-600 text-[11px]">
             <span>Hoàn thành: <strong class="text-slate-900">{{ item.completionRating }}/10</strong></span>
@@ -176,7 +170,6 @@
           </div>
         </div>
 
-        <!-- Instructor Feedback Block if exists -->
         <div v-if="item.feedback" class="p-3 bg-amber-50/80 border border-amber-200 rounded-xl text-xs text-amber-950 space-y-1">
           <div class="flex items-center gap-1.5 font-bold text-amber-900">
             <span class="material-symbols-outlined text-[16px]">record_voice_over</span>
@@ -187,7 +180,6 @@
       </div>
     </div>
 
-    <!-- DETAIL DRAWER -->
     <div
       v-if="showDrawer"
       class="fixed inset-0 z-[110] flex justify-end bg-slate-900/40 backdrop-blur-xs font-sans"
@@ -272,7 +264,6 @@
       </div>
     </div>
 
-    <!-- NEW JOURNAL MODAL (Viết nhật ký mới) -->
     <div
       v-if="showNewModal"
       id="new-journal-modal-container"
@@ -283,7 +274,6 @@
         id="new-journal-modal-card"
         class="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[92vh] flex flex-col overflow-hidden border border-slate-100 animate-in fade-in-50 zoom-in-95 duration-200"
       >
-        <!-- Modal Header -->
         <div id="new-journal-modal-header" class="flex justify-between items-center px-6 py-4 border-b border-slate-100 bg-slate-50/50 shrink-0">
           <div>
             <h3 id="new-journal-modal-title" class="font-extrabold text-slate-900 text-base flex items-center gap-2">
@@ -297,10 +287,8 @@
           </button>
         </div>
 
-        <!-- Scrollable Modal Body -->
         <div id="new-journal-modal-body" class="overflow-y-auto p-6 space-y-5 flex-1 scroll-smooth">
           
-          <!-- Validation Alert Banner -->
           <div 
             v-if="showValidationAlert" 
             id="validation-alert-banner"
@@ -317,9 +305,7 @@
             </div>
           </div>
 
-          <!-- Section 1: Overview and Feeling Ratings -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-5 p-4 bg-blue-50/40 border border-blue-100 rounded-2xl">
-            <!-- Completion Segmented Control -->
             <div id="completion-rating-wrapper" class="space-y-1.5">
               <label class="block font-bold text-slate-800 text-[11px] uppercase tracking-wider">Mức độ hoàn thành công việc (*)</label>
               <div class="flex flex-wrap items-center gap-1">
@@ -341,7 +327,6 @@
               </p>
             </div>
 
-            <!-- Feeling Grid Controls -->
             <div id="feeling-rating-wrapper" class="space-y-1.5">
               <label class="block font-bold text-slate-800 text-[11px] uppercase tracking-wider">Cảm nhận tuần này (*)</label>
               <div class="grid grid-cols-5 gap-1.5">
@@ -363,10 +348,8 @@
             </div>
           </div>
 
-          <!-- Section 2: Core Log Textareas -->
           <div class="space-y-4">
             
-            <!-- Task Description -->
             <div id="task-desc-wrapper" class="space-y-1">
               <div class="flex items-center justify-between">
                 <label class="block font-bold text-slate-800 text-[11px] uppercase tracking-wider flex items-center gap-1">
@@ -391,7 +374,6 @@
               </p>
             </div>
 
-            <!-- Skills Learned -->
             <div id="skills-learned-wrapper" class="space-y-1">
               <div class="flex items-center justify-between">
                 <label class="block font-bold text-slate-800 text-[11px] uppercase tracking-wider flex items-center gap-1">
@@ -416,7 +398,6 @@
               </p>
             </div>
 
-            <!-- Optional Difficulties & Solutions Grid -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div id="difficulties-wrapper" class="space-y-1">
                 <label class="block font-bold text-slate-800 text-[11px] uppercase tracking-wider flex items-center gap-1">
@@ -447,7 +428,6 @@
               </div>
             </div>
 
-            <!-- Next Week Plan -->
             <div id="next-plan-wrapper" class="space-y-1">
               <div class="flex items-center justify-between">
                 <label class="block font-bold text-slate-800 text-[11px] uppercase tracking-wider flex items-center gap-1">
@@ -474,7 +454,6 @@
 
           </div>
 
-          <!-- Section 3: Document Upload Area -->
           <div id="attachments-wrapper" class="space-y-2">
             <label class="block font-bold text-slate-800 text-[11px] uppercase tracking-wider flex items-center gap-1">
               <span class="material-symbols-outlined text-slate-500 text-[16px]">attach_file</span>
@@ -490,7 +469,6 @@
               @change="onFilesSelected"
             />
 
-            <!-- Drag & Drop Zone -->
             <div
               id="drag-drop-zone"
               @click="triggerFileInput"
@@ -505,7 +483,6 @@
               </div>
             </div>
 
-            <!-- Uploaded Images Preview Grid -->
             <div v-if="uploadedImages.length > 0" class="space-y-1.5 pt-1">
               <div class="flex items-center justify-between">
                 <span class="font-bold text-slate-800 text-[11px] flex items-center gap-1">
@@ -540,7 +517,6 @@
               </div>
             </div>
 
-            <!-- Uploaded Documents List -->
             <div v-if="uploadedDocs.length > 0" class="space-y-1.5 pt-1">
               <span class="font-bold text-slate-800 text-[11px] block">File tài liệu đính kèm ({{ uploadedDocs.length }})</span>
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -565,7 +541,6 @@
 
         </div>
 
-        <!-- Modal Footer -->
         <div id="new-journal-modal-footer" class="px-6 py-4 border-t border-slate-100 flex items-center justify-between bg-slate-50/50 shrink-0">
           <button 
             id="btn-cancel-modal"
@@ -600,7 +575,6 @@
       </div>
     </div>
 
-    <!-- IMAGE LIGHTBOX PREVIEW MODAL -->
     <div
       v-if="previewImageUrl"
       class="fixed inset-0 z-[150] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md"
@@ -617,7 +591,6 @@
       </div>
     </div>
 
-    <!-- Toast Notification -->
     <div
       v-if="toastMsg"
       class="fixed bottom-6 right-6 z-[130] bg-slate-900 text-white px-4 py-3 rounded-xl shadow-xl text-xs font-bold flex items-center gap-2"
@@ -646,7 +619,6 @@
   const fileInputRef = ref(null);
   const previewImageUrl = ref(null);
 
-  // Form states
   const formCompletion = ref(8);
   const formFeeling = ref(4);
   const formTaskDesc = ref('');
@@ -710,7 +682,6 @@
       journalsData.value = {};
     }
 
-    // Attach Firestore real-time listener scoped strictly to current user ID
     if (unsubscribeFirestore) unsubscribeFirestore();
 
     // Prevent unauthenticated calls during login/transition or if user is guest/not authenticated
@@ -880,7 +851,6 @@
   }
 
   async function submitJournal() {
-    // Validate required fields
     validationErrors.value.taskDesc = !formTaskDesc.value.trim() || formTaskDesc.value.trim().length < 10;
     validationErrors.value.skills = !formSkills.value.trim();
     validationErrors.value.nextPlan = !formNextPlan.value.trim();
@@ -938,7 +908,6 @@
     }
     persistUserJournals();
 
-    // Dispatch real-time Firebase notification to teacher
     sendRealtimeNotification({
       role: 'GiangVien',
       userId: 'GV001',

@@ -29,7 +29,7 @@ namespace IMSBackend.Controllers
             _context = context;
         }
 
-        /// <summary>UC-14.2 — load diary config for a class (students also call this).</summary>
+        /// <summary>UC-14.2 get diary config</summary>
         [HttpGet("classes/{classId}/diary-config")]
         public async Task<IActionResult> GetDiaryConfig(string classId)
         {
@@ -49,7 +49,7 @@ namespace IMSBackend.Controllers
             }
         }
 
-        /// <summary>UC-14.2 — save diary config; applies to all students in the class.</summary>
+        /// <summary>UC-14.2 save diary config</summary>
         [HttpPut("classes/{classId}/diary-config")]
         public async Task<IActionResult> PutDiaryConfig(string classId, [FromBody] DiaryConfigDto body)
         {
@@ -79,15 +79,6 @@ namespace IMSBackend.Controllers
             cls.DiaryConfig = JsonSerializer.Serialize(normalized, JsonOpts);
             await _context.SaveChangesAsync();
 
-            // #region agent log
-            try
-            {
-                Console.WriteLine(
-                    $"[IMS][UC-14.2] Saved diary-config class={cls.Id} enabled={normalized.IsEnabled} min={normalized.MinPerWeek} fieldsOn={normalized.Fields.Count(f => f.IsEnabled)}");
-            }
-            catch { /* ignore */ }
-            // #endregion
-
             return Ok(new
             {
                 message = "Lưu cấu hình lớp thực tập thành công",
@@ -95,7 +86,7 @@ namespace IMSBackend.Controllers
             });
         }
 
-        /// <summary>UC-18.1 — students in a class (demo: all SinhVien users).</summary>
+        /// <summary>UC-18.1 class students (tạm: toàn bộ SinhVien)</summary>
         [HttpGet("classes/{classId}/students")]
         public async Task<IActionResult> GetClassStudents(string classId)
         {
@@ -132,7 +123,7 @@ namespace IMSBackend.Controllers
 
             if (!cfg.IsEnabled)
             {
-                // When disabled, keep payload but do not require fields/min rules
+                // tắt nhật ký: vẫn lưu payload, bỏ validate fields/min
                 return (true, null, cfg);
             }
 

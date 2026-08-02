@@ -1,6 +1,5 @@
 <template>
   <div class="ims-scope max-w-5xl mx-auto font-sans space-y-6 pb-20">
-    <!-- Breadcrumb -->
     <nav class="flex items-center text-xs text-slate-500 gap-1.5">
       <router-link to="/student/classes" class="hover:text-[#005EA3] transition font-medium">Lớp của tôi</router-link>
       <span class="material-symbols-outlined text-[14px]">chevron_right</span>
@@ -11,7 +10,6 @@
       <span class="text-slate-900 font-bold">Chi tiết nhiệm vụ</span>
     </nav>
 
-    <!-- Task Header & Demo State Selector Switcher -->
     <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-2xs space-y-4">
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-4">
         <div>
@@ -25,7 +23,6 @@
           <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">{{ taskData.title }}</h1>
         </div>
 
-        <!-- Interactive Quick Switcher for Demo -->
         <div class="flex items-center gap-1.5 bg-slate-100 p-1 rounded-xl text-xs font-bold shrink-0">
           <button
             @click="setSubmissionState('unsubmitted')"
@@ -51,7 +48,6 @@
         </div>
       </div>
 
-      <!-- Task Instructions & Description -->
       <div class="space-y-3 text-xs text-slate-700 leading-relaxed">
         <h3 class="font-bold text-slate-900 text-sm flex items-center gap-1.5">
           <span class="material-symbols-outlined text-[#005EA3] text-[18px]">description</span>
@@ -70,7 +66,6 @@
         </div>
       </div>
 
-      <!-- Cấu hình điểm Sub Items & Tiêu chí đánh giá -->
       <div class="border-t border-slate-100 pt-4 space-y-3">
         <div class="flex items-center justify-between">
           <h3 class="font-bold text-slate-900 text-xs uppercase tracking-wider flex items-center gap-1.5">
@@ -123,7 +118,6 @@
       </div>
     </div>
 
-    <!-- Submission Status Table (Trạng thái nộp bài) -->
     <div class="bg-white rounded-2xl border border-slate-200 shadow-2xs overflow-hidden">
       <div class="px-6 py-4 bg-slate-50/80 border-b border-slate-200 flex items-center justify-between">
         <h3 class="font-bold text-sm text-slate-900 flex items-center gap-2">
@@ -150,9 +144,7 @@
         </span>
       </div>
 
-      <!-- Detail Rows Table -->
       <div class="divide-y divide-slate-100 text-xs font-medium">
-        <!-- Row 1: Submission status -->
         <div class="grid grid-cols-1 sm:grid-cols-3 p-4 bg-slate-50/50">
           <span class="text-slate-500 font-semibold">Trạng thái nộp bài</span>
           <div class="sm:col-span-2">
@@ -166,7 +158,6 @@
           </div>
         </div>
 
-        <!-- Row 2: Grading status -->
         <div class="grid grid-cols-1 sm:grid-cols-3 p-4 bg-white">
           <span class="text-slate-500 font-semibold">Trạng thái chấm điểm</span>
           <div class="sm:col-span-2 flex items-center justify-between">
@@ -186,13 +177,11 @@
           </div>
         </div>
 
-        <!-- Row 3: Deadline -->
         <div class="grid grid-cols-1 sm:grid-cols-3 p-4 bg-slate-50/50">
           <span class="text-slate-500 font-semibold">Hạn chót</span>
           <span class="sm:col-span-2 font-bold text-slate-900 font-mono">Thứ ba, 26 tháng 8 2025, 9:00 AM</span>
         </div>
 
-        <!-- Row 4: Time remaining -->
         <div class="grid grid-cols-1 sm:grid-cols-3 p-4 bg-white">
           <span class="text-slate-500 font-semibold">Thời gian còn lại</span>
           <div class="sm:col-span-2">
@@ -209,7 +198,6 @@
           </div>
         </div>
 
-        <!-- Row 5: Last modified -->
         <div class="grid grid-cols-1 sm:grid-cols-3 p-4 bg-slate-50/50">
           <span class="text-slate-500 font-semibold">Chỉnh sửa lần cuối</span>
           <span class="sm:col-span-2 font-mono text-slate-800">
@@ -217,7 +205,6 @@
           </span>
         </div>
 
-        <!-- Row 6: Submitted Files -->
         <div v-if="submissionState !== 'unsubmitted'" class="grid grid-cols-1 sm:grid-cols-3 p-4 bg-white items-center">
           <span class="text-slate-500 font-semibold">File bài nộp</span>
           <div class="sm:col-span-2 space-y-2">
@@ -235,7 +222,6 @@
       </div>
     </div>
 
-    <!-- Submission Action Controls & Inline File Upload Area -->
     <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-2xs space-y-6">
       <div v-if="!showInlineUpload" class="flex flex-col items-center justify-center py-4 space-y-3 text-center">
         <div class="flex flex-wrap items-center justify-center gap-3">
@@ -278,7 +264,6 @@
         </p>
       </div>
 
-      <!-- Inline Drag & Drop File Upload Form -->
       <div v-else class="space-y-6 border-t border-slate-100 pt-4">
         <div class="flex items-center justify-between">
           <h4 class="font-bold text-sm text-slate-900 flex items-center gap-2">
@@ -290,7 +275,6 @@
           </button>
         </div>
 
-        <!-- Drag & Drop Container -->
         <div
           @dragover.prevent="isDragging = true"
           @dragleave.prevent="isDragging = false"
@@ -305,7 +289,6 @@
           <p class="text-[11px] text-slate-400">Định dạng chấp nhận: .pdf, .docx, .zip | Dung lượng tối đa: 50MB | Tối đa 2 file</p>
         </div>
 
-        <!-- Pending Selected Files List -->
         <div v-if="pendingFiles.length > 0" class="space-y-2">
           <p class="font-bold text-xs text-slate-700">Các tệp đã chọn để tải lên:</p>
           <div
@@ -327,7 +310,6 @@
           </div>
         </div>
 
-        <!-- Save / Cancel Action Buttons -->
         <div class="flex items-center gap-3 justify-end pt-2 border-t border-slate-100">
           <button
             @click="openFilePicker"
@@ -355,14 +337,12 @@
       </div>
     </div>
 
-    <!-- MODAL 1: BỘ CHỌN TỆP (FILE PICKER MODAL) -->
     <div
       v-if="showFilePickerModal"
       class="fixed inset-0 z-[120] bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4"
       @click.self="showFilePickerModal = false"
     >
       <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl overflow-hidden font-sans border border-slate-200">
-        <!-- Header -->
         <div class="flex justify-between items-center px-6 py-4 border-b border-slate-200 bg-slate-50">
           <h3 class="font-extrabold text-slate-900 text-base flex items-center gap-2">
             <span class="material-symbols-outlined text-[#005EA3]">folder_managed</span>
@@ -372,7 +352,6 @@
         </div>
 
         <div class="flex h-[480px]">
-          <!-- Sidebar -->
           <aside class="w-56 border-r border-slate-200 bg-slate-50 p-3 space-y-2 shrink-0">
             <button
               @click="pickerTab = 'upload'"
@@ -400,9 +379,7 @@
             </button>
           </aside>
 
-          <!-- Main Picker Area -->
           <div class="flex-1 p-6 overflow-y-auto space-y-5 text-xs">
-            <!-- Upload Tab -->
             <div v-if="pickerTab === 'upload'" class="space-y-4">
               <div>
                 <label class="block font-bold text-slate-700 mb-1">Đính kèm tệp (*)</label>
@@ -419,7 +396,6 @@
                   <input ref="pickerFileInputRef" type="file" class="hidden" @change="onPickerFileSelected" />
                 </div>
 
-                <!-- Selected File Info Card -->
                 <div v-else class="flex items-center justify-between p-3.5 bg-blue-50/70 border border-blue-200 rounded-xl">
                   <div class="flex items-center gap-3">
                     <span class="material-symbols-outlined text-[#005EA3]">description</span>
@@ -462,7 +438,6 @@
               </div>
             </div>
 
-            <!-- Recent Files Tab -->
             <div v-else-if="pickerTab === 'recent'" class="space-y-3">
               <p class="font-bold text-slate-800 mb-2">Tập tin đã sử dụng gần đây:</p>
               <div
@@ -482,7 +457,6 @@
               </div>
             </div>
 
-            <!-- Private Files Tab -->
             <div v-else class="p-8 text-center text-slate-400 space-y-2">
               <span class="material-symbols-outlined text-[42px]">folder_off</span>
               <p class="font-bold text-slate-600">Thư mục riêng tư trống</p>
@@ -492,13 +466,11 @@
       </div>
     </div>
 
-    <!-- MODAL 2: KẾT QUẢ ĐÁNH GIÁ BÀI NỘP - SPLIT VIEW (E12.2) -->
     <div
       v-if="showAssessmentModal"
       class="fixed inset-0 z-[140] bg-slate-900/80 backdrop-blur-xs flex items-center justify-center p-4 font-sans"
     >
       <div class="bg-white w-full max-w-6xl h-[90vh] rounded-2xl shadow-2xl overflow-hidden flex flex-col border border-slate-300">
-        <!-- Top Modal Nav Bar -->
         <div class="h-14 bg-[#005EA3] text-white px-6 flex items-center justify-between shrink-0">
           <div class="flex items-center gap-3">
             <span class="material-symbols-outlined text-[24px]">verified</span>
@@ -513,11 +485,8 @@
           </button>
         </div>
 
-        <!-- Split Content Area -->
         <div class="flex-1 flex overflow-hidden">
-          <!-- Left Column: PDF Report Viewer (60%) -->
           <section class="w-[60%] flex flex-col border-r border-slate-200 bg-slate-100">
-            <!-- Toolbar -->
             <div class="h-10 bg-white border-b border-slate-200 flex items-center justify-between px-4 text-xs shrink-0">
               <div class="flex items-center gap-2 text-slate-600 font-bold">
                 <button class="p-1 hover:bg-slate-100 rounded"><span class="material-symbols-outlined text-[18px]">zoom_out</span></button>
@@ -532,7 +501,6 @@
               </button>
             </div>
 
-            <!-- Scrollable Report Canvas -->
             <div class="flex-1 overflow-y-auto p-6 space-y-4">
               <div class="bg-white p-8 rounded-xl shadow-xs border border-slate-200 max-w-xl mx-auto space-y-6 text-xs text-slate-800 relative min-h-[600px]">
                 <header class="border-b-2 border-slate-900 pb-4 flex justify-between items-start">
@@ -561,7 +529,6 @@
                   </section>
                 </div>
 
-                <!-- Watermark -->
                 <div class="absolute bottom-6 right-6 opacity-20 pointer-events-none text-slate-400 font-black text-xl">
                   IMS INTERNAL ONLY
                 </div>
@@ -569,9 +536,7 @@
             </div>
           </section>
 
-          <!-- Right Column: Feedback & Assessment (40%) -->
           <section class="w-[40%] flex flex-col bg-slate-50 overflow-y-auto p-6 space-y-6 text-xs">
-            <!-- Submission Info -->
             <div class="bg-white p-4 rounded-xl border border-slate-200 space-y-2">
               <div class="flex justify-between items-center border-b pb-2">
                 <span class="font-bold text-slate-900">Thông tin nộp bài</span>
@@ -583,7 +548,6 @@
               </div>
             </div>
 
-            <!-- Overall Lecturer Feedback -->
             <div class="bg-white p-4 rounded-xl border border-slate-200 space-y-3">
               <h4 class="font-bold text-slate-900 text-xs flex items-center gap-1.5">
                 <span class="material-symbols-outlined text-[#005EA3] text-[18px]">record_voice_over</span>
@@ -605,7 +569,6 @@
               </p>
             </div>
 
-            <!-- Score Rubric -->
             <div class="bg-white p-4 rounded-xl border border-slate-200 space-y-3">
               <div class="flex items-center justify-between">
                 <h4 class="font-bold text-slate-900 text-xs">Điểm số & Tiêu chí đánh giá</h4>
@@ -631,7 +594,6 @@
       </div>
     </div>
 
-    <!-- Toast -->
     <div
       v-if="toastMsg"
       class="fixed bottom-6 right-6 z-[150] bg-slate-900 text-white px-4 py-3 rounded-xl shadow-xl text-xs font-bold flex items-center gap-2"
