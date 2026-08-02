@@ -77,59 +77,79 @@ namespace IMSBackend.Controllers
         [HttpPut("{id}/feedback")]
         public async Task<IActionResult> AddFeedback(string id, [FromBody] FeedbackRequest req)
         {
-            if (req == null || string.IsNullOrWhiteSpace(req.Content))
-                return BadRequest(new { message = "Nội dung nhận xét không được để trống" });
-
-            var diary = await _context.Diaries.Include(d => d.Feedbacks).FirstOrDefaultAsync(d => d.Id == id);
-            if (diary == null) return NotFound(new { message = "Không tìm thấy nhật ký" });
-
-            if (!string.Equals(diary.Status, "Submitted", StringComparison.OrdinalIgnoreCase))
-                return BadRequest(new { message = "Chỉ nhận xét nhật ký đã nộp" });
-
-            var teacherName = string.IsNullOrWhiteSpace(req.TeacherName) ? "GVHD" : req.TeacherName.Trim();
-            var content = req.Content.Trim();
-            var feedback = new Feedback
+            try
             {
-                Id = Guid.NewGuid().ToString(),
-                DiaryId = id,
-                TeacherName = teacherName,
-                Content = content,
-                Timestamp = DateTime.UtcNow
-            };
+                // #region agent log
+                Console.WriteLine($"[IMS][feedback] id={id} contentLen={req?.Content?.Length ?? -1}");
+                // #endregion
 
-            diary.IsReadByTeacher = true;
-            diary.IsReadByStudent = false;
-            diary.NgayCapNhat = DateTime.UtcNow;
+                if (req == null || string.IsNullOrWhiteSpace(req.Content))
+                    return BadRequest(new { message = "Nội dung nhận xét không được để trống" });
 
-            _context.Feedbacks.Add(feedback);
+                var diary = await _context.Diaries.Include(d => d.Feedbacks).FirstOrDefaultAsync(d => d.Id == id);
+                if (diary == null) return NotFound(new { message = "Không tìm thấy nhật ký" });
 
-            var diaryDate = (diary.NgayTao == default ? DateTime.UtcNow : diary.NgayTao).ToLocalTime();
-            var dateLabel = diaryDate.ToString("dd/MM/yyyy");
-            var weekLabel = string.IsNullOrWhiteSpace(diary.Week) ? "?" : diary.Week;
-            var notifyText = $"{teacherName} đã nhận xét nhật ký {dateLabel} - Tuần {weekLabel}.";
+                if (!string.Equals(diary.Status, "Submitted", StringComparison.OrdinalIgnoreCase))
+                    return BadRequest(new { message = "Chỉ nhận xét nhật ký đã nộp", status = diary.Status });
 
-            _context.Notifications.Add(new Notification
+                var teacherName = string.IsNullOrWhiteSpace(req.TeacherName) ? "GVHD" : req.TeacherName.Trim();
+                var content = req.Content.Trim();
+                var feedback = new Feedback
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    DiaryId = id,
+                    TeacherName = teacherName,
+                    Content = content,
+                    Timestamp = DateTime.UtcNow
+                };
+
+                diary.IsReadByTeacher = true;
+                diary.IsReadByStudent = false;
+                diary.NgayCapNhat = DateTime.UtcNow;
+
+                _context.Feedbacks.Add(feedback);
+
+                var diaryDate = (diary.NgayTao == default ? DateTime.UtcNow : diary.NgayTao).ToLocalTime();
+                var dateLabel = diaryDate.ToString("dd/MM/yyyy");
+                var weekLabel = string.IsNullOrWhiteSpace(diary.Week) ? "?" : diary.Week;
+                var notifyText = $"{teacherName} đã nhận xét nhật ký {dateLabel} - Tuần {weekLabel}.";
+
+                _context.Notifications.Add(new Notification
+                {
+                    TieuDe = "Phản hồi nhật ký thực tập",
+                    NoiDung = notifyText,
+                    Type = "diary_feedback",
+                    Role = "SinhVien",
+                    UserId = diary.UserId ?? "ALL",
+                    Icon = "rate_review",
+                    BgClass = "bg-amber-100 text-amber-800",
+                    Link = "/student/progress",
+                    IsRead = false,
+                    NgayTao = DateTime.UtcNow
+                });
+
+                await _context.SaveChangesAsync();
+
+                return Ok(new
+                {
+                    message = "Đã gửi phản hồi",
+                    feedback,
+                    notification = notifyText
+                });
+            }
+            catch (Exception ex)
             {
-                TieuDe = "Phản hồi nhật ký thực tập",
-                NoiDung = notifyText,
-                Type = "diary_feedback",
-                Role = "SinhVien",
-                UserId = diary.UserId ?? "ALL",
-                Icon = "rate_review",
-                BgClass = "bg-amber-100 text-amber-800",
-                Link = "/student/progress",
-                IsRead = false,
-                NgayTao = DateTime.UtcNow
-            });
-
-            await _context.SaveChangesAsync();
-
-            return Ok(new
-            {
-                message = "Đã gửi phản hồi",
-                feedback,
-                notification = notifyText
-            });
+                // #region agent log
+                Console.WriteLine($"[IMS][feedback] FAIL: {ex.GetType().Name}: {ex.Message}");
+                if (ex.InnerException != null)
+                    Console.WriteLine($"[IMS][feedback] Inner: {ex.InnerException.Message}");
+                // #endregion
+                return StatusCode(500, new
+                {
+                    message = "Không lưu được nhận xét (lỗi máy chủ)",
+                    detail = ex.InnerException?.Message ?? ex.Message
+                });
+            }
         }
 
         /// <summary>UC-18.3 feedback history</summary>
@@ -191,7 +211,10 @@ namespace IMSBackend.Controllers
 
     public class FeedbackRequest
     {
+        [System.Text.Json.Serialization.JsonConverter(typeof(FlexibleStringConverter))]
         public string TeacherName { get; set; }
+
+        [System.Text.Json.Serialization.JsonConverter(typeof(FlexibleStringConverter))]
         public string Content { get; set; }
     }
 }

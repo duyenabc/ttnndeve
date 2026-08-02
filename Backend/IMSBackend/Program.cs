@@ -193,6 +193,8 @@ static async Task EnsureDatabaseReadyAsync(IServiceProvider services)
             await db.Database.OpenConnectionAsync();
             await db.Database.CloseConnectionAsync();
             await db.Database.EnsureCreatedAsync();
+            // EnsureCreated does not add new tables/columns to an existing DB
+            await EnsureDiaryFeedbackSchemaAsync(db);
             await SeedDefaultsIfEmptyAsync(db);
             Console.WriteLine($"[IMS] Database ready (attempt {attempt}).");
             return;
@@ -212,6 +214,45 @@ static async Task EnsureDatabaseReadyAsync(IServiceProvider services)
         "Check DATABASE_URL is the Internal Database URL from ims-db, " +
         "and that the API service is in the same region as ims-db (Oregon).",
         last);
+}
+
+static async Task EnsureDiaryFeedbackSchemaAsync(AppDbContext db)
+{
+    // Patch schema for DBs created before Feedbacks/Notifications existed
+    await db.Database.ExecuteSqlRawAsync("""
+        CREATE TABLE IF NOT EXISTS "Feedbacks" (
+            "Id" text NOT NULL,
+            "DiaryId" text NULL,
+            "TeacherName" text NULL,
+            "Content" text NULL,
+            "Timestamp" timestamp with time zone NOT NULL,
+            CONSTRAINT "PK_Feedbacks" PRIMARY KEY ("Id"),
+            CONSTRAINT "FK_Feedbacks_Diaries_DiaryId" FOREIGN KEY ("DiaryId")
+                REFERENCES "Diaries" ("Id") ON DELETE CASCADE
+        );
+        """);
+    await db.Database.ExecuteSqlRawAsync("""
+        CREATE TABLE IF NOT EXISTS "Notifications" (
+            "Id" text NOT NULL,
+            "TieuDe" text NULL,
+            "NoiDung" text NULL,
+            "Type" text NULL,
+            "Role" text NULL,
+            "UserId" text NULL,
+            "Icon" text NULL,
+            "BgClass" text NULL,
+            "Link" text NULL,
+            "IsRead" boolean NOT NULL DEFAULT FALSE,
+            "NgayTao" timestamp with time zone NOT NULL,
+            CONSTRAINT "PK_Notifications" PRIMARY KEY ("Id")
+        );
+        """);
+    await db.Database.ExecuteSqlRawAsync("""
+        ALTER TABLE "Diaries" ADD COLUMN IF NOT EXISTS "IsReadByTeacher" boolean NOT NULL DEFAULT FALSE;
+        ALTER TABLE "Diaries" ADD COLUMN IF NOT EXISTS "IsReadByStudent" boolean NOT NULL DEFAULT TRUE;
+        ALTER TABLE "Diaries" ADD COLUMN IF NOT EXISTS "ClassId" text NULL;
+        """);
+    Console.WriteLine("[IMS] Diary/Feedback/Notification schema ensured.");
 }
 
 static async Task SeedDefaultsIfEmptyAsync(AppDbContext db)

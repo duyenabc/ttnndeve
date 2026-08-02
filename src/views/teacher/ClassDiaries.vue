@@ -495,12 +495,41 @@ async function loadData() {
     allStudents.value = Array.isArray(stRes.data) ? stRes.data : stRes.data?.items || [];
 
     const diariesRes = await api.get('/diaries', { params: { classId: classId.value } });
-    allDiaries.value = diariesRes.data || [];
+    const raw = Array.isArray(diariesRes.data) ? diariesRes.data : [];
+    allDiaries.value = raw.map((d) => ({
+      ...d,
+      id: d.id || d.Id,
+      userId: d.userId || d.UserId,
+      week: d.week ?? d.Week,
+      status: String(d.status || d.Status || '').trim(),
+      ngayTao: d.ngayTao || d.NgayTao,
+      ngayCapNhat: d.ngayCapNhat || d.NgayCapNhat,
+      isReadByTeacher: d.isReadByTeacher ?? d.IsReadByTeacher,
+      feedbacks: d.feedbacks || d.Feedbacks || [],
+    }));
   } catch (error) {
     console.error('Lỗi khi tải dữ liệu nhật ký:', error);
   } finally {
     isLoading.value = false;
   }
+}
+
+function feedbackErrorMessage(err) {
+  const d = err?.response?.data;
+  if (!d) {
+    if (err?.code === 'ERR_NETWORK' || err?.code === 'ECONNABORTED') {
+      return 'Không kết nối được API — kiểm tra backend đang chạy và VITE_API_BASE_URL';
+    }
+    return err?.message || 'Gửi nhận xét thất bại';
+  }
+  if (typeof d === 'string') return d.slice(0, 200);
+  if (d.message) return d.detail ? `${d.message}: ${d.detail}` : d.message;
+  if (d.errors && typeof d.errors === 'object') {
+    const first = Object.values(d.errors).flat().find(Boolean);
+    if (first) return String(first);
+  }
+  if (d.title) return d.title;
+  return err?.response?.status ? `Gửi nhận xét thất bại (${err.response.status})` : 'Gửi nhận xét thất bại';
 }
 
 function setTimeTab(tab) {
@@ -823,8 +852,13 @@ function closeDrawer() {
 
 async function submitInlineFeedback(student) {
   const entry = currentEntry(student);
-  const content = inlineFeedback[student.id]?.trim();
-  if (!entry) return;
+  const diaryId = entry?.id || entry?.rawData?.id;
+  const content = String(inlineFeedback[student.id] || '').trim();
+  if (!entry || !diaryId) {
+    toastMessage.value = 'Không xác định được nhật ký để nhận xét';
+    showToast.value = true;
+    return;
+  }
   if (!content) {
     toastMessage.value = 'Nội dung nhận xét không được để trống';
     showToast.value = true;
@@ -835,10 +869,16 @@ async function submitInlineFeedback(student) {
   }
   isSubmittingFeedback.value = true;
   try {
-    const res = await api.put(`/diaries/${entry.id}/feedback`, {
-      teacherName: authStore.user?.hoTen || 'GVHD',
+    // #region agent log
+    fetch('http://127.0.0.1:7500/ingest/7f531694-75ae-41c0-a883-0940871f5a5e',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'19ef33'},body:JSON.stringify({sessionId:'19ef33',runId:'feedback-debug',hypothesisId:'H3',location:'ClassDiaries.vue:submitInlineFeedback',message:'feedback request',data:{diaryId,status:entry.rawData?.status||null,userId:entry.rawData?.userId||null,apiBase:import.meta.env.VITE_API_BASE_URL||'(localhost fallback)'},timestamp:Date.now()})}).catch(()=>{});
+    // #endregion
+    const res = await api.put(`/diaries/${encodeURIComponent(diaryId)}/feedback`, {
+      teacherName: String(authStore.user?.hoTen || 'GVHD'),
       content,
     });
+    // #region agent log
+    fetch('http://127.0.0.1:7500/ingest/7f531694-75ae-41c0-a883-0940871f5a5e',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'19ef33'},body:JSON.stringify({sessionId:'19ef33',runId:'feedback-debug',hypothesisId:'H1',location:'ClassDiaries.vue:submitInlineFeedback',message:'feedback ok',data:{httpStatus:res.status,msg:res.data?.message||null},timestamp:Date.now()})}).catch(()=>{});
+    // #endregion
     inlineFeedback[student.id] = '';
     toastMessage.value = res.data?.message || 'Đã gửi nhận xét thành công';
     showToast.value = true;
@@ -847,8 +887,14 @@ async function submitInlineFeedback(student) {
     }, 3000);
     await loadData();
   } catch (err) {
-    toastMessage.value = err.response?.data?.message || 'Gửi nhận xét thất bại';
+    // #region agent log
+    fetch('http://127.0.0.1:7500/ingest/7f531694-75ae-41c0-a883-0940871f5a5e',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'19ef33'},body:JSON.stringify({sessionId:'19ef33',runId:'feedback-debug',hypothesisId:'H2',location:'ClassDiaries.vue:submitInlineFeedback',message:'feedback error',data:{httpStatus:err?.response?.status??null,code:err?.code||null,msg:feedbackErrorMessage(err),body:typeof err?.response?.data==='string'?String(err.response.data).slice(0,200):err?.response?.data||null},timestamp:Date.now()})}).catch(()=>{});
+    // #endregion
+    toastMessage.value = feedbackErrorMessage(err);
     showToast.value = true;
+    setTimeout(() => {
+      showToast.value = false;
+    }, 5000);
   } finally {
     isSubmittingFeedback.value = false;
   }
@@ -856,7 +902,14 @@ async function submitInlineFeedback(student) {
 
 async function submitFeedback() {
   if (!viewingDiary.value) return;
-  if (!feedbackContent.value.trim()) {
+  const diaryId = viewingDiary.value.id || viewingDiary.value.rawData?.id;
+  const content = String(feedbackContent.value || '').trim();
+  if (!diaryId) {
+    toastMessage.value = 'Không xác định được nhật ký để nhận xét';
+    showToast.value = true;
+    return;
+  }
+  if (!content) {
     toastMessage.value = 'Nội dung nhận xét không được để trống';
     showToast.value = true;
     setTimeout(() => {
@@ -866,9 +919,12 @@ async function submitFeedback() {
   }
   isSubmittingFeedback.value = true;
   try {
-    const res = await api.put(`/diaries/${viewingDiary.value.id}/feedback`, {
-      teacherName: authStore.user?.hoTen || 'GVHD',
-      content: feedbackContent.value,
+    // #region agent log
+    fetch('http://127.0.0.1:7500/ingest/7f531694-75ae-41c0-a883-0940871f5a5e',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'19ef33'},body:JSON.stringify({sessionId:'19ef33',runId:'feedback-debug',hypothesisId:'H3',location:'ClassDiaries.vue:submitFeedback',message:'drawer feedback request',data:{diaryId,apiBase:import.meta.env.VITE_API_BASE_URL||'(localhost fallback)'},timestamp:Date.now()})}).catch(()=>{});
+    // #endregion
+    const res = await api.put(`/diaries/${encodeURIComponent(diaryId)}/feedback`, {
+      teacherName: String(authStore.user?.hoTen || 'GVHD'),
+      content,
     });
     toastMessage.value = res.data?.message || 'Đã gửi phản hồi thành công';
     showToast.value = true;
@@ -878,8 +934,14 @@ async function submitFeedback() {
     await loadData();
     closeDrawer();
   } catch (err) {
-    toastMessage.value = err.response?.data?.message || 'Có lỗi xảy ra khi gửi phản hồi';
+    // #region agent log
+    fetch('http://127.0.0.1:7500/ingest/7f531694-75ae-41c0-a883-0940871f5a5e',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'19ef33'},body:JSON.stringify({sessionId:'19ef33',runId:'feedback-debug',hypothesisId:'H2',location:'ClassDiaries.vue:submitFeedback',message:'drawer feedback error',data:{httpStatus:err?.response?.status??null,msg:feedbackErrorMessage(err)},timestamp:Date.now()})}).catch(()=>{});
+    // #endregion
+    toastMessage.value = feedbackErrorMessage(err);
     showToast.value = true;
+    setTimeout(() => {
+      showToast.value = false;
+    }, 5000);
   } finally {
     isSubmittingFeedback.value = false;
   }
