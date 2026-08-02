@@ -6,7 +6,6 @@ using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Render (and most PaaS) inject PORT
 var port = Environment.GetEnvironmentVariable("PORT");
 if (!string.IsNullOrWhiteSpace(port))
 {
@@ -36,7 +35,6 @@ builder.Services.AddCors(options =>
             ?.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
             ?? Array.Empty<string>();
 
-        // Always allow local Vite + configured production origins (e.g. Render static site)
         var localDev = new[]
         {
             "http://localhost:3000",
@@ -67,10 +65,7 @@ var jwtKey = builder.Configuration["Jwt:Key"]
     ?? "SuperSecretKey_For_Development_IMS_12345";
 var key = Encoding.UTF8.GetBytes(jwtKey);
 if (key.Length < 32)
-{
-    // HMAC-SHA256 needs a sufficiently long key
     key = Encoding.UTF8.GetBytes(jwtKey.PadRight(32, '0'));
-}
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -119,7 +114,6 @@ app.Use(async (ctx, next) =>
     }
 });
 
-// TLS is terminated by Render — skip HTTPS redirect in containers
 if (!app.Environment.IsDevelopment() && string.IsNullOrWhiteSpace(port))
 {
     app.UseHttpsRedirection();
@@ -160,29 +154,11 @@ app.MapGet("/api/health/db", async (AppDbContext db) =>
     var users = await db.Users.CountAsync();
     var classes = await db.Classes.CountAsync();
     var hasGv001 = await db.Users.AnyAsync(u => u.MaDinhDanh != null && u.MaDinhDanh.ToLower() == "gv001");
-    var demoSv = await db.Users.CountAsync(u => u.VaiTro == "SinhVien" && u.LopSinhHoat != null && u.LopSinhHoat.StartsWith("LOP10"));
-    // #region agent log
-    try
-    {
-        const string logPath = @"C:\Users\while\Downloads\remix_-ttnndev (1)\debug-19ef33.log";
-        var line = System.Text.Json.JsonSerializer.Serialize(new
-        {
-            sessionId = "19ef33",
-            hypothesisId = "A,B,C",
-            location = "Program.cs:health/db",
-            message = "health db snapshot",
-            data = new { users, classes, hasGv001, demoSv },
-            timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
-            runId = "demo-restore"
-        });
-        await File.AppendAllTextAsync(logPath, line + Environment.NewLine);
-    }
-    catch { /* ignore debug log IO */ }
-    // #endregion
+    var demoSv = await db.Users.CountAsync(u =>
+        u.VaiTro == "SinhVien" && u.LopSinhHoat != null && u.LopSinhHoat.StartsWith("LOP10"));
     return Results.Ok(new { status = "ok", users, classes, hasGv001, demoSv, database = "ready" });
 });
 
-// Listen first so Render healthCheckPath:/ succeeds, then init DB
 await app.StartAsync();
 Console.WriteLine("[IMS] HTTP server listening; initializing database...");
 try
@@ -195,7 +171,6 @@ catch (Exception ex)
 {
     dbError = ex.Message;
     Console.WriteLine($"[IMS] Database init FAILED: {ex}");
-    // Keep serving / so health checks work; /api returns 503 until fixed + restart
 }
 await app.WaitForShutdownAsync();
 
@@ -213,7 +188,6 @@ static async Task EnsureDatabaseReadyAsync(IServiceProvider services)
             await db.Database.OpenConnectionAsync();
             await db.Database.CloseConnectionAsync();
             await db.Database.EnsureCreatedAsync();
-            // EnsureCreated does not add new tables/columns to an existing DB
             await EnsureDiaryFeedbackSchemaAsync(db);
             await SeedDefaultsIfEmptyAsync(db);
             await EnsureDemoDatasetAsync(db);
@@ -239,7 +213,6 @@ static async Task EnsureDatabaseReadyAsync(IServiceProvider services)
 
 static async Task EnsureDiaryFeedbackSchemaAsync(AppDbContext db)
 {
-    // Patch schema for DBs created before Feedbacks/Notifications existed
     await db.Database.ExecuteSqlRawAsync("""
         CREATE TABLE IF NOT EXISTS "Feedbacks" (
             "Id" text NOT NULL,
@@ -328,10 +301,6 @@ static async Task SeedDefaultsIfEmptyAsync(AppDbContext db)
     Console.WriteLine("[IMS] Seeded default users (admin, GV001, SV001).");
 }
 
-/// <summary>
-/// Restores the historical demo set (Firestore-era): gv001 + Test@1234, LOP101–105, MSSV lists.
-/// Upserts — safe to run on every startup; does not delete other users.
-/// </summary>
 static async Task EnsureDemoDatasetAsync(AppDbContext db)
 {
     const string demoPassword = "Test@1234";
@@ -339,7 +308,6 @@ static async Task EnsureDemoDatasetAsync(AppDbContext db)
     var addedUsers = 0;
     var addedClasses = 0;
 
-    // Exact MaNguoiDung / MaDinhDanh only — never fold case (GV001 ≠ gv001).
     async Task<IMSBackend.Models.User> UpsertUserAsync(
         string maNguoiDung,
         string maDinhDanh,
@@ -390,14 +358,12 @@ static async Task EnsureDemoDatasetAsync(AppDbContext db)
         return user;
     }
 
-    // Repair defaults in case a prior case-insensitive demo upsert overwrote GV001 → gv001
     await UpsertUserAsync("admin_001", "admin", "Quản trị viên", "Admin", "Admin@123", "admin@example.com", quyenAdmin: true);
     await UpsertUserAsync("gv_001", "GV001", "ThS. Lê Hoàng Nam", "GiangVien", "Gv@12345", "namlh@example.com");
     await UpsertUserAsync("sv_001", "SV001", "Nguyễn Văn A", "SinhVien", "Sv@12345", "sv001@example.com", "K64-CNTT");
 
     var gv = await UpsertUserAsync("gv_demo_001", "gv001", "ThS. Demo Hướng Dẫn", "GiangVien", demoPassword, "gv001@due.udn.vn");
 
-    // Class → student MSSV lists (as provided by product owner)
     var classStudents = new Dictionary<string, string[]>
     {
         ["LOP101"] = new[]
@@ -435,7 +401,6 @@ static async Task EnsureDemoDatasetAsync(AppDbContext db)
             cls.SoSinhVien = mssvs.Length;
         }
 
-        var i = 1;
         foreach (var mssv in mssvs)
         {
             await UpsertUserAsync(
@@ -446,35 +411,14 @@ static async Task EnsureDemoDatasetAsync(AppDbContext db)
                 password: demoPassword,
                 email: $"{mssv}@student.due.udn.vn",
                 lopSinhHoat: maLop);
-            i++;
         }
     }
 
     await db.SaveChangesAsync();
     var totalUsers = await db.Users.CountAsync();
     var totalClasses = await db.Classes.CountAsync();
-    var hasGv001 = await db.Users.AnyAsync(u => u.MaDinhDanh != null && u.MaDinhDanh.ToLower() == "gv001");
-    var demoSv = await db.Users.CountAsync(u => u.VaiTro == "SinhVien" && u.LopSinhHoat != null && u.LopSinhHoat.StartsWith("LOP10"));
     Console.WriteLine(
         $"[IMS] Demo dataset ensured (+users={addedUsers}, +classes={addedClasses}); totals users={totalUsers}, classes={totalClasses}.");
-    // #region agent log
-    try
-    {
-        const string logPath = @"C:\Users\while\Downloads\remix_-ttnndev (1)\debug-19ef33.log";
-        var line = System.Text.Json.JsonSerializer.Serialize(new
-        {
-            sessionId = "19ef33",
-            hypothesisId = "B,D",
-            location = "Program.cs:EnsureDemoDatasetAsync",
-            message = "demo dataset upsert finished",
-            data = new { addedUsers, addedClasses, totalUsers, totalClasses, hasGv001, demoSv },
-            timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
-            runId = "demo-restore"
-        });
-        await File.AppendAllTextAsync(logPath, line + Environment.NewLine);
-    }
-    catch { /* ignore debug log IO */ }
-    // #endregion
 }
 
 static string DescribeConnectionTarget(string cs)
@@ -497,7 +441,6 @@ static string DescribeConnectionTarget(string cs)
 
 static string ResolveConnectionString(IConfiguration config)
 {
-    // Prefer env (Render), then appsettings — never use localhost on Render/Production
     var fromEnv = Environment.GetEnvironmentVariable("DATABASE_URL")
         ?? Environment.GetEnvironmentVariable("ConnectionStrings__DefaultConnection");
     var databaseUrl = fromEnv ?? config.GetConnectionString("DefaultConnection");
@@ -570,8 +513,6 @@ static bool IsLocalDbHost(string connectionString)
 
 static string EnsureSsl(string connectionString)
 {
-    // Render Postgres: external needs TLS; internal accepts Prefer.
-    // Trust Server Certificate avoids CA issues in containers.
     if (!connectionString.Contains("SSL Mode=", StringComparison.OrdinalIgnoreCase)
         && !connectionString.Contains("Ssl Mode=", StringComparison.OrdinalIgnoreCase))
     {

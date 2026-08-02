@@ -30,7 +30,6 @@ namespace IMSBackend.Data
                 .HasForeignKey(f => f.DiaryId)
                 .OnDelete(DeleteBehavior.Cascade);
                 
-            // Deterministic seed timestamps (DateTime.UtcNow breaks EF HasData)
             var seedAt = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             modelBuilder.Entity<User>().HasData(
                 new User 
@@ -73,7 +72,6 @@ namespace IMSBackend.Data
                 }
             );
             
-            // Seed Classes
             modelBuilder.Entity<Class>().HasData(
                 new Class
                 {

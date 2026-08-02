@@ -39,13 +39,11 @@ namespace IMSBackend.Controllers
                 var input = req.MaDinhDanh.Trim();
                 var password = req.MatKhau.Trim();
 
-                // Exact MaDinhDanh first so GV001 and gv001 stay distinct accounts.
                 var user = await _context.Users.FirstOrDefaultAsync(u =>
                     u.MaDinhDanh == input || u.Email == input);
 
                 if (user == null)
                 {
-                    // Email-only fallback, case-insensitive
                     var pattern = input
                         .Replace("\\", "\\\\")
                         .Replace("%", "\\%")

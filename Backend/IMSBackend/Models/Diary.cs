@@ -13,7 +13,6 @@ namespace IMSBackend.Models
         public string UserId { get; set; }
         public string ClassId { get; set; }
 
-        /// <summary>Accepts JSON string or number from the Vue client.</summary>
         [JsonConverter(typeof(FlexibleStringConverter))]
         public string Week { get; set; }
         public int? CompletionLevel { get; set; }
@@ -25,7 +24,7 @@ namespace IMSBackend.Models
         public string NextPlan { get; set; }
         public string SupportNeeded { get; set; }
         public string Evidence { get; set; }
-        public string Status { get; set; } = "Draft"; // "Draft", "Submitted"
+        public string Status { get; set; } = "Draft";
         public bool IsReadByTeacher { get; set; }
         public bool IsReadByStudent { get; set; } = true;
         public DateTime NgayTao { get; set; } = DateTime.UtcNow;

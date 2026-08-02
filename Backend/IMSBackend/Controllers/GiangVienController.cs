@@ -29,7 +29,6 @@ namespace IMSBackend.Controllers
             _context = context;
         }
 
-        /// <summary>UC-14.2 get diary config</summary>
         [HttpGet("classes/{classId}/diary-config")]
         public async Task<IActionResult> GetDiaryConfig(string classId)
         {
@@ -49,7 +48,6 @@ namespace IMSBackend.Controllers
             }
         }
 
-        /// <summary>UC-14.2 save diary config</summary>
         [HttpPut("classes/{classId}/diary-config")]
         public async Task<IActionResult> PutDiaryConfig(string classId, [FromBody] DiaryConfigDto body)
         {
@@ -86,11 +84,10 @@ namespace IMSBackend.Controllers
             });
         }
 
-        /// <summary>UC-18.1 class students (tạm: toàn bộ SinhVien)</summary>
         [HttpGet("classes/{classId}/students")]
         public async Task<IActionResult> GetClassStudents(string classId)
         {
-            _ = classId; // reserved for enrollment mapping
+            _ = classId;
             var students = await _context.Users
                 .AsNoTracking()
                 .Where(u => u.VaiTro == "SinhVien")
@@ -122,12 +119,8 @@ namespace IMSBackend.Controllers
             var cfg = NormalizeConfig(body) ?? DiaryConfigDefaults.Create();
 
             if (!cfg.IsEnabled)
-            {
-                // tắt nhật ký: vẫn lưu payload, bỏ validate fields/min
                 return (true, null, cfg);
-            }
 
-            // UC-14.2 / 4a — reject empty or 0 before clamping
             if (cfg.MinPerWeek < 1 || cfg.MinPerWeek > 7)
                 return (false, "Tối thiểu 1 nhật ký/tuần", cfg);
 

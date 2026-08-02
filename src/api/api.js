@@ -1,9 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  // Production: set VITE_API_BASE_URL=https://ims-api-ftzr.onrender.com/api (must end with /api)
   baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:5071/api',
-  // Render free tier cold-start often exceeds 15s
   timeout: 45000,
   headers: {
     'Content-Type': 'application/json',
@@ -31,7 +29,6 @@ api.interceptors.response.use(
       url.includes('/auth/forgot') ||
       url.includes('/auth/reset');
 
-    // Failed login returns 401 — do not treat as "session expired"
     if (error.response?.status === 401 && !isAuthAttempt) {
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');

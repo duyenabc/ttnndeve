@@ -191,16 +191,20 @@ async function handleLogin() {
   } catch (err) {
     const status = err?.response?.status;
     const data = err?.response?.data;
+    const isNetwork =
+      err?.code === 'ERR_NETWORK' ||
+      err?.code === 'ECONNABORTED' ||
+      status === 503;
     const looksLikeWrongApi =
       typeof data === 'string' ||
-      (typeof data === 'object' && data !== null && !data.message && status === 404) ||
-      err?.code === 'ERR_NETWORK' ||
-      err?.code === 'ECONNABORTED';
+      (typeof data === 'object' && data !== null && !data.message && status === 404);
     errorMessage.value =
       data?.message ||
-      (looksLikeWrongApi
-        ? 'Không kết nối được API. Kiểm tra VITE_API_BASE_URL và service ims-api (Docker) trên Render.'
-        : 'Tên đăng nhập hoặc mật khẩu không chính xác. Vui lòng kiểm tra lại!');
+      (isNetwork
+        ? 'Không kết nối được API (mạng/timeout). Nếu dùng Render: đợi service thức dậy rồi thử lại. Local: chạy backend :5071. URL đúng: https://ims-api-ftzr.onrender.com/api'
+        : looksLikeWrongApi
+          ? 'Sai địa chỉ API. Đặt VITE_API_BASE_URL=https://ims-api-ftzr.onrender.com/api rồi build lại (không dùng ims-backend / ims-api Express).'
+          : 'Tên đăng nhập hoặc mật khẩu không chính xác. Vui lòng kiểm tra lại!');
   } finally {
     loading.value = false;
   }

@@ -73,16 +73,11 @@ namespace IMSBackend.Controllers
             return Ok(new { message = "Đã cập nhật nhật ký" });
         }
 
-        /// <summary>UC-18.3</summary>
         [HttpPut("{id}/feedback")]
         public async Task<IActionResult> AddFeedback(string id, [FromBody] FeedbackRequest req)
         {
             try
             {
-                // #region agent log
-                Console.WriteLine($"[IMS][feedback] id={id} contentLen={req?.Content?.Length ?? -1}");
-                // #endregion
-
                 if (req == null || string.IsNullOrWhiteSpace(req.Content))
                     return BadRequest(new { message = "Nội dung nhận xét không được để trống" });
 
@@ -139,11 +134,6 @@ namespace IMSBackend.Controllers
             }
             catch (Exception ex)
             {
-                // #region agent log
-                Console.WriteLine($"[IMS][feedback] FAIL: {ex.GetType().Name}: {ex.Message}");
-                if (ex.InnerException != null)
-                    Console.WriteLine($"[IMS][feedback] Inner: {ex.InnerException.Message}");
-                // #endregion
                 return StatusCode(500, new
                 {
                     message = "Không lưu được nhận xét (lỗi máy chủ)",
@@ -152,7 +142,6 @@ namespace IMSBackend.Controllers
             }
         }
 
-        /// <summary>UC-18.3 feedback history</summary>
         [HttpGet("feedback-history")]
         public async Task<IActionResult> GetFeedbackHistory([FromQuery] string userId, [FromQuery] string classId)
         {
@@ -186,7 +175,6 @@ namespace IMSBackend.Controllers
             return Ok(history);
         }
         
-        /// <summary>UC-18.2 mark read</summary>
         [HttpPut("{id}/read")]
         public async Task<IActionResult> MarkRead(string id, [FromQuery] string by = "teacher")
         {

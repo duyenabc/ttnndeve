@@ -63,7 +63,6 @@ export const useAuthStore = defineStore('auth', {
       try {
         res = await attempt();
       } catch (err) {
-        // One retry: Render free instances sleep and first request may time out
         const retryable =
           err?.code === 'ERR_NETWORK' ||
           err?.code === 'ECONNABORTED' ||

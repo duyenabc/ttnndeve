@@ -6,11 +6,10 @@ namespace IMSBackend.Models
     {
         public bool IsEnabled { get; set; } = true;
         public int MinPerWeek { get; set; } = 2;
-        /// <summary>0 = Sunday … 6 = Saturday (JS Date.getDay)</summary>
+        // 0=Sun … 6=Sat (Date.getDay)
         public int DeadlineDay { get; set; } = 0;
         public string DeadlineTime { get; set; } = "23:59";
         public List<DiaryFieldConfigDto> Fields { get; set; } = new();
-        /// <summary>Optional ISO date for internship week-1 start (Monday preferred).</summary>
         public string InternshipStart { get; set; }
     }
 

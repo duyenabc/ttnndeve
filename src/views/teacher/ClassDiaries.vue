@@ -550,7 +550,6 @@ function isPastDeadline(weekNum) {
 
 function deadlineForWeek(weekNum) {
   const weekStart = addDays(internshipStart.value, (weekNum - 1) * 7); // Monday
-  // Find calendar day in Mon..Sun matching deadlineDay (0=Sun..6=Sat)
   let deadlineDate = new Date(weekStart);
   for (let i = 0; i < 7; i++) {
     const d = addDays(weekStart, i);
@@ -575,7 +574,6 @@ const studentDiaries = computed(() => {
 
   return allStudents.value.map((st) => {
     const stId = String(st.maGhiDanh || st.maSoSinhVien || st.id);
-    // Chronological (oldest → newest) for plan comparison
     const stDiaries = allDiaries.value
       .filter((d) => matchStudentDiary(d, st) && String(d.week) === week && d.status === 'Submitted')
       .sort((a, b) => new Date(a.ngayTao || a.ngayCapNhat) - new Date(b.ngayTao || b.ngayCapNhat));
@@ -869,16 +867,10 @@ async function submitInlineFeedback(student) {
   }
   isSubmittingFeedback.value = true;
   try {
-    // #region agent log
-    fetch('http://127.0.0.1:7500/ingest/7f531694-75ae-41c0-a883-0940871f5a5e',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'19ef33'},body:JSON.stringify({sessionId:'19ef33',runId:'feedback-debug',hypothesisId:'H3',location:'ClassDiaries.vue:submitInlineFeedback',message:'feedback request',data:{diaryId,status:entry.rawData?.status||null,userId:entry.rawData?.userId||null,apiBase:import.meta.env.VITE_API_BASE_URL||'(localhost fallback)'},timestamp:Date.now()})}).catch(()=>{});
-    // #endregion
     const res = await api.put(`/diaries/${encodeURIComponent(diaryId)}/feedback`, {
       teacherName: String(authStore.user?.hoTen || 'GVHD'),
       content,
     });
-    // #region agent log
-    fetch('http://127.0.0.1:7500/ingest/7f531694-75ae-41c0-a883-0940871f5a5e',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'19ef33'},body:JSON.stringify({sessionId:'19ef33',runId:'feedback-debug',hypothesisId:'H1',location:'ClassDiaries.vue:submitInlineFeedback',message:'feedback ok',data:{httpStatus:res.status,msg:res.data?.message||null},timestamp:Date.now()})}).catch(()=>{});
-    // #endregion
     inlineFeedback[student.id] = '';
     toastMessage.value = res.data?.message || 'Đã gửi nhận xét thành công';
     showToast.value = true;
@@ -887,9 +879,6 @@ async function submitInlineFeedback(student) {
     }, 3000);
     await loadData();
   } catch (err) {
-    // #region agent log
-    fetch('http://127.0.0.1:7500/ingest/7f531694-75ae-41c0-a883-0940871f5a5e',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'19ef33'},body:JSON.stringify({sessionId:'19ef33',runId:'feedback-debug',hypothesisId:'H2',location:'ClassDiaries.vue:submitInlineFeedback',message:'feedback error',data:{httpStatus:err?.response?.status??null,code:err?.code||null,msg:feedbackErrorMessage(err),body:typeof err?.response?.data==='string'?String(err.response.data).slice(0,200):err?.response?.data||null},timestamp:Date.now()})}).catch(()=>{});
-    // #endregion
     toastMessage.value = feedbackErrorMessage(err);
     showToast.value = true;
     setTimeout(() => {
@@ -919,9 +908,6 @@ async function submitFeedback() {
   }
   isSubmittingFeedback.value = true;
   try {
-    // #region agent log
-    fetch('http://127.0.0.1:7500/ingest/7f531694-75ae-41c0-a883-0940871f5a5e',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'19ef33'},body:JSON.stringify({sessionId:'19ef33',runId:'feedback-debug',hypothesisId:'H3',location:'ClassDiaries.vue:submitFeedback',message:'drawer feedback request',data:{diaryId,apiBase:import.meta.env.VITE_API_BASE_URL||'(localhost fallback)'},timestamp:Date.now()})}).catch(()=>{});
-    // #endregion
     const res = await api.put(`/diaries/${encodeURIComponent(diaryId)}/feedback`, {
       teacherName: String(authStore.user?.hoTen || 'GVHD'),
       content,
@@ -934,9 +920,6 @@ async function submitFeedback() {
     await loadData();
     closeDrawer();
   } catch (err) {
-    // #region agent log
-    fetch('http://127.0.0.1:7500/ingest/7f531694-75ae-41c0-a883-0940871f5a5e',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'19ef33'},body:JSON.stringify({sessionId:'19ef33',runId:'feedback-debug',hypothesisId:'H2',location:'ClassDiaries.vue:submitFeedback',message:'drawer feedback error',data:{httpStatus:err?.response?.status??null,msg:feedbackErrorMessage(err)},timestamp:Date.now()})}).catch(()=>{});
-    // #endregion
     toastMessage.value = feedbackErrorMessage(err);
     showToast.value = true;
     setTimeout(() => {
