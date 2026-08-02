@@ -56,6 +56,16 @@ Client mặc định: `http://localhost:3000`
 | Giảng viên  | GV001        | Gv@12345   |
 | Sinh viên   | SV001        | Sv@12345   |
 
+### Bộ demo lớp (tự upsert mỗi lần API start)
+
+| Vai trò | Mã | Mật khẩu |
+|---------|-----|----------|
+| Giảng viên | `gv001` | `Test@1234` |
+| Sinh viên (tất cả MSSV dưới) | *MSSV* | `Test@1234` |
+
+Lớp: `LOP101`…`LOP105` (GV `gv001`).  
+MSSV LOP101: `231121521101`, `20241021`, `20246015`, `20246012`, `20246020`, `20246022`, `20246025`, `20246028` — LOP102: `20246030`–`35` — LOP103: `20246036`–`41` — LOP104: `20246050`–`52` — LOP105: `20246053`–`55`.
+
 ## Ghi chú kiến trúc
 
 - Frontend gọi REST API qua Axios (`VITE_API_BASE_URL`).

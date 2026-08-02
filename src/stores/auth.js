@@ -54,7 +54,23 @@ export const useAuthStore = defineStore('auth', {
       }
     },
     async login(credentials) {
-      const res = await api.post('/auth/login', credentials);
+      const payload = {
+        maDinhDanh: String(credentials?.maDinhDanh || '').trim(),
+        matKhau: String(credentials?.matKhau || '').trim(),
+      };
+      const attempt = () => api.post('/auth/login', payload);
+      let res;
+      try {
+        res = await attempt();
+      } catch (err) {
+        // One retry: Render free instances sleep and first request may time out
+        const retryable =
+          err?.code === 'ERR_NETWORK' ||
+          err?.code === 'ECONNABORTED' ||
+          err?.response?.status === 503;
+        if (!retryable) throw err;
+        res = await attempt();
+      }
       this.setAuth(res.data);
       return res.data;
     },

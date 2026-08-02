@@ -30,18 +30,24 @@ namespace IMSBackend.Controllers
         {
             try
             {
-                if (req == null || string.IsNullOrEmpty(req.MaDinhDanh))
+                if (req == null || string.IsNullOrWhiteSpace(req.MaDinhDanh))
                     return BadRequest(new { message = "Vui lòng nhập mã định danh hoặc email" });
 
-                if (string.IsNullOrEmpty(req.MatKhau))
+                if (string.IsNullOrWhiteSpace(req.MatKhau))
                     return BadRequest(new { message = "Vui lòng nhập mật khẩu" });
 
-                var input = req.MaDinhDanh.Trim().ToLowerInvariant();
+                var input = req.MaDinhDanh.Trim();
+                var password = req.MatKhau.Trim();
 
-                // ILike avoids EF/Npgsql ToLower translation edge cases
+                // Escape LIKE wildcards; match mã / email không phân biệt hoa thường
+                var pattern = input
+                    .Replace("\\", "\\\\")
+                    .Replace("%", "\\%")
+                    .Replace("_", "\\_");
+
                 var user = await _context.Users.FirstOrDefaultAsync(u =>
-                    (u.MaDinhDanh != null && EF.Functions.ILike(u.MaDinhDanh, input)) ||
-                    (u.Email != null && EF.Functions.ILike(u.Email, input)));
+                    (u.MaDinhDanh != null && EF.Functions.ILike(u.MaDinhDanh, pattern, "\\")) ||
+                    (u.Email != null && EF.Functions.ILike(u.Email, pattern, "\\")));
 
                 if (user == null)
                     return Unauthorized(new { message = "Mã định danh hoặc mật khẩu không đúng" });
@@ -49,7 +55,7 @@ namespace IMSBackend.Controllers
                 if (user.TrangThaiTaiKhoan == "BiKhoa")
                     return Unauthorized(new { message = "Tài khoản của bạn đã bị khóa. Vui lòng liên hệ quản trị viên" });
 
-                if (!string.IsNullOrEmpty(user.MatKhau) && user.MatKhau != req.MatKhau)
+                if (!string.IsNullOrEmpty(user.MatKhau) && user.MatKhau != password)
                     return Unauthorized(new { message = "Mã định danh hoặc mật khẩu không đúng" });
 
                 var tokenHandler = new JwtSecurityTokenHandler();

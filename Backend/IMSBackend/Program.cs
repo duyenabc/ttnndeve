@@ -32,30 +32,29 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowVueApp", policy =>
     {
-        var origins = builder.Configuration["Cors:Origins"]
-            ?.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        var configured = builder.Configuration["Cors:Origins"]
+            ?.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            ?? Array.Empty<string>();
 
-        if (origins is { Length: > 0 })
+        // Always allow local Vite + configured production origins (e.g. Render static site)
+        var localDev = new[]
+        {
+            "http://localhost:3000",
+            "http://localhost:5173",
+            "http://127.0.0.1:3000",
+            "http://127.0.0.1:5173",
+        };
+        var origins = configured.Concat(localDev).Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
+
+        if (origins.Length > 0)
         {
             policy.WithOrigins(origins)
                 .AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowCredentials();
         }
-        else if (builder.Environment.IsDevelopment())
-        {
-            policy.WithOrigins(
-                    "http://localhost:3000",
-                    "http://localhost:5173",
-                    "http://127.0.0.1:3000",
-                    "http://127.0.0.1:5173")
-                .AllowAnyHeader()
-                .AllowAnyMethod()
-                .AllowCredentials();
-        }
         else
         {
-            // Temporary until Cors:Origins is set on Render
             policy.AllowAnyOrigin()
                 .AllowAnyHeader()
                 .AllowAnyMethod();
@@ -159,7 +158,28 @@ app.MapGet("/", () => Results.Ok(new
 app.MapGet("/api/health/db", async (AppDbContext db) =>
 {
     var users = await db.Users.CountAsync();
-    return Results.Ok(new { status = "ok", users, database = "ready" });
+    var classes = await db.Classes.CountAsync();
+    var hasGv001 = await db.Users.AnyAsync(u => u.MaDinhDanh != null && u.MaDinhDanh.ToLower() == "gv001");
+    var demoSv = await db.Users.CountAsync(u => u.VaiTro == "SinhVien" && u.LopSinhHoat != null && u.LopSinhHoat.StartsWith("LOP10"));
+    // #region agent log
+    try
+    {
+        const string logPath = @"C:\Users\while\Downloads\remix_-ttnndev (1)\debug-19ef33.log";
+        var line = System.Text.Json.JsonSerializer.Serialize(new
+        {
+            sessionId = "19ef33",
+            hypothesisId = "A,B,C",
+            location = "Program.cs:health/db",
+            message = "health db snapshot",
+            data = new { users, classes, hasGv001, demoSv },
+            timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
+            runId = "demo-restore"
+        });
+        await File.AppendAllTextAsync(logPath, line + Environment.NewLine);
+    }
+    catch { /* ignore debug log IO */ }
+    // #endregion
+    return Results.Ok(new { status = "ok", users, classes, hasGv001, demoSv, database = "ready" });
 });
 
 // Listen first so Render healthCheckPath:/ succeeds, then init DB
@@ -196,6 +216,7 @@ static async Task EnsureDatabaseReadyAsync(IServiceProvider services)
             // EnsureCreated does not add new tables/columns to an existing DB
             await EnsureDiaryFeedbackSchemaAsync(db);
             await SeedDefaultsIfEmptyAsync(db);
+            await EnsureDemoDatasetAsync(db);
             Console.WriteLine($"[IMS] Database ready (attempt {attempt}).");
             return;
         }
@@ -305,6 +326,146 @@ static async Task SeedDefaultsIfEmptyAsync(AppDbContext db)
         });
     await db.SaveChangesAsync();
     Console.WriteLine("[IMS] Seeded default users (admin, GV001, SV001).");
+}
+
+/// <summary>
+/// Restores the historical demo set (Firestore-era): gv001 + Test@1234, LOP101–105, MSSV lists.
+/// Upserts — safe to run on every startup; does not delete other users.
+/// </summary>
+static async Task EnsureDemoDatasetAsync(AppDbContext db)
+{
+    const string demoPassword = "Test@1234";
+    var created = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+    var addedUsers = 0;
+    var addedClasses = 0;
+
+    async Task<IMSBackend.Models.User> UpsertUserAsync(
+        string maNguoiDung,
+        string maDinhDanh,
+        string hoTen,
+        string vaiTro,
+        string? email = null,
+        string? lopSinhHoat = null)
+    {
+        var user = await db.Users.FirstOrDefaultAsync(u =>
+            u.MaNguoiDung == maNguoiDung ||
+            (u.MaDinhDanh != null && u.MaDinhDanh.ToLower() == maDinhDanh.ToLower()));
+
+        if (user == null)
+        {
+            user = new IMSBackend.Models.User
+            {
+                MaNguoiDung = maNguoiDung,
+                MaDinhDanh = maDinhDanh,
+                HoTen = hoTen,
+                Email = email ?? $"{maDinhDanh.ToLower()}@due.udn.vn",
+                VaiTro = vaiTro,
+                TrangThaiTaiKhoan = "DangHoatDong",
+                MatKhau = demoPassword,
+                BuocDoiMatKhau = false,
+                NgayTao = created,
+                LopSinhHoat = lopSinhHoat
+            };
+            db.Users.Add(user);
+            addedUsers++;
+        }
+        else
+        {
+            // Keep login usable for the known demo password set
+            user.MaDinhDanh = maDinhDanh;
+            user.HoTen = hoTen;
+            user.VaiTro = vaiTro;
+            user.TrangThaiTaiKhoan = "DangHoatDong";
+            user.MatKhau = demoPassword;
+            user.BuocDoiMatKhau = false;
+            if (!string.IsNullOrWhiteSpace(lopSinhHoat))
+                user.LopSinhHoat = lopSinhHoat;
+            if (string.IsNullOrWhiteSpace(user.Email))
+                user.Email = email ?? $"{maDinhDanh.ToLower()}@due.udn.vn";
+        }
+
+        return user;
+    }
+
+    var gv = await UpsertUserAsync("gv_demo_001", "gv001", "ThS. Demo Hướng Dẫn", "GiangVien", "gv001@due.udn.vn");
+
+    // Class → student MSSV lists (as provided by product owner)
+    var classStudents = new Dictionary<string, string[]>
+    {
+        ["LOP101"] = new[]
+        {
+            "231121521101", "20241021", "20246015", "20246012",
+            "20246020", "20246022", "20246025", "20246028"
+        },
+        ["LOP102"] = new[] { "20246030", "20246031", "20246032", "20246033", "20246034", "20246035" },
+        ["LOP103"] = new[] { "20246036", "20246037", "20246038", "20246039", "20246040", "20246041" },
+        ["LOP104"] = new[] { "20246050", "20246051", "20246052" },
+        ["LOP105"] = new[] { "20246053", "20246054", "20246055" },
+    };
+
+    foreach (var (maLop, mssvs) in classStudents)
+    {
+        var cls = await db.Classes.FirstOrDefaultAsync(c => c.Id == maLop || c.MaLop == maLop);
+        if (cls == null)
+        {
+            cls = new IMSBackend.Models.Class
+            {
+                Id = maLop,
+                MaLop = maLop,
+                TenLop = $"Lớp thực tập {maLop}",
+                GiangVienId = gv.MaNguoiDung,
+                SoSinhVien = mssvs.Length
+            };
+            db.Classes.Add(cls);
+            addedClasses++;
+        }
+        else
+        {
+            cls.MaLop = maLop;
+            cls.TenLop = string.IsNullOrWhiteSpace(cls.TenLop) ? $"Lớp thực tập {maLop}" : cls.TenLop;
+            cls.GiangVienId = gv.MaNguoiDung;
+            cls.SoSinhVien = mssvs.Length;
+        }
+
+        var i = 1;
+        foreach (var mssv in mssvs)
+        {
+            await UpsertUserAsync(
+                maNguoiDung: $"sv_{mssv}",
+                maDinhDanh: mssv,
+                hoTen: $"Sinh viên {mssv}",
+                vaiTro: "SinhVien",
+                email: $"{mssv}@student.due.udn.vn",
+                lopSinhHoat: maLop);
+            i++;
+        }
+    }
+
+    await db.SaveChangesAsync();
+    var totalUsers = await db.Users.CountAsync();
+    var totalClasses = await db.Classes.CountAsync();
+    var hasGv001 = await db.Users.AnyAsync(u => u.MaDinhDanh != null && u.MaDinhDanh.ToLower() == "gv001");
+    var demoSv = await db.Users.CountAsync(u => u.VaiTro == "SinhVien" && u.LopSinhHoat != null && u.LopSinhHoat.StartsWith("LOP10"));
+    Console.WriteLine(
+        $"[IMS] Demo dataset ensured (+users={addedUsers}, +classes={addedClasses}); totals users={totalUsers}, classes={totalClasses}.");
+    // #region agent log
+    try
+    {
+        const string logPath = @"C:\Users\while\Downloads\remix_-ttnndev (1)\debug-19ef33.log";
+        var line = System.Text.Json.JsonSerializer.Serialize(new
+        {
+            sessionId = "19ef33",
+            hypothesisId = "B,D",
+            location = "Program.cs:EnsureDemoDatasetAsync",
+            message = "demo dataset upsert finished",
+            data = new { addedUsers, addedClasses, totalUsers, totalClasses, hasGv001, demoSv },
+            timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
+            runId = "demo-restore"
+        });
+        await File.AppendAllTextAsync(logPath, line + Environment.NewLine);
+    }
+    catch { /* ignore debug log IO */ }
+    // #endregion
 }
 
 static string DescribeConnectionTarget(string cs)
